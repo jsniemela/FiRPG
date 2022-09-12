@@ -5,6 +5,7 @@ Character::Character(std::string newName, int hp, int atk, int def, int matk, in
 {
 	level = 1;
 	currentHealth = maxHealth;
+	condition = normal;
 }
 
 int Character::getMaxHealth()
@@ -36,6 +37,8 @@ void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, in
 {
 	level = 1;
 	name = "newname";
+	status condition;
+	condition = normal;
 	maxHealth = hp;
 	currentHealth = maxHealth;
 	attack = atk;
@@ -63,6 +66,7 @@ void Character::showStats()
 {
 	std::cout << "Name: " << name << "\n";
 	std::cout << "Level: " << level << "\n";
+	//std::cout << "Status: " << condition << "\n"; // prints number of the status affliction
 	std::cout << "Health: " << currentHealth << "/" << maxHealth << "\n";
 	std::cout << "Attack: " << attack << "\n";
 	std::cout << "Defence: " << defence << "\n";
@@ -115,7 +119,7 @@ void Character::die()
 
 int main() 
 {
-	Character hero{ "Hero", 100, 200, 3, 7, 2, 10 };
+	Character hero{ "Hero", 100, 60, 3, 7, 2, 10 };
 	Character villain{ "Villain", 100, 10, 3, 7, 2, 10 };
 	hero.levelUp();
 	villain.levelUp();

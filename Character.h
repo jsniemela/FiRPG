@@ -14,6 +14,7 @@ private:
 	int magicAttack;
 	int magicDefence;
 	int critRate;
+	enum status {normal, poison, KO, slow, haste, petrify, protect, shell} condition; 
 public:
 	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 
