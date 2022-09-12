@@ -73,7 +73,9 @@ void Character::showStats()
 
 void Character::dealDamage(Character &target) 
 {
-	bool critical = true;
+	bool critical;
+	critical = critRate >= randomizeInt(1, 100);
+
 	float critBonus = 2.0f;
 	std::cout << name << " attacks " << target.getName() << "!\n";
 	if (critical) 
