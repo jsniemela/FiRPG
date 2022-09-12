@@ -100,11 +100,22 @@ void Character::takeDamage(float baseDamage)
 	currentHealth -= static_cast<int>(damage);
 	std::cout << name << " took " << damage << " damage.\n\n";
 	//std::cout << "Current health: " << currentHealth << "\n";
+	if (currentHealth < 0) {
+		currentHealth = 0;
+	}
+	if (currentHealth == 0) {
+		die();
+	}
+}
+
+void Character::die()
+{
+	std::cout << name << " died.\n";
 }
 
 int main() 
 {
-	Character hero{ "Hero", 100, 10, 3, 7, 2, 10 };
+	Character hero{ "Hero", 100, 200, 3, 7, 2, 10 };
 	Character villain{ "Villain", 100, 10, 3, 7, 2, 10 };
 	hero.levelUp();
 	villain.levelUp();

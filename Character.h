@@ -23,6 +23,7 @@ public:
 	void showStats();
 	void dealDamage(Character &target);
 	void takeDamage(float baseDamage);
+	void die();
 
 	std::string getName();
 	int getMaxHealth();
