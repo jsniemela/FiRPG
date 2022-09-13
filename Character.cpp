@@ -5,7 +5,7 @@ Character::Character(std::string newName, int hp, int atk, int def, int matk, in
 {
 	level = 1;
 	currentHealth = maxHealth;
-	condition = normal;
+	condition = poison;
 }
 
 int Character::getMaxHealth()
@@ -75,6 +75,16 @@ void Character::showStats()
 	std::cout << "Crit Rate: " << critRate << "\n\n";
 }
 
+void Character::takeTurn()
+{
+	std::cout << this->name << "'s turn.\n";
+	if (condition == poison) {
+		int poisonDamage = maxHealth / 10;
+		std::cout << this->name << " is poisoned.\n";
+		takeDamage(poisonDamage, true);
+	}
+}
+
 void Character::dealDamage(Character &target) 
 {
 	bool critical;
@@ -85,18 +95,25 @@ void Character::dealDamage(Character &target)
 	if (critical) 
 	{
 		std::cout << "Critical Hit!\n";
-		target.takeDamage(static_cast<float>(attack) * critBonus);
+		target.takeDamage(static_cast<float>(attack) * critBonus, false);
 	}
 	else
 	{
-		target.takeDamage(static_cast<float>(attack));
+		target.takeDamage(static_cast<float>(attack), false);
 	}
 }
 
-void Character::takeDamage(float baseDamage) 
+void Character::takeDamage(float baseDamage, bool ignoreDefence) 
 {
+	float damage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence
-	float damage = baseDamage - defence;
+	if (ignoreDefence == true) {
+		damage = baseDamage;
+	}
+	else
+	{
+		damage = baseDamage - defence;
+	}
 	if (damage < 0)
 	{
 		damage = 0;
@@ -127,7 +144,9 @@ int main()
 	std::cout << "\n";
 	villain.showStats();
 	std::cout << "\n";
+	hero.takeTurn();
 	hero.dealDamage(villain);
+	hero.showStats();
 	villain.showStats();
 	//villain.levelUp();
 	//villain.showStats();

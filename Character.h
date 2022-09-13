@@ -23,8 +23,9 @@ public:
 	void levelUp();
 	void showStats();
 	void dealDamage(Character &target);
-	void takeDamage(float baseDamage);
+	void takeDamage(float baseDamage, bool ignoreDefence);
 	void die();
+	void takeTurn();
 
 	std::string getName();
 	int getMaxHealth();
