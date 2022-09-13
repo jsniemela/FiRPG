@@ -1,7 +1,7 @@
 #include "Character.h"
 
-Character::Character(std::string newName, int hp, int atk, int def, int matk, int mdef, int crit) 
-	: name{newName}, maxHealth{ hp },attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}
+Character::Character(std::string newName, int hp, int atk, int def, int matk, int mdef, int crit, int spd) 
+	: name{newName}, maxHealth{ hp },attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd}
 {
 	level = 1;
 	currentHealth = maxHealth;
@@ -33,7 +33,7 @@ std::string Character::getName()
 	return name;
 }
 
-void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, int crit)
+void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd)
 {
 	level = 1;
 	name = "newname";
@@ -46,6 +46,7 @@ void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, in
 	magicAttack = matk;
 	magicDefence = mdef;
 	critRate = crit;
+	speed = spd;
 }
 
 void Character::levelUp() 
@@ -79,7 +80,8 @@ void Character::takeTurn()
 {
 	std::cout << this->name << "'s turn.\n";
 	if (condition == poison) {
-		int poisonDamage = maxHealth / 10;
+		// Change this to apply poison damage after attacking?
+		float poisonDamage = static_cast<float>(maxHealth) / 10;
 		std::cout << this->name << " is poisoned.\n";
 		takeDamage(poisonDamage, true);
 	}
@@ -136,8 +138,16 @@ void Character::die()
 
 int main() 
 {
-	Character hero{ "Hero", 100, 60, 3, 7, 2, 10 };
-	Character villain{ "Villain", 100, 10, 3, 7, 2, 10 };
+	Character hero{ "Hero", 100, 60, 3, 7, 2, 10, 10 };
+	Character villain{ "Villain", 100, 10, 3, 7, 2, 10, 5 };
+	//Character characters[2] {hero, villain}; 
+	/*
+	change this to use the 'new' expression to change the array size dynamically
+	and delete the array later
+	*/
+	//Battle battle{characters};
+	Battle battle;
+	battle.turnOrder(hero.getName(), villain.getName());
 	hero.levelUp();
 	villain.levelUp();
 	hero.showStats();
