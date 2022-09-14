@@ -1,6 +1,6 @@
 #pragma once
 #include "Randomizer.h"
-#include "Battle.h"
+//#include "Battle.h"
 #include <iostream>
 
 class Character 
@@ -19,7 +19,6 @@ private:
 	enum status {normal, poison, KO, slow, haste, petrify, protect, shell} condition; 
 public:
 	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
-	Character();
 
 	void initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd);
 	void dealDamage();

@@ -1,5 +1,4 @@
 #pragma once
-//#include "Character.h"
 
 int randomizeInt(int startValue, int endValue);
 /*

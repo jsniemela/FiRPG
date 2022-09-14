@@ -5,7 +5,7 @@ Character::Character(std::string newName, int hp, int atk, int def, int matk, in
 {
 	level = 1;
 	currentHealth = maxHealth;
-	condition = poison;
+	condition = normal;
 }
 
 int Character::getMaxHealth()
@@ -136,29 +136,3 @@ void Character::die()
 	std::cout << name << " died.\n";
 }
 
-int main() 
-{
-	Character hero{ "Hero", 100, 60, 3, 7, 2, 10, 10 };
-	Character villain{ "Villain", 100, 10, 3, 7, 2, 10, 5 };
-	//Character characters[2] {hero, villain}; 
-	/*
-	change this to use the 'new' expression to change the array size dynamically
-	and delete the array later
-	*/
-	//Battle battle{characters};
-	Battle battle;
-	battle.turnOrder(hero.getName(), villain.getName());
-	hero.levelUp();
-	villain.levelUp();
-	hero.showStats();
-	std::cout << "\n";
-	villain.showStats();
-	std::cout << "\n";
-	hero.takeTurn();
-	hero.dealDamage(villain);
-	hero.showStats();
-	villain.showStats();
-	//villain.levelUp();
-	//villain.showStats();
-	return 0;
-}
