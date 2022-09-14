@@ -28,6 +28,10 @@ int Character::getCritRate()
 {
 	return critRate;
 }
+int Character::getSpeed()
+{
+	return speed;
+}
 std::string Character::getName()
 {
 	return name;

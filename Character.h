@@ -35,4 +35,5 @@ public:
 	int getMagicAttack();
 	int getMagicDefence();
 	int getCritRate();
+	int getSpeed();
 };
