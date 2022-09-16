@@ -11,39 +11,23 @@ Battle::Battle() {}
 void Battle::turnOrder(std::vector<std::unique_ptr<Character>>& characters)
 {
 	std::cout << "Turn order: \n";
-	/*
+	//this currently sorts the list for all contexts, consider making a local vector
+	std::sort(characters.begin(), characters.end(), 
+		[](const std::unique_ptr<Character> &left, const std::unique_ptr<Character> &right)
+		{
+			return left->getSpeed() > right->getSpeed();
+		});
 	for (int i = 0; i < characters.size(); i++)
 	{
-		if (characters[i]->getStatus() == Character::haste)
-		{
-			//never mind, do this in Character
-		}
+		std::cout << characters[i]->getName() << "\n";
 	}
-	*/
-	if (characters[0]->getSpeed() > characters[1]->getSpeed())
-	{
-		std::cout << characters[0]->getName() << " (speed: " << characters[0]->getSpeed() << ")\n";
-		std::cout << characters[1]->getName() << " (speed: " << characters[1]->getSpeed() << ")\n\n";
-	}
-	else
-	{
-		std::cout << characters[1]->getName() << " (speed: " << characters[1]->getSpeed() << ")\n";
-		std::cout << characters[0]->getName() << " (speed: " << characters[0]->getSpeed() << ")\n\n";
-	}
-
-	/*
-	std::sort(characters.begin(), characters.end(), 
-		[](Character &left, Character& right)
-		{
-			return left.getSpeed() < right.getSpeed();
-		});
-	*/
+	std::cout << std::endl;
 }
 
 std::vector<std::unique_ptr<Character>> setupCharacters() {
 	std::vector<std::unique_ptr<Character>> characters;
 	characters.push_back(std::unique_ptr<Character>(new Character{ "Hero", 100, 60, 3, 7, 2, 10, 10 }));
-	characters.push_back(std::unique_ptr<Character>(new Character{ "Villain", 100, 60, 3, 7, 2, 10, 5 }));
+	characters.push_back(std::unique_ptr<Character>(new Character{ "Villain", 100, 60, 3, 7, 2, 10, 15 }));
 	return characters;
 }
 
