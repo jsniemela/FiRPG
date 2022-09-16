@@ -16,8 +16,9 @@ private:
 	int magicDefence;
 	int critRate;
 	int speed;
-	enum status {normal, poison, KO, slow, haste, petrify, protect, shell} condition; 
+	
 public:
+	enum status { normal, poison, KO, slow, haste, petrify, protect, shell } condition;
 	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 
 	void initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd);
@@ -36,4 +37,5 @@ public:
 	int getMagicDefence();
 	int getCritRate();
 	int getSpeed();
+	enum status getStatus();
 };

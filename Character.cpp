@@ -32,6 +32,9 @@ int Character::getSpeed()
 {
 	return speed;
 }
+enum Character::status Character::getStatus() {
+	return condition;
+};
 std::string Character::getName()
 {
 	return name;
@@ -82,13 +85,21 @@ void Character::showStats()
 
 void Character::takeTurn()
 {
-	std::cout << this->name << "'s turn.\n";
-	if (condition == poison) {
-		// Change this to apply poison damage after attacking?
-		float poisonDamage = static_cast<float>(maxHealth) / 10;
-		std::cout << this->name << " is poisoned.\n";
-		takeDamage(poisonDamage, true);
+	if (condition != KO)
+	{
+		std::cout << name << "'s turn.\n";
+		if (condition == poison) {
+			// Change this to apply poison damage after attacking?
+			float poisonDamage = static_cast<float>(maxHealth) / 10;
+			std::cout << this->name << " is poisoned.\n";
+			takeDamage(poisonDamage, true);
+		}
 	}
+	else
+	{
+		std::cout << name << " is dead. Can't act.";
+	}
+	
 }
 
 void Character::dealDamage(Character &target) 
@@ -137,6 +148,7 @@ void Character::takeDamage(float baseDamage, bool ignoreDefence)
 
 void Character::die()
 {
-	std::cout << name << " died.\n";
+	condition = KO;
+	std::cout << name << " died.\n\n";
 }
 
