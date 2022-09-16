@@ -1,20 +1,17 @@
 #include "Battle.h"
 #include <algorithm>
 //comment the next three lines if detecting memory leaks is not necessary
-
+/*
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-
+*/
 Battle::Battle() {}
 
 void Battle::turnOrder(std::vector<std::unique_ptr<Character>>& characters)
 {
-	//character = &player;
-	//character2 = &enemy;
 	std::cout << "Turn order: \n";
-	//std::cout << characters[0]->getName() << " (speed: " << characters[0]->getSpeed() << ")\n";
-	
+	/*
 	for (int i = 0; i < characters.size(); i++)
 	{
 		if (characters[i]->getStatus() == Character::haste)
@@ -22,7 +19,7 @@ void Battle::turnOrder(std::vector<std::unique_ptr<Character>>& characters)
 			//never mind, do this in Character
 		}
 	}
-	
+	*/
 	if (characters[0]->getSpeed() > characters[1]->getSpeed())
 	{
 		std::cout << characters[0]->getName() << " (speed: " << characters[0]->getSpeed() << ")\n";
@@ -41,13 +38,6 @@ void Battle::turnOrder(std::vector<std::unique_ptr<Character>>& characters)
 			return left.getSpeed() < right.getSpeed();
 		});
 	*/
-	/*
-	for (int i = 0; i < characters.size(); i++)
-	{
-		std::cout << characters[i]->getName() << " (speed: " << characters[0]->getSpeed() << ")\n";
-	}
-	std::cout << "\n";
-	*/
 }
 
 std::vector<std::unique_ptr<Character>> setupCharacters() {
@@ -60,7 +50,7 @@ std::vector<std::unique_ptr<Character>> setupCharacters() {
 
 int main()
 {
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	std::vector<std::unique_ptr<Character>> characters = setupCharacters();
 	
 	Battle battle;
@@ -91,7 +81,6 @@ int main()
 	//villain.levelUp();
 	//villain.showStats();
 	
-	//delete hero;
-	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 	return 0;
 }

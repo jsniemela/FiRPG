@@ -9,7 +9,6 @@ private:
 	//Character* character;
 	//Character* character2;
 public:
-	int numberOfCharacters;
 	Battle();
 	void turnOrder(std::vector<std::unique_ptr<Character>>& characters);
 	//void setupCharacters();
