@@ -16,6 +16,7 @@ private:
 	int magicDefence;
 	int critRate;
 	int speed;
+	int statusTimer;
 	
 public:
 	enum status { normal, poison, KO, slow, haste, petrify, protect, shell } condition;
@@ -29,6 +30,7 @@ public:
 	void takeDamage(float baseDamage, bool ignoreDefence);
 	void die();
 	void takeTurn();
+	void applyStatus(status);
 
 	std::string getName();
 	int getMaxHealth();

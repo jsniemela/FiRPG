@@ -6,6 +6,7 @@ Character::Character(std::string newName, int hp, int atk, int def, int matk, in
 	level = 1;
 	currentHealth = maxHealth;
 	condition = normal;
+	statusTimer = 0;
 }
 
 int Character::getMaxHealth()
@@ -87,9 +88,17 @@ void Character::takeTurn()
 {
 	if (condition != KO)
 	{
+		if (statusTimer > 0) {
+			statusTimer--; //decrement status effect timer by one each turn.
+		}
+		if (statusTimer == 0 && condition != normal)
+		{
+			std::cout << name << "'s status is back to normal.\n\n";
+			condition = normal;
+		}
 		std::cout << name << "'s turn.\n";
 		if (condition == poison) {
-			// Change this to apply poison damage after attacking?
+			// Change this to apply poison damage after attacking? Currently player can die from poison damage and attack after it.
 			float poisonDamage = static_cast<float>(maxHealth) / 10;
 			std::cout << this->name << " is poisoned.\n";
 			takeDamage(poisonDamage, true);
@@ -102,6 +111,19 @@ void Character::takeTurn()
 	
 }
 
+void Character::applyStatus(status effect) 
+{
+	if (statusTimer == 0)
+	{
+		condition = effect;
+		statusTimer = 3; //apply status for 3 turns (actually 2, because 
+		if (effect == poison)
+		{
+			std::cout << name << " is now poisoned.\n";
+		}
+	}
+}
+
 void Character::dealDamage(Character &target) 
 {
 	bool critical;
@@ -112,6 +134,7 @@ void Character::dealDamage(Character &target)
 	if (critical) 
 	{
 		std::cout << "Critical Hit!\n";
+		target.applyStatus(poison); //apply poison on critical hit (for testing purposes)
 		target.takeDamage(static_cast<float>(attack) * critBonus, false);
 	}
 	else
@@ -122,20 +145,21 @@ void Character::dealDamage(Character &target)
 
 void Character::takeDamage(float baseDamage, bool ignoreDefence) 
 {
-	float damage; 
+	int damage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence
 	if (ignoreDefence == true) {
-		damage = baseDamage;
+		damage = static_cast<int>(baseDamage);
 	}
 	else
 	{
-		damage = baseDamage - defence;
+		damage = static_cast<int>(baseDamage - defence);
 	}
 	if (damage < 0)
 	{
 		damage = 0;
 	}
-	currentHealth -= static_cast<int>(damage);
+
+	currentHealth -= damage;
 	std::cout << name << " took " << damage << " damage.\n\n";
 	//std::cout << "Current health: " << currentHealth << "\n";
 	if (currentHealth < 0) {

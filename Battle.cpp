@@ -26,8 +26,8 @@ void Battle::turnOrder(std::vector<std::unique_ptr<Character>>& characters)
 
 std::vector<std::unique_ptr<Character>> setupCharacters() {
 	std::vector<std::unique_ptr<Character>> characters;
-	characters.push_back(std::unique_ptr<Character>(new Character{ "Hero", 100, 60, 3, 7, 2, 10, 10 }));
-	characters.push_back(std::unique_ptr<Character>(new Character{ "Villain", 100, 60, 3, 7, 2, 10, 15 }));
+	characters.push_back(std::unique_ptr<Character>(new Character{ "Hero", 100, 10, 3, 7, 2, 25, 10 }));
+	characters.push_back(std::unique_ptr<Character>(new Character{ "Villain", 100, 10, 3, 7, 2, 25, 15 }));
 	return characters;
 }
 
@@ -46,8 +46,10 @@ int main()
 	std::cout << "\n";
 	characters[1]->showStats();
 	std::cout << "\n";
-	for (int i = 0; i < 3; i++)
+	//for (int i = 0; i < 3; i++)
+	while(characters[0]->getStatus() != Character::KO || characters[0]->getStatus() != Character::KO)
 	{
+		int i = 0;
 		if (characters[0]->getStatus() != Character::KO && characters[1]->getStatus() != Character::KO)
 		{
 			characters[0]->takeTurn();
@@ -59,6 +61,11 @@ int main()
 			characters[1]->takeTurn();
 			characters[1]->dealDamage(*characters[0]);
 			characters[0]->showStats();
+		}
+		i++;
+		if (i > 100) { //temporary solution in case loop doesn't end with someone dying.
+			std::cout << "100 rounds passed without anyone dying. Breaking loop"; 
+			break;
 		}
 	}
 
