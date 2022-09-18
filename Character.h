@@ -1,5 +1,6 @@
 #pragma once
 #include "Randomizer.h"
+#include "Weapon.h"
 //#include "Battle.h"
 #include <iostream>
 
