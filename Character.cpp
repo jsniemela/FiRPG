@@ -7,6 +7,7 @@ Character::Character(std::string newName, int hp, int atk, int def, int matk, in
 	currentHealth = maxHealth;
 	condition = normal;
 	statusTimer = 0;
+	target = nullptr;
 }
 
 int Character::getMaxHealth()

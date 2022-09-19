@@ -18,7 +18,8 @@ private:
 	int critRate;
 	int speed;
 	int statusTimer;
-	
+	Character* target;
+
 public:
 	enum status { normal, poison, KO, slow, haste, petrify, protect, shell } condition;
 	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);

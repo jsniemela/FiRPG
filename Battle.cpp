@@ -1,11 +1,11 @@
 #include "Battle.h"
 #include <algorithm>
 //comment the next three lines if detecting memory leaks is not necessary
-/*
+
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-*/
+
 Battle::Battle() {}
 
 void Battle::turnOrder(std::vector<std::unique_ptr<Character>>& characters)
@@ -31,30 +31,30 @@ std::vector<std::unique_ptr<Character>> setupCharacters() {
 	return characters;
 }
 
-
-int main()
+void Battle::simulateBattle()
 {
-	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	std::vector<std::unique_ptr<Character>> characters = setupCharacters();
-	
-	Battle battle;
-	battle.turnOrder(characters);
-	
-	characters[0]->levelUp();
-	characters[1]->levelUp();
+	turnOrder(characters);
+
+	//characters[0]->levelUp();
+	//characters[1]->levelUp();
 	characters[0]->showStats();
 	std::cout << "\n";
 	characters[1]->showStats();
 	std::cout << "\n";
 	//for (int i = 0; i < 3; i++)
-	while(characters[0]->getStatus() != Character::KO || characters[0]->getStatus() != Character::KO)
+	for (int i = 0; i < 100; i++)
 	{
-		int i = 0;
+		std::cout << "turn: " << i << std::endl;
 		if (characters[0]->getStatus() != Character::KO && characters[1]->getStatus() != Character::KO)
 		{
 			characters[0]->takeTurn();
 			characters[0]->dealDamage(*characters[1]);
 			characters[1]->showStats();
+		}
+		else {
+			std::cout << "A character died. Exiting battle.\n";
+			break;
 		}
 		if (characters[1]->getStatus() != Character::KO && characters[1]->getStatus() != Character::KO)
 		{
@@ -62,16 +62,32 @@ int main()
 			characters[1]->dealDamage(*characters[0]);
 			characters[0]->showStats();
 		}
-		i++;
-		if (i > 100) { //temporary solution in case loop doesn't end with someone dying.
-			std::cout << "100 rounds passed without anyone dying. Breaking loop"; 
+		else {
+			std::cout << "A character died. Exiting battle.\n";
 			break;
 		}
 	}
+	int i = 0;
+	while (characters[0]->getStatus() != Character::KO || characters[1]->getStatus() != Character::KO)
+	{
+		
+		i++;
+		if (i > 100) { //temporary solution in case loop doesn't end with someone dying.
+			std::cout << "100 rounds passed without anyone dying. Breaking loop";
+			break;
+		}
+	}
+	std::cout << "Exiting battle.";
+}
 
-	//villain.levelUp();
-	//villain.showStats();
+
+int main()
+{
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	
-	//_CrtDumpMemoryLeaks();
+	Battle battle;
+	battle.simulateBattle();
+
+	_CrtDumpMemoryLeaks();
 	return 0;
 }

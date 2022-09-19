@@ -11,6 +11,7 @@ private:
 public:
 	Battle();
 	void turnOrder(std::vector<std::unique_ptr<Character>>& characters);
+	void simulateBattle();
 	//void setupCharacters();
 	//void turnOrder(Character &player);
 	//void turnOrder();
