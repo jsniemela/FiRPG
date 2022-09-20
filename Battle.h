@@ -10,7 +10,7 @@ private:
 	//Character* character2;
 public:
 	Battle();
-	void turnOrder(std::vector<std::unique_ptr<Character>>& characters);
+	void turnOrder(std::vector<Character*>& characters);
 	void simulateBattle();
 	//void setupCharacters();
 	//void turnOrder(Character &player);

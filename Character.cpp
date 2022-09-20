@@ -89,6 +89,8 @@ void Character::takeTurn()
 {
 	if (condition != KO)
 	{
+		std::cout << name << "'s turn.\n";
+		dealDamage();
 		if (statusTimer > 0) {
 			statusTimer--; //decrement status effect timer by one each turn.
 		}
@@ -97,7 +99,7 @@ void Character::takeTurn()
 			std::cout << name << "'s status is back to normal.\n\n";
 			condition = normal;
 		}
-		std::cout << name << "'s turn.\n";
+		
 		if (condition == poison) {
 			// Change this to apply poison damage after attacking? Currently player can die from poison damage and attack after it.
 			float poisonDamage = static_cast<float>(maxHealth) / 10;
@@ -110,6 +112,11 @@ void Character::takeTurn()
 		std::cout << name << " is dead. Can't act.";
 	}
 	
+}
+
+void Character::setTarget(Character* newTarget)
+{
+	target = newTarget;
 }
 
 void Character::applyStatus(status effect) 
@@ -125,22 +132,22 @@ void Character::applyStatus(status effect)
 	}
 }
 
-void Character::dealDamage(Character &target) 
+void Character::dealDamage() 
 {
 	bool critical;
 	critical = critRate >= randomizeInt(1, 100);
 
 	float critBonus = 2.0f;
-	std::cout << name << " attacks " << target.getName() << "!\n";
+	std::cout << name << " attacks " << target->getName() << "!\n";
 	if (critical) 
 	{
 		std::cout << "Critical Hit!\n";
-		target.applyStatus(poison); //apply poison on critical hit (for testing purposes)
-		target.takeDamage(static_cast<float>(attack) * critBonus, false);
+		target->applyStatus(poison); //apply poison on critical hit (for testing purposes)
+		target->takeDamage(static_cast<float>(attack) * critBonus, false);
 	}
 	else
 	{
-		target.takeDamage(static_cast<float>(attack), false);
+		target->takeDamage(static_cast<float>(attack), false);
 	}
 }
 

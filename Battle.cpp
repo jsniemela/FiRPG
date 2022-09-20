@@ -8,12 +8,12 @@
 
 Battle::Battle() {}
 
-void Battle::turnOrder(std::vector<std::unique_ptr<Character>>& characters)
+void Battle::turnOrder(std::vector<Character*>& characters)
 {
 	std::cout << "Turn order: \n";
 	//this currently sorts the list for all contexts, consider making a local vector
 	std::sort(characters.begin(), characters.end(), 
-		[](const std::unique_ptr<Character> &left, const std::unique_ptr<Character> &right)
+		[](Character* &left, Character* &right)
 		{
 			return left->getSpeed() > right->getSpeed();
 		});
@@ -24,60 +24,51 @@ void Battle::turnOrder(std::vector<std::unique_ptr<Character>>& characters)
 	std::cout << std::endl;
 }
 
-std::vector<std::unique_ptr<Character>> setupCharacters() {
-	std::vector<std::unique_ptr<Character>> characters;
-	characters.push_back(std::unique_ptr<Character>(new Character{ "Hero", 100, 10, 3, 7, 2, 25, 10 }));
-	characters.push_back(std::unique_ptr<Character>(new Character{ "Villain", 100, 10, 3, 7, 2, 25, 15 }));
+std::vector<Character*> setupCharacters() {
+	std::vector<Character*> characters;
+	characters.push_back(new Character { "Hero", 100, 10, 3, 7, 2, 25, 10 });
+	characters.push_back(new Character{ "Villain", 100, 10, 3, 7, 2, 25, 15 });
 	return characters;
 }
 
 void Battle::simulateBattle()
 {
-	std::vector<std::unique_ptr<Character>> characters = setupCharacters();
+	std::vector<Character*> characters = setupCharacters();
 	turnOrder(characters);
 
-	//characters[0]->levelUp();
-	//characters[1]->levelUp();
+	characters[0]->levelUp();
+	characters[1]->levelUp();
 	characters[0]->showStats();
 	std::cout << "\n";
 	characters[1]->showStats();
 	std::cout << "\n";
 	//for (int i = 0; i < 3; i++)
+	characters[0]->setTarget(characters[1]);
+	characters[1]->setTarget(characters[0]);
 	for (int i = 0; i < 100; i++)
 	{
 		std::cout << "turn: " << i << std::endl;
 		if (characters[0]->getStatus() != Character::KO && characters[1]->getStatus() != Character::KO)
 		{
 			characters[0]->takeTurn();
-			characters[0]->dealDamage(*characters[1]);
 			characters[1]->showStats();
 		}
 		else {
-			std::cout << "A character died. Exiting battle.\n";
+			std::cout << "A character died.\n";
 			break;
 		}
 		if (characters[1]->getStatus() != Character::KO && characters[1]->getStatus() != Character::KO)
 		{
 			characters[1]->takeTurn();
-			characters[1]->dealDamage(*characters[0]);
 			characters[0]->showStats();
 		}
 		else {
-			std::cout << "A character died. Exiting battle.\n";
+			std::cout << "A character died.\n";
 			break;
 		}
 	}
-	int i = 0;
-	while (characters[0]->getStatus() != Character::KO || characters[1]->getStatus() != Character::KO)
-	{
-		
-		i++;
-		if (i > 100) { //temporary solution in case loop doesn't end with someone dying.
-			std::cout << "100 rounds passed without anyone dying. Breaking loop";
-			break;
-		}
-	}
-	std::cout << "Exiting battle.";
+	std::cout << "Exiting battle.\n";
+	characters.clear();
 }
 
 
