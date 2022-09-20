@@ -91,25 +91,26 @@ void Character::takeTurn()
 	{
 		std::cout << name << "'s turn.\n";
 		dealDamage();
+
+		if (condition == poison) {
+			float poisonDamage = static_cast<float>(maxHealth) / 10;
+			std::cout << this->name << " is poisoned.\n";
+			takeDamage(poisonDamage, true);
+		}
+
 		if (statusTimer > 0) {
 			statusTimer--; //decrement status effect timer by one each turn.
 		}
+
 		if (statusTimer == 0 && condition != normal)
 		{
 			std::cout << name << "'s status is back to normal.\n\n";
 			condition = normal;
 		}
-		
-		if (condition == poison) {
-			// Change this to apply poison damage after attacking? Currently player can die from poison damage and attack after it.
-			float poisonDamage = static_cast<float>(maxHealth) / 10;
-			std::cout << this->name << " is poisoned.\n";
-			takeDamage(poisonDamage, true);
-		}
 	}
 	else
 	{
-		std::cout << name << " is dead. Can't act.";
+		std::cout << name << " is dead. Can't act.\n";
 	}
 	
 }
@@ -124,7 +125,7 @@ void Character::applyStatus(status effect)
 	if (statusTimer == 0)
 	{
 		condition = effect;
-		statusTimer = 3; //apply status for 3 turns (actually 2, because 
+		statusTimer = 3; //apply status for 3 turns 
 		if (effect == poison)
 		{
 			std::cout << name << " is now poisoned.\n";

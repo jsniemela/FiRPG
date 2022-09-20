@@ -27,7 +27,7 @@ void Battle::turnOrder(std::vector<Character*>& characters)
 std::vector<Character*> setupCharacters() {
 	std::vector<Character*> characters;
 	characters.push_back(new Character { "Hero", 100, 10, 3, 7, 2, 25, 10 });
-	characters.push_back(new Character{ "Villain", 100, 10, 3, 7, 2, 25, 15 });
+	characters.push_back(new Character{ "Villain", 100, 10, 3, 7, 2, 25, 5 });
 	return characters;
 }
 
@@ -45,6 +45,17 @@ void Battle::simulateBattle()
 	//for (int i = 0; i < 3; i++)
 	characters[0]->setTarget(characters[1]);
 	characters[1]->setTarget(characters[0]);
+
+	while (characters[0]->getStatus() != Character::KO && characters[1]->getStatus() != Character::KO)
+	{
+		for (auto character : characters)
+		{
+			character->showStats();
+			character->takeTurn();
+		}
+	}
+	std::cout << "Exiting battle.\n";
+	/*
 	for (int i = 0; i < 100; i++)
 	{
 		std::cout << "turn: " << i << std::endl;
@@ -63,11 +74,16 @@ void Battle::simulateBattle()
 			characters[0]->showStats();
 		}
 		else {
-			std::cout << "A character died.\n";
+			std::cout << "A character has died.\n";
 			break;
 		}
 	}
 	std::cout << "Exiting battle.\n";
+	*/
+	for (auto p : characters)
+	{
+		delete p;
+	}
 	characters.clear();
 }
 
