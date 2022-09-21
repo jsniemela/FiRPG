@@ -10,12 +10,11 @@ private:
 	//Character* character2;
 	std::vector<Character*> players;
 	std::vector<Character*> enemies;
-	std::vector<Character*> characters;
 public:
 	Battle();
-	void turnOrder();
+	void turnOrder(std::vector<Character*>& characters);
 	void simulateBattle();
-	void setupCharacters();
+	std::vector<Character*> setupCharacters();
 	//void turnOrder(Character &player);
 	//void turnOrder();
 };

@@ -6,10 +6,9 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-Battle::Battle() {
-}
+Battle::Battle() {}
 
-void Battle::turnOrder()
+void Battle::turnOrder(std::vector<Character*>& characters)
 {
 	std::cout << "Turn order: \n";
 	//this currently sorts the list for all contexts, consider making a local vector
@@ -25,25 +24,31 @@ void Battle::turnOrder()
 	std::cout << std::endl;
 }
 
-void Battle::setupCharacters() 
+std::vector<Character*> Battle::setupCharacters()
 {
+	std::vector<Character*> characters;
 	
-	characters.push_back(new Character { "Player1", 100, 10, 3, 7, 2, 25, 10 });
-	characters.push_back(new Character { "Player2", 100, 10, 3, 7, 2, 25, 10 });
-	characters.push_back(new Character{ "Enemy", 100, 10, 3, 7, 2, 25, 5 });
-	characters.push_back(new Character{ "Enemy2", 100, 10, 3, 7, 2, 25, 5 });
-	/*
-	characters.resize(players.size() + enemies.size());
+	Character* p1 = new Character("Player1", 100, 10, 3, 7, 2, 25, 10);
+	Character* p2 = new Character("Player2", 100, 10, 3, 7, 2, 25, 8);
+	Character* e1 = new Character("Enemy1", 100, 10, 3, 7, 2, 25, 12);
+	Character* e2 = new Character("Enemy2", 100, 10, 3, 7, 2, 25, 6);
+	
+	players.push_back(p1);
+	players.push_back(p2);
+	enemies.push_back(e1);
+	enemies.push_back(e2);
+
 	characters.insert(characters.end(), players.begin(), players.end());
 	characters.insert(characters.end(), enemies.begin(), enemies.end());
-	*/
+	
+	return characters;
 }
 
 void Battle::simulateBattle()
 {
-	setupCharacters();
-	turnOrder();
-
+	std::vector<Character*> characters = setupCharacters();
+	turnOrder(characters);
+	/*
 	players[0]->levelUp();
 	enemies[0]->levelUp();
 	players[0]->showStats();
@@ -51,8 +56,11 @@ void Battle::simulateBattle()
 	enemies[0]->showStats();
 	std::cout << "\n";
 	//for (int i = 0; i < 3; i++)
+	*/
 	players[0]->setTarget(enemies[0]);
+	players[1]->setTarget(enemies[0]);
 	enemies[0]->setTarget(players[0]);
+	enemies[1]->setTarget(players[0]);
 
 	while (players[0]->getStatus() != Character::KO && enemies[0]->getStatus() != Character::KO)
 	{
@@ -88,11 +96,23 @@ void Battle::simulateBattle()
 	}
 	std::cout << "Exiting battle.\n";
 	*/
-	for (auto p : characters)
+	for (auto c : characters)
+	{
+		delete c;
+	}
+	characters.clear();
+	/*
+	for (auto p : players)
 	{
 		delete p;
 	}
-	characters.clear();
+	players.clear();
+	for (auto e : enemies)
+	{
+		delete e;
+	}
+	enemies.clear();
+	*/
 }
 
 
