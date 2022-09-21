@@ -6,9 +6,10 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-Battle::Battle() {}
+Battle::Battle() {
+}
 
-void Battle::turnOrder(std::vector<Character*>& characters)
+void Battle::turnOrder()
 {
 	std::cout << "Turn order: \n";
 	//this currently sorts the list for all contexts, consider making a local vector
@@ -24,29 +25,36 @@ void Battle::turnOrder(std::vector<Character*>& characters)
 	std::cout << std::endl;
 }
 
-std::vector<Character*> setupCharacters() {
-	std::vector<Character*> characters;
-	characters.push_back(new Character { "Hero", 100, 10, 3, 7, 2, 25, 10 });
-	characters.push_back(new Character{ "Villain", 100, 10, 3, 7, 2, 25, 5 });
-	return characters;
+void Battle::setupCharacters() 
+{
+	
+	characters.push_back(new Character { "Player1", 100, 10, 3, 7, 2, 25, 10 });
+	characters.push_back(new Character { "Player2", 100, 10, 3, 7, 2, 25, 10 });
+	characters.push_back(new Character{ "Enemy", 100, 10, 3, 7, 2, 25, 5 });
+	characters.push_back(new Character{ "Enemy2", 100, 10, 3, 7, 2, 25, 5 });
+	/*
+	characters.resize(players.size() + enemies.size());
+	characters.insert(characters.end(), players.begin(), players.end());
+	characters.insert(characters.end(), enemies.begin(), enemies.end());
+	*/
 }
 
 void Battle::simulateBattle()
 {
-	std::vector<Character*> characters = setupCharacters();
-	turnOrder(characters);
+	setupCharacters();
+	turnOrder();
 
-	characters[0]->levelUp();
-	characters[1]->levelUp();
-	characters[0]->showStats();
+	players[0]->levelUp();
+	enemies[0]->levelUp();
+	players[0]->showStats();
 	std::cout << "\n";
-	characters[1]->showStats();
+	enemies[0]->showStats();
 	std::cout << "\n";
 	//for (int i = 0; i < 3; i++)
-	characters[0]->setTarget(characters[1]);
-	characters[1]->setTarget(characters[0]);
+	players[0]->setTarget(enemies[0]);
+	enemies[0]->setTarget(players[0]);
 
-	while (characters[0]->getStatus() != Character::KO && characters[1]->getStatus() != Character::KO)
+	while (players[0]->getStatus() != Character::KO && enemies[0]->getStatus() != Character::KO)
 	{
 		for (auto character : characters)
 		{
