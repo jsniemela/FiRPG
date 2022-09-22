@@ -1,7 +1,7 @@
 #pragma once
 #include "Character.h"
-#include <iostream>
-#include <vector>
+//#include <iostream>
+//#include <vector>
 
 class Battle
 {
@@ -12,9 +12,8 @@ private:
 	//Character* character2;
 public:
 	Battle(std::vector<Character*> enms, std::vector<Character*> plrs);
-	void turnOrder(std::vector<Character*>& characters);
+	std::vector<Character*> turnOrder();
 	void simulateBattle();
-	std::vector<Character*> setupCharacters();
 	//void turnOrder(Character &player);
 	//void turnOrder();
 };

@@ -5,11 +5,8 @@
 class CharacterManager
 {
 private:
-	std::vector<Character*> players;
-	std::vector<Character*> enemies;
+	std::vector<Character*> characters;
 public:
-	void addPlayers(Character* plr);
-	void addEnemies(Character* enm);
-	std::vector<Character*> getPlayers();
-	std::vector<Character*> getEnemies();
+	void addCharacters(Character* ch);
+	std::vector<Character*> getCharacters();
 };

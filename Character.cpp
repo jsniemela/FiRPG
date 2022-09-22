@@ -37,6 +37,10 @@ int Character::getSpeed()
 enum Character::status Character::getStatus() {
 	return condition;
 };
+Character* Character::getTarget()
+{
+	return target;
+}
 std::string Character::getName()
 {
 	return name;
@@ -75,14 +79,17 @@ void Character::levelUp()
 void Character::showStats()
 {
 	std::cout << "Name: " << name << "\n";
+	std::cout << "Health: " << currentHealth << "/" << maxHealth << "\n";
+	/*
 	std::cout << "Level: " << level << "\n";
 	//std::cout << "Status: " << condition << "\n"; // prints number of the status affliction
-	std::cout << "Health: " << currentHealth << "/" << maxHealth << "\n";
 	std::cout << "Attack: " << attack << "\n";
 	std::cout << "Defence: " << defence << "\n";
 	std::cout << "Magic Attack: " << magicAttack << "\n";
 	std::cout << "Magic Defence: " << magicDefence << "\n";
-	std::cout << "Crit Rate: " << critRate << "\n\n";
+	std::cout << "Crit Rate: " << critRate << "\n";
+	*/
+	std::cout << std::endl;
 }
 
 void Character::takeTurn()
@@ -180,6 +187,7 @@ void Character::takeDamage(float baseDamage, bool ignoreDefence)
 	if (currentHealth < 0) {
 		currentHealth = 0;
 	}
+	showStats();
 	if (currentHealth == 0) {
 		die();
 	}

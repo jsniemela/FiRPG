@@ -1,21 +1,11 @@
 #include "CharacterManager.h"
 
-void CharacterManager::addPlayers(Character* plr)
+void CharacterManager::addCharacters(Character* ch)
 {
-	players.push_back(plr);
+	characters.push_back(ch);
 }
 
-void CharacterManager::addEnemies(Character* enm)
+std::vector<Character*> CharacterManager::getCharacters()
 {
-	enemies.push_back(enm);
-}
-
-std::vector<Character*> CharacterManager::getPlayers()
-{
-	return players;
-}
-
-std::vector<Character*> CharacterManager::getEnemies()
-{
-	return enemies;
+	return characters;
 }

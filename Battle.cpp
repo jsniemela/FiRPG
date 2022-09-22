@@ -14,35 +14,24 @@ Battle::Battle(std::vector<Character*> enms, std::vector<Character*> plrs)
 
 }
 
-void Battle::turnOrder(std::vector<Character*>& characters)
+std::vector<Character*> Battle::turnOrder()
 {
-	std::cout << "Turn order: \n";
-	//this currently sorts the list for all contexts, consider making a local vector
+	std::vector<Character*> characters;
+	characters.insert(characters.end(), players.begin(), players.end());
+	characters.insert(characters.end(), enemies.begin(), enemies.end());
+
 	std::sort(characters.begin(), characters.end(), 
 		[](Character* &left, Character* &right)
 		{
 			return left->getSpeed() > right->getSpeed();
 		});
-	for (int i = 0; i < characters.size(); i++)
-	{
-		std::cout << characters[i]->getName() << "\n";
-	}
-	std::cout << std::endl;
-}
-
-std::vector<Character*> Battle::setupCharacters()
-{
-	std::vector<Character*> characters;
-	characters.insert(characters.end(), players.begin(), players.end());
-	characters.insert(characters.end(), enemies.begin(), enemies.end());
 
 	return characters;
 }
 
 void Battle::simulateBattle()
 {
-	std::vector<Character*> characters = setupCharacters();
-	turnOrder(characters);
+	std::vector<Character*> characters = turnOrder();
 	players[0]->setTarget(enemies[0]);
 	players[1]->setTarget(enemies[0]);
 	enemies[0]->setTarget(players[0]);
@@ -52,18 +41,17 @@ void Battle::simulateBattle()
 	{
 		for (auto character : characters)
 		{
-			character->showStats();
 			character->takeTurn();
-			// TODO: check deaths here too, change target to next with +1 and break loop if not targets left.
 		}
 	}
 	std::cout << "Exiting battle.\n";
-
+	
 	for (auto c : characters)
 	{
 		delete c;
 	}
 	characters.clear();
+	
 }
 
 
@@ -76,13 +64,14 @@ int main()
 	Character* e1 = new Character("Enemy1", 100, 10, 3, 7, 2, 25, 12);
 	Character* e2 = new Character("Enemy2", 100, 10, 3, 7, 2, 25, 6);
 
-	CharacterManager cm;
-	cm.addPlayers(p1);
-	cm.addPlayers(p2);
-	cm.addEnemies(e1);
-	cm.addEnemies(e2);
+	CharacterManager pm; //player manager
+	CharacterManager em; //enemy manager
+	pm.addCharacters(p1);
+	pm.addCharacters(p2);
+	em.addCharacters(e1);
+	em.addCharacters(e2);
 	
-	Battle battle(cm.getEnemies(), cm.getPlayers());
+	Battle battle(em.getCharacters(), pm.getCharacters());
 
 	battle.simulateBattle();
 	//_CrtDumpMemoryLeaks();

@@ -44,4 +44,5 @@ public:
 	int getCritRate();
 	int getSpeed();
 	enum status getStatus();
+	Character* getTarget();
 };
