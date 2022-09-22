@@ -6,12 +6,12 @@
 class Battle
 {
 private:
+	std::vector<Character*> enemies;
+	std::vector<Character*> players;
 	//Character* character;
 	//Character* character2;
-	std::vector<Character*> players;
-	std::vector<Character*> enemies;
 public:
-	Battle();
+	Battle(std::vector<Character*> enms, std::vector<Character*> plrs);
 	void turnOrder(std::vector<Character*>& characters);
 	void simulateBattle();
 	std::vector<Character*> setupCharacters();

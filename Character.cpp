@@ -90,7 +90,13 @@ void Character::takeTurn()
 	if (condition != KO)
 	{
 		std::cout << name << "'s turn.\n";
-		dealDamage();
+		if (target != nullptr) {
+			dealDamage();
+		}
+		else
+		{
+			std::cout << "No target available";
+		}
 
 		if (condition == poison) {
 			float poisonDamage = static_cast<float>(maxHealth) / 10;
