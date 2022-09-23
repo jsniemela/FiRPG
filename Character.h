@@ -19,9 +19,9 @@ private:
 	int critRate;
 	int speed;
 	int statusTimer;
-	Character* target;
-	static std::vector<Character> *enemies;
-	static std::vector<Character> *friends;
+	int target;
+	std::vector<Character*> enemies;
+	std::vector<Character*> friends;
 public:
 	enum status { normal, poison, KO, slow, haste, petrify, protect, shell } condition;
 	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
@@ -34,7 +34,9 @@ public:
 	void die();
 	void takeTurn();
 	void applyStatus(status);
-	void setTarget(Character* newTarget);
+	void setTarget(int newTarget);
+	void setEnemyList(std::vector<Character*> enms);
+	void setPlayerList(std::vector<Character*> plrs);
 
 	std::string getName();
 	int getMaxHealth();
@@ -44,5 +46,5 @@ public:
 	int getCritRate();
 	int getSpeed();
 	enum status getStatus();
-	Character* getTarget();
+	int getTarget();
 };

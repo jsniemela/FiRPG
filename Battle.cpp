@@ -32,16 +32,24 @@ std::vector<Character*> Battle::turnOrder()
 void Battle::simulateBattle()
 {
 	std::vector<Character*> characters = turnOrder();
-	players[0]->setTarget(enemies[0]);
-	players[1]->setTarget(enemies[0]);
-	enemies[0]->setTarget(players[0]);
-	enemies[1]->setTarget(players[0]);
+	for (auto pl : players) {
+		pl->setEnemyList(enemies);
+		pl->setPlayerList(players);
+	}
+	for (auto en : enemies) {
+		en->setEnemyList(players);
+		en->setPlayerList(enemies);
+	}
 
-	while (players[0]->getStatus() != Character::KO && enemies[0]->getStatus() != Character::KO) // TODO: check if all characters from one side are dead
+	while (players.back()->getStatus() != Character::KO && enemies.back()->getStatus() != Character::KO) //unnecessary?
 	{
 		for (auto character : characters)
 		{
 			character->takeTurn();
+			if (players.back()->getStatus() == Character::KO || enemies.back()->getStatus() == Character::KO) //extra check so that remaining players don't take their turn
+			{
+				break;
+			}
 		}
 	}
 	std::cout << "Exiting battle.\n";
@@ -59,9 +67,9 @@ int main()
 {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	Character* p1 = new Character("Player1", 100, 10, 3, 7, 2, 25, 10);
-	Character* p2 = new Character("Player2", 100, 10, 3, 7, 2, 25, 8);
-	Character* e1 = new Character("Enemy1", 100, 10, 3, 7, 2, 25, 12);
+	Character* p1 = new Character("Player1", 100, 15, 3, 7, 2, 25, 10);
+	Character* p2 = new Character("Player2", 100, 13, 3, 7, 2, 25, 8);
+	Character* e1 = new Character("Enemy1", 100, 8, 3, 7, 2, 25, 12);
 	Character* e2 = new Character("Enemy2", 100, 10, 3, 7, 2, 25, 6);
 
 	CharacterManager pm; //player manager

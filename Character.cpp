@@ -7,7 +7,7 @@ Character::Character(std::string newName, int hp, int atk, int def, int matk, in
 	currentHealth = maxHealth;
 	condition = normal;
 	statusTimer = 0;
-	target = nullptr;
+	target = 0;
 }
 
 int Character::getMaxHealth()
@@ -37,7 +37,7 @@ int Character::getSpeed()
 enum Character::status Character::getStatus() {
 	return condition;
 };
-Character* Character::getTarget()
+int Character::getTarget()
 {
 	return target;
 }
@@ -97,7 +97,12 @@ void Character::takeTurn()
 	if (condition != KO)
 	{
 		std::cout << name << "'s turn.\n";
-		if (target != nullptr) {
+		if (enemies[target]->getStatus() == KO && enemies[target+1] != nullptr)
+		{
+			target++;
+			std::cout << name << " changed target to the next enemy.\n";
+		}
+		if (enemies[target] != nullptr) {
 			dealDamage();
 		}
 		else
@@ -128,7 +133,17 @@ void Character::takeTurn()
 	
 }
 
-void Character::setTarget(Character* newTarget)
+void Character::setEnemyList(std::vector<Character*> enms)
+{
+	enemies = enms;
+}
+
+void Character::setPlayerList(std::vector<Character*> plrs)
+{
+	friends = plrs;
+}
+
+void Character::setTarget(int newTarget)
 {
 	target = newTarget;
 }
@@ -146,22 +161,22 @@ void Character::applyStatus(status effect)
 	}
 }
 
-void Character::dealDamage() 
+void Character::dealDamage()
 {
 	bool critical;
 	critical = critRate >= randomizeInt(1, 100);
 
 	float critBonus = 2.0f;
-	std::cout << name << " attacks " << target->getName() << "!\n";
+	std::cout << name << " attacks " << enemies[target]->getName() << "!\n";
 	if (critical) 
 	{
 		std::cout << "Critical Hit!\n";
-		target->applyStatus(poison); //apply poison on critical hit (for testing purposes)
-		target->takeDamage(static_cast<float>(attack) * critBonus, false);
+		enemies[target]->applyStatus(poison); //apply poison on critical hit (for testing purposes)
+		enemies[target]->takeDamage(static_cast<float>(attack) * critBonus, false);
 	}
 	else
 	{
-		target->takeDamage(static_cast<float>(attack), false);
+		enemies[target]->takeDamage(static_cast<float>(attack), false);
 	}
 }
 
