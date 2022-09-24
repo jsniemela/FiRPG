@@ -97,12 +97,20 @@ void Character::takeTurn()
 	if (condition != KO)
 	{
 		std::cout << name << "'s turn.\n";
+		if (enemies[target]->getStatus() == KO)
+		{
+			enemies.erase(enemies.begin() + target);
+		}
+		target = randomizeInt(1, enemies.size())-1;
+		/*
 		if (enemies[target]->getStatus() == KO && enemies[target+1] != nullptr)
 		{
 			target++;
 			std::cout << name << " changed target to the next enemy.\n";
 		}
-		if (enemies[target] != nullptr) {
+		*/
+		if (enemies[target] != nullptr && enemies[target]->getStatus() != KO) {
+			std::cout << "New Target is " << enemies[target]->getName() << ".\n";
 			dealDamage();
 		}
 		else

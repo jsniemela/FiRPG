@@ -6,7 +6,7 @@
 class Battle
 {
 private:
-	std::vector<Character*> enemies;
+	std::vector<Character*> enemies; 
 	std::vector<Character*> players;
 	//Character* character;
 	//Character* character2;

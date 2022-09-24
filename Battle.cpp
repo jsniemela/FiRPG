@@ -32,6 +32,10 @@ std::vector<Character*> Battle::turnOrder()
 void Battle::simulateBattle()
 {
 	std::vector<Character*> characters = turnOrder();
+
+	int deadPlayers = 0;
+	int deadEnemies = 0;
+
 	for (auto pl : players) {
 		pl->setEnemyList(enemies);
 		pl->setPlayerList(players);
@@ -41,12 +45,32 @@ void Battle::simulateBattle()
 		en->setPlayerList(enemies);
 	}
 
-	while (players.back()->getStatus() != Character::KO && enemies.back()->getStatus() != Character::KO) //unnecessary?
+	while (deadPlayers != players.size() && deadEnemies != enemies.size()) //unnecessary? no. the break inside for loop would only break the for loop
 	{
 		for (auto character : characters)
 		{
-			character->takeTurn();
-			if (players.back()->getStatus() == Character::KO || enemies.back()->getStatus() == Character::KO) //extra check so that remaining players don't take their turn
+			deadPlayers = 0;
+			deadEnemies = 0;
+			if (character->getStatus() != Character::KO)
+			{
+				character->takeTurn();
+			}
+
+			for (auto pl : players) {
+				if (pl->getStatus() == Character::KO) 
+				{
+					deadPlayers++;
+				}
+			}
+
+			for (auto en : enemies) {
+				if (en->getStatus() == Character::KO)
+				{
+					deadEnemies++;
+				}
+			}
+
+			if (deadPlayers == players.size() || deadEnemies == enemies.size())
 			{
 				break;
 			}
@@ -69,8 +93,8 @@ int main()
 
 	Character* p1 = new Character("Player1", 100, 15, 3, 7, 2, 25, 10);
 	Character* p2 = new Character("Player2", 100, 13, 3, 7, 2, 25, 8);
-	Character* e1 = new Character("Enemy1", 100, 8, 3, 7, 2, 25, 12);
-	Character* e2 = new Character("Enemy2", 100, 10, 3, 7, 2, 25, 6);
+	Character* e1 = new Character("Enemy1", 100, 12, 3, 7, 2, 25, 12);
+	Character* e2 = new Character("Enemy2", 100, 12, 5, 7, 2, 25, 6);
 
 	CharacterManager pm; //player manager
 	CharacterManager em; //enemy manager
