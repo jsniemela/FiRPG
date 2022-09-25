@@ -76,7 +76,11 @@ void Battle::simulateBattle()
 			}
 		}
 	}
-	std::cout << "Exiting battle.\n";
+	std::cout << "Exiting battle. \n\n";
+	for (auto ch : characters)
+	{
+		ch->showStats();
+	}
 	
 	for (auto c : characters)
 	{

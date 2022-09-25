@@ -112,21 +112,22 @@ void Character::takeTurn()
 		{
 			std::cout << "No target available.\n";
 		}
+		if (condition != KO && static_cast<int>(enemies.size()) > 0) {
+			if (condition == poison) {
+				float poisonDamage = static_cast<float>(maxHealth) / 10;
+				std::cout << this->name << " is poisoned.\n";
+				takeDamage(poisonDamage, true);
+			}
 
-		if (condition == poison) {
-			float poisonDamage = static_cast<float>(maxHealth) / 10;
-			std::cout << this->name << " is poisoned.\n";
-			takeDamage(poisonDamage, true);
-		}
+			if (statusTimer > 0) {
+				statusTimer--; //decrement status effect timer by one each turn.
+			}
 
-		if (statusTimer > 0) {
-			statusTimer--; //decrement status effect timer by one each turn.
-		}
-
-		if (statusTimer == 0 && condition != normal)
-		{
-			std::cout << name << "'s status is back to normal.\n\n";
-			condition = normal;
+			if (statusTimer == 0 && condition != normal)
+			{
+				std::cout << name << "'s status is back to normal.\n\n";
+				condition = normal;
+			}
 		}
 	}
 	else
