@@ -97,25 +97,20 @@ void Character::takeTurn()
 	if (condition != KO)
 	{
 		std::cout << name << "'s turn.\n";
-		if (enemies[target]->getStatus() == KO)
+		target = randomizeInt(1, static_cast<int>(enemies.size())) - 1;
+		while (enemies[target]->getStatus() == KO && static_cast<int>(enemies.size()) > 0)
 		{
+			// delete from enemy list if dead and re-randomize
 			enemies.erase(enemies.begin() + target);
+			target = randomizeInt(1, static_cast<int>(enemies.size())) - 1; 
 		}
-		target = randomizeInt(1, enemies.size())-1;
-		/*
-		if (enemies[target]->getStatus() == KO && enemies[target+1] != nullptr)
+		if (enemies[target]->getStatus() != KO)
 		{
-			target++;
-			std::cout << name << " changed target to the next enemy.\n";
-		}
-		*/
-		if (enemies[target] != nullptr && enemies[target]->getStatus() != KO) {
-			std::cout << "New Target is " << enemies[target]->getName() << ".\n";
 			dealDamage();
 		}
 		else
 		{
-			std::cout << "No target available";
+			std::cout << "No target available.\n";
 		}
 
 		if (condition == poison) {
