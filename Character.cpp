@@ -107,6 +107,10 @@ void Character::takeTurn()
 		if (enemies[target]->getStatus() != KO)
 		{
 			dealDamage();
+			if (enemies[target]->getStatus() == KO)
+			{
+				enemies.erase(enemies.begin() + target);
+			}
 		}
 		else
 		{
