@@ -46,6 +46,11 @@ std::string Character::getName()
 	return name;
 }
 
+bool Character::getGuarding()
+{
+	return guarding;
+}
+
 void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd)
 {
 	level = 1;
@@ -60,6 +65,7 @@ void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, in
 	magicDefence = mdef;
 	critRate = crit;
 	speed = spd;
+	//actions = { "attack", "guard" };
 }
 
 void Character::levelUp() 
@@ -72,7 +78,6 @@ void Character::levelUp()
 	defence += randomizeInt(1, 3);
 	magicAttack += randomizeInt(1, 3);
 	magicDefence += randomizeInt(1, 3);
-	
 	std::cout << name << " leveled up!" << "\n\n";
 }
 
@@ -92,10 +97,25 @@ void Character::showStats()
 	std::cout << std::endl;
 }
 
+void Character::chooseAction()
+{
+	int action = randomizeInt(0, 4); //80% change to attack, 40% change to block
+	if (action <= 3)
+	{
+		physicalAttack();
+	}
+	else
+	{
+		guard();
+	}
+
+}
+
 void Character::takeTurn()
 {
 	if (condition != KO)
 	{
+		//Checking targets might be unnecessary if the action doesn't require a target, but this also removes dead enemies so it might still be useful
 		std::cout << name << "'s turn.\n";
 		target = randomizeInt(1, static_cast<int>(enemies.size())) - 1;
 		while (enemies[target]->getStatus() == KO && static_cast<int>(enemies.size()) > 0)
@@ -106,7 +126,7 @@ void Character::takeTurn()
 		}
 		if (enemies[target]->getStatus() != KO)
 		{
-			dealDamage();
+			chooseAction();
 			if (enemies[target]->getStatus() == KO)
 			{
 				enemies.erase(enemies.begin() + target);
@@ -127,7 +147,7 @@ void Character::takeTurn()
 				statusTimer--; //decrement status effect timer by one each turn.
 			}
 
-			if (statusTimer == 0 && condition != normal)
+			if (statusTimer == 0 && condition != normal && condition != KO)
 			{
 				std::cout << name << "'s status is back to normal.\n\n";
 				condition = normal;
@@ -158,7 +178,7 @@ void Character::setTarget(int newTarget)
 
 void Character::applyStatus(status effect) 
 {
-	if (statusTimer == 0)
+	if (statusTimer == 0 && !guarding) //guard block statuses
 	{
 		condition = effect;
 		statusTimer = 3; //apply status for 3 turns 
@@ -166,6 +186,10 @@ void Character::applyStatus(status effect)
 		{
 			std::cout << name << " is now poisoned.\n";
 		}
+	}
+	else if (guarding)
+	{
+		std::cout << name << " avoided status by guarding. \n"; 
 	}
 }
 
@@ -188,7 +212,16 @@ void Character::dealDamage()
 	}
 }
 
-void Character::takeDamage(float baseDamage, bool ignoreDefence) 
+void Character::guard() {
+	guarding = true;
+	std::cout << name << " is guarding.\n\n";
+}
+
+void Character::physicalAttack() { // this will be more relevant once magic attacks are added
+	dealDamage();
+}
+
+void Character::takeDamage(float baseDamage, bool ignoreDefence) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
 {
 	int damage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence
@@ -203,13 +236,17 @@ void Character::takeDamage(float baseDamage, bool ignoreDefence)
 	{
 		damage = 0;
 	}
-
+	if (guarding)
+	{
+		damage /= 2; // this applies to poison damage too. consider if it's desirable or not.
+	}
 	currentHealth -= damage;
 	std::cout << name << " took " << damage << " damage.\n\n";
 	//std::cout << "Current health: " << currentHealth << "\n";
 	if (currentHealth < 0) {
 		currentHealth = 0;
 	}
+	guarding = false;
 	showStats();
 	if (currentHealth == 0) {
 		die();
@@ -219,6 +256,7 @@ void Character::takeDamage(float baseDamage, bool ignoreDefence)
 void Character::die()
 {
 	condition = KO;
+	statusTimer = 0;
 	std::cout << name << " died.\n\n";
 }
 
