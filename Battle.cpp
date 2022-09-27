@@ -95,12 +95,12 @@ int main()
 {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	Character* p1 = new Character("Player1", 100, 15, 3, 7, 2, 25, 10);
-	Character* p2 = new Character("Player2", 100, 13, 3, 7, 2, 25, 8);
-	Character* p3 = new Character("Player3", 100, 13, 3, 7, 2, 25, 8);
-	Character* e1 = new Character("Enemy1", 100, 12, 3, 7, 2, 25, 12);
-	Character* e2 = new Character("Enemy2", 100, 12, 5, 7, 2, 25, 6);
-	Character* e3 = new Character("Enemy3", 100, 12, 5, 7, 2, 25, 6);
+	Character* p1 = new Character("Player1", 100, 15, 3, 7, 2, 25, 10, true);
+	Character* p2 = new Character("Player2", 100, 13, 3, 7, 2, 25, 8, false);
+	Character* p3 = new Character("Player3", 100, 13, 3, 7, 2, 25, 8, false);
+	Character* e1 = new Character("Enemy1", 100, 12, 3, 7, 2, 25, 12, false);
+	Character* e2 = new Character("Enemy2", 100, 12, 5, 7, 2, 25, 6, false);
+	Character* e3 = new Character("Enemy3", 100, 12, 5, 7, 2, 25, 6, false);
 
 	CharacterManager pm; //player manager
 	CharacterManager em; //enemy manager

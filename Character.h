@@ -24,6 +24,7 @@ private:
 	std::vector<Character*> friends;
 	//std::vector<std::string> actions; // vector of abilities that the character has available. it should be able to change based on several factors.
 	bool guarding;
+	bool controlled;
 
 	void chooseAction();
 	void physicalAttack();
@@ -31,7 +32,7 @@ private:
 
 public:
 	enum status { normal, poison, KO, slow, haste, petrify, protect, shell } condition;
-	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
+	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 
 	void initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd);
 	void dealDamage();

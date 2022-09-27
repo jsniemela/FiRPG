@@ -1,7 +1,7 @@
 #include "Character.h"
 
-Character::Character(std::string newName, int hp, int atk, int def, int matk, int mdef, int crit, int spd) 
-	: name{newName}, maxHealth{ hp },attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd}
+Character::Character(std::string newName, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl) 
+	: name{newName}, maxHealth{ hp },attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd} , controlled{ctrl}
 {
 	level = 1;
 	currentHealth = maxHealth;
@@ -99,16 +99,34 @@ void Character::showStats()
 
 void Character::chooseAction()
 {
-	int action = randomizeInt(0, 4); //80% change to attack, 40% change to block
-	if (action <= 3)
+	if (controlled)
 	{
-		physicalAttack();
+		int action = 0;
+		while (action < 1 || action > 2) //change this later to use the number of available actions as max value
+		{
+			std::cout << "Choose action. (1) Attack (2) Guard: ";
+			std::cin >> action;
+			std::cout << "\n";
+		}
+		switch (action)
+		{
+			case 1:
+				physicalAttack();
+			case 2:
+				guard();
+		}
 	}
-	else
-	{
-		guard();
+	else {
+		int action = randomizeInt(0, 4); //80% change to attack, 40% change to block
+		if (action <= 3)
+		{
+			physicalAttack();
+		}
+		else
+		{
+			guard();
+		}
 	}
-
 }
 
 void Character::takeTurn()
