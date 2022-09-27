@@ -8,11 +8,16 @@ Character::Character(std::string newName, int hp, int atk, int def, int matk, in
 	condition = normal;
 	statusTimer = 0;
 	target = 0;
+	guarding = false;
 }
 
 int Character::getMaxHealth()
 {
 	return maxHealth;
+}
+int Character::getCurrentHealth()
+{
+	return currentHealth;
 }
 int Character::getAttack()
 {
@@ -106,14 +111,30 @@ void Character::chooseAction()
 		{
 			std::cout << "Choose action. (1) Attack (2) Guard: ";
 			std::cin >> action;
-			std::cout << "\n";
+			std::cout << std::endl;
 		}
+		int i = 1; // for character selection name print loop. refactor the loop later
 		switch (action)
 		{
 			case 1:
+				target = 0;
+				for (auto en : enemies) { 
+					std::cout << "(" << i << "): ";
+					i++;
+					std::cout << en->getName() << " - health: " << en->getCurrentHealth() << "\n";
+				}
+				while (target < 1 || target > static_cast<int>(enemies.size()))
+				{
+					std::cout << "Choose target:";
+					std::cin >> target;
+					std::cout << std::endl;
+				}
+				target--; 
 				physicalAttack();
+				break;
 			case 2:
 				guard();
+				break;
 		}
 	}
 	else {
