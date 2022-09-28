@@ -176,10 +176,10 @@ void Character::takeTurn()
 			std::cout << "No target available.\n";
 		}
 		if (condition != KO && static_cast<int>(enemies.size()) > 0) {
-			if (condition == poison) {
+			if (condition == poisoned) {
 				float poisonDamage = static_cast<float>(maxHealth) / 10;
 				std::cout << this->name << " is poisoned.\n";
-				takeDamage(poisonDamage, true);
+				takeDamage(poisonDamage, poison);
 			}
 
 			if (statusTimer > 0) {
@@ -221,7 +221,7 @@ void Character::applyStatus(status effect)
 	{
 		condition = effect;
 		statusTimer = 3; //apply status for 3 turns 
-		if (effect == poison)
+		if (effect == poisoned)
 		{
 			std::cout << name << " is now poisoned.\n";
 		}
@@ -242,12 +242,12 @@ void Character::dealDamage()
 	if (critical) 
 	{
 		std::cout << "Critical Hit!\n";
-		enemies[target]->applyStatus(poison); //apply poison on critical hit (for testing purposes)
-		enemies[target]->takeDamage(static_cast<float>(attack) * critBonus, false);
+		enemies[target]->applyStatus(poisoned); //apply poison on critical hit (for testing purposes)
+		enemies[target]->takeDamage(static_cast<float>(attack) * critBonus, physical);
 	}
 	else
 	{
-		enemies[target]->takeDamage(static_cast<float>(attack), false);
+		enemies[target]->takeDamage(static_cast<float>(attack), physical);
 	}
 }
 
@@ -260,11 +260,11 @@ void Character::physicalAttack() { // this will be more relevant once magic atta
 	dealDamage();
 }
 
-void Character::takeDamage(float baseDamage, bool ignoreDefence) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
+void Character::takeDamage(float baseDamage, damageType dmgType) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
 {
 	int damage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence
-	if (ignoreDefence == true) {
+	if (dmgType == poison) {
 		damage = static_cast<int>(baseDamage);
 	}
 	else
