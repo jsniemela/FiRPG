@@ -33,6 +33,7 @@ private:
 	void physicalAttack();
 	void guard();
 	void initializeActions();
+	void removeDeadTargets();
 
 public:
 	enum status { normal, poisoned, KO, slow, haste, petrify, protect, shell } condition;

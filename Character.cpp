@@ -80,7 +80,7 @@ void Character::initializeActions()
 {
 	actions.push_back(new Skill("Attack"));
 	actions.push_back(new Skill("Block"));
-	actions.push_back(new Skill("Magic")); // doesn't do anything yet
+	actions.push_back(new Skill("Skip turn")); 
 	//std::cout << actions[0]->getName();
 }
 
@@ -113,12 +113,24 @@ void Character::showStats()
 	std::cout << std::endl;
 }
 
+void Character::removeDeadTargets()
+{
+	enemies.erase( //removes dead targets
+		std::remove_if(
+			enemies.begin(),
+			enemies.end(),
+			[](Character* const& e) { return e->getStatus() == KO; }
+		),
+		enemies.end()
+	);
+}
+
 void Character::chooseAction()
 {
 	if (controlled)
 	{
 		int action = 0;
-		while (action < 1 || action > static_cast<int>(actions.size())) 
+		while (action < 1 || action > actions.size()) 
 		{
 			int i = 1;
 			for (auto act : actions)
@@ -131,17 +143,19 @@ void Character::chooseAction()
 			std::cin >> action;
 			std::cout << std::endl;
 		}
-		int i = 1; // for target selection name print loop. refactor the loop later
+		int i = 1; // for target selection name print loop. 
 		switch (action)
 		{
 			case 1:
 				target = 0;
-				for (auto en : enemies) { 
+				for (auto en : enemies) 
+				{
 					std::cout << "(" << i << "): ";
 					i++;
 					std::cout << en->getName() << " - health: " << en->getCurrentHealth() << "\n";
 				}
-				while (target < 1 || target > static_cast<int>(enemies.size()))
+				
+				while (target < 1 || target > enemies.size())
 				{
 					std::cout << "Choose target:";
 					std::cin >> target;
@@ -156,7 +170,7 @@ void Character::chooseAction()
 		}
 	}
 	else {
-		int action = randomizeInt(0, 4); //80% change to attack, 40% change to block
+		int action = randomizeInt(0, 4); //80% change to attack, 20% change to block
 		if (action <= 3)
 		{
 			physicalAttack();
@@ -172,28 +186,18 @@ void Character::takeTurn()
 {
 	if (condition != KO)
 	{
-		//Checking targets might be unnecessary if the action doesn't require a target, but this also removes dead enemies so it might still be useful
+		removeDeadTargets();
 		std::cout << name << "'s turn.\n";
-		target = randomizeInt(1, static_cast<int>(enemies.size())) - 1;
-		while (enemies[target]->getStatus() == KO && static_cast<int>(enemies.size()) > 0)
-		{
-			// delete from enemy list if dead and re-randomize
-			enemies.erase(enemies.begin() + target);
-			target = randomizeInt(1, static_cast<int>(enemies.size())) - 1; 
-		}
-		if (enemies[target]->getStatus() != KO)
-		{
+		target = randomizeInt(0, enemies.size() -1);
+		if (enemies.size() > 0) {
 			chooseAction();
-			if (enemies[target]->getStatus() == KO)
-			{
-				enemies.erase(enemies.begin() + target);
-			}
+			removeDeadTargets(); //remove again in case target(s) died.
 		}
 		else
 		{
 			std::cout << "No target available.\n";
 		}
-		if (condition != KO && static_cast<int>(enemies.size()) > 0) {
+		if (condition != KO && enemies.size() > 0) {
 			if (condition == poisoned) {
 				float poisonDamage = static_cast<float>(maxHealth) / 10;
 				std::cout << this->name << " is poisoned.\n";
