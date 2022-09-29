@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "Action.h"
 
 Character::Character(std::string newName, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl) 
 	: name{newName}, maxHealth{ hp },attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd} , controlled{ctrl}
@@ -71,6 +72,11 @@ void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, in
 	critRate = crit;
 	speed = spd;
 	//actions = { "attack", "guard" };
+}
+
+void Character::initializeActions()
+{
+	//actions.push_back(new Action);
 }
 
 void Character::levelUp() 
@@ -232,22 +238,22 @@ void Character::applyStatus(status effect)
 	}
 }
 
-void Character::dealDamage()
+void Character::dealDamage(Character* target)
 {
 	bool critical;
 	critical = critRate >= randomizeInt(1, 100);
 
 	float critBonus = 2.0f;
-	std::cout << name << " attacks " << enemies[target]->getName() << "!\n";
+	std::cout << name << " attacks " << target->getName() << "!\n";
 	if (critical) 
 	{
 		std::cout << "Critical Hit!\n";
-		enemies[target]->applyStatus(poisoned); //apply poison on critical hit (for testing purposes)
-		enemies[target]->takeDamage(static_cast<float>(attack) * critBonus, physical);
+		target->applyStatus(poisoned); //apply poison on critical hit (for testing purposes)
+		target->takeDamage(static_cast<float>(attack) * critBonus, physical);
 	}
 	else
 	{
-		enemies[target]->takeDamage(static_cast<float>(attack), physical);
+		target->takeDamage(static_cast<float>(attack), physical);
 	}
 }
 
@@ -257,7 +263,7 @@ void Character::guard() {
 }
 
 void Character::physicalAttack() { // this will be more relevant once magic attacks are added
-	dealDamage();
+	dealDamage(enemies[target]);
 }
 
 void Character::takeDamage(float baseDamage, damageType dmgType) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
