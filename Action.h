@@ -7,7 +7,9 @@ private:
 protected:
 	std::string name;
 public:
-	Action() {}
-
+	Action(std::string newName);
+	Action(){}
 	virtual ~Action() {}
+
+	std::string getName();
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "Randomizer.h"
 #include "Weapon.h"
+#include "Skill.h"
 //#include "Battle.h"
 #include <iostream>
 #include <vector>
@@ -22,7 +23,7 @@ private:
 	int target;
 	std::vector<Character*> enemies;
 	std::vector<Character*> friends;
-	//std::vector<Action*> actions;
+	std::vector<Action*> actions;
 	//std::vector<std::string> actions; // vector of abilities that the character has available. it should be able to change based on several factors.
 	bool guarding;
 	bool controlled;
@@ -37,7 +38,7 @@ public:
 	enum status { normal, poisoned, KO, slow, haste, petrify, protect, shell } condition;
 	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 
-	void initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd);
+	//void initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd);
 	void dealDamage(Character* target);
 	void levelUp();
 	void showStats();

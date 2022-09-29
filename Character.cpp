@@ -10,6 +10,7 @@ Character::Character(std::string newName, int hp, int atk, int def, int matk, in
 	statusTimer = 0;
 	target = 0;
 	guarding = false;
+	initializeActions();
 }
 
 int Character::getMaxHealth()
@@ -57,6 +58,7 @@ bool Character::getGuarding()
 	return guarding;
 }
 
+/*
 void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd)
 {
 	level = 1;
@@ -73,10 +75,13 @@ void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, in
 	speed = spd;
 	//actions = { "attack", "guard" };
 }
-
+*/
 void Character::initializeActions()
 {
-	//actions.push_back(new Action);
+	actions.push_back(new Skill("Attack"));
+	actions.push_back(new Skill("Block"));
+	actions.push_back(new Skill("Magic")); // doesn't do anything yet
+	//std::cout << actions[0]->getName();
 }
 
 void Character::levelUp() 
@@ -113,13 +118,20 @@ void Character::chooseAction()
 	if (controlled)
 	{
 		int action = 0;
-		while (action < 1 || action > 2) //change this later to use the number of available actions as max value
+		while (action < 1 || action > static_cast<int>(actions.size())) 
 		{
-			std::cout << "Choose action. (1) Attack (2) Guard: ";
+			int i = 1;
+			for (auto act : actions)
+			{
+				std::cout << "(" << i << ")";
+				std::cout << act->getName() << std::endl;
+				i++;
+			}
+			std::cout << "Choose action:";
 			std::cin >> action;
 			std::cout << std::endl;
 		}
-		int i = 1; // for character selection name print loop. refactor the loop later
+		int i = 1; // for target selection name print loop. refactor the loop later
 		switch (action)
 		{
 			case 1:

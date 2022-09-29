@@ -4,9 +4,10 @@
 class Skill: public Action
 {
 private:
-	enum damageType { physical, poison, fire, ice } dmgType;
+	enum damageType { physical, healing, poison, fire, ice } dmgType;
 	int baseDamage;
 public:
 	Skill();
+	Skill(std::string newName);
 	~Skill(){}
 };
