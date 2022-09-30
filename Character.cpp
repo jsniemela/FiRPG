@@ -1,5 +1,5 @@
 #include "Character.h"
-#include "Action.h"
+#include "Skill.h"
 
 Character::Character(std::string newName, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl) 
 	: name{newName}, maxHealth{ hp },attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd} , controlled{ctrl}
@@ -78,10 +78,10 @@ void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, in
 */
 void Character::initializeActions()
 {
-	actions.push_back(new Skill("Attack"));
-	actions.push_back(new Skill("Block"));
-	actions.push_back(new Skill("Skip turn")); 
-	//std::cout << actions[0]->getName();
+	actions.push_back(new Skill("Attack", 0, Skill::physical));
+	actions.push_back(new Skill("Block", false));
+	actions.push_back(new Skill("Strong attack", 50, Skill::physical));
+	//actions.push_back(new Skill("Skip turn", 0, Skill::physical)); 
 }
 
 void Character::levelUp() 
@@ -125,6 +125,26 @@ void Character::removeDeadTargets()
 	);
 }
 
+void Character::targetSelection()
+{
+	int i = 1;
+	target = 0;
+	for (auto en : enemies)
+	{
+		std::cout << "(" << i << "): ";
+		i++;
+		std::cout << en->getName() << " - health: " << en->getCurrentHealth() << "\n";
+	}
+
+	while (target < 1 || target > enemies.size())
+	{
+		std::cout << "Choose target:";
+		std::cin >> target;
+		std::cout << std::endl;
+	}
+	target--;
+}
+
 void Character::chooseAction()
 {
 	if (controlled)
@@ -143,41 +163,26 @@ void Character::chooseAction()
 			std::cin >> action;
 			std::cout << std::endl;
 		}
-		int i = 1; // for target selection name print loop. 
-		switch (action)
-		{
-			case 1:
-				target = 0;
-				for (auto en : enemies) 
-				{
-					std::cout << "(" << i << "): ";
-					i++;
-					std::cout << en->getName() << " - health: " << en->getCurrentHealth() << "\n";
-				}
-				
-				while (target < 1 || target > enemies.size())
-				{
-					std::cout << "Choose target:";
-					std::cin >> target;
-					std::cout << std::endl;
-				}
-				target--; 
-				physicalAttack();
-				break;
-			case 2:
-				guard();
-				break;
-		}
-	}
-	else {
-		int action = randomizeInt(0, 4); //80% change to attack, 20% change to block
-		if (action <= 3)
-		{
-			physicalAttack();
+		action--;
+		if (static_cast<Skill*>(actions[action])->getRequiresTarget()) {
+			targetSelection();
+			static_cast<Skill*>(actions[action])->useAction(this, enemies[target], attack, critRate);
 		}
 		else
 		{
-			guard();
+			static_cast<Skill*>(actions[action])->useAction(this);
+		}
+		//enemies[target]->takeDamage(static_cast<Skill*>(actions[action]));
+	}
+	else {
+		int action = randomizeInt(0, actions.size() -1); 
+		if (static_cast<Skill*>(actions[action])->getRequiresTarget()) {
+			target = randomizeInt(0, enemies.size() - 1);
+			static_cast<Skill*>(actions[action])->useAction(this, enemies[target], attack, critRate);
+		}
+		else
+		{
+			static_cast<Skill*>(actions[action])->useAction(this);
 		}
 	}
 }
@@ -253,7 +258,7 @@ void Character::applyStatus(status effect)
 		std::cout << name << " avoided status by guarding. \n"; 
 	}
 }
-
+/*
 void Character::dealDamage(Character* target)
 {
 	bool critical;
@@ -272,15 +277,17 @@ void Character::dealDamage(Character* target)
 		target->takeDamage(static_cast<float>(attack), physical);
 	}
 }
+*/
 
 void Character::guard() {
 	guarding = true;
 	std::cout << name << " is guarding.\n\n";
 }
-
+/*
 void Character::physicalAttack() { // this will be more relevant once magic attacks are added
 	dealDamage(enemies[target]);
 }
+*/
 
 void Character::takeDamage(float baseDamage, damageType dmgType) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
 {

@@ -1,10 +1,12 @@
 #pragma once
 #include "Randomizer.h"
 #include "Weapon.h"
-#include "Skill.h"
 //#include "Battle.h"
 #include <iostream>
 #include <vector>
+
+class Skill;
+class Action;
 
 class Character 
 {
@@ -27,17 +29,20 @@ private:
 	//std::vector<std::string> actions; // vector of abilities that the character has available. it should be able to change based on several factors.
 	bool guarding;
 	bool controlled;
-	enum damageType { physical, poison, fire, ice} dmgType;
 
 	void chooseAction();
-	void physicalAttack();
-	void guard();
+	//void physicalAttack();
 	void initializeActions();
 	void removeDeadTargets();
+	void targetSelection();
 
 public:
 	enum status { normal, poisoned, KO, slow, haste, petrify, protect, shell } condition;
+	enum damageType { physical, poison, fire, ice } dmgType;
 	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
+
+	Skill* getSkill();
+	Action* getAction();
 
 	//void initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd);
 	void dealDamage(Character* target);
@@ -50,6 +55,7 @@ public:
 	void setTarget(int newTarget);
 	void setEnemyList(std::vector<Character*> enms);
 	void setPlayerList(std::vector<Character*> plrs);
+	void guard();
 
 	std::string getName();
 	int getMaxHealth();
@@ -62,4 +68,8 @@ public:
 	enum status getStatus();
 	int getTarget();
 	bool getGuarding();
+
+protected:
+	Skill* s;
+	Action* a;
 };
