@@ -41,7 +41,7 @@ void Skill::useAction(Character* user, Character* target, int atk, int cr)
 	critical = cr >= randomizeInt(1, 100);
 
 	float critBonus = 2.0f;
-	std::cout << user->getName() << " attacks " << target->getName() << "!\n";
+	std::cout << user->getName() << " uses " << name << " on " << target->getName() << "!\n";
 	if (critical)
 	{
 		std::cout << "Critical Hit!\n";

@@ -52,30 +52,11 @@ std::string Character::getName()
 {
 	return name;
 }
-
 bool Character::getGuarding()
 {
 	return guarding;
 }
 
-/*
-void Character::initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd)
-{
-	level = 1;
-	name = "newname";
-	status condition;
-	condition = normal;
-	maxHealth = hp;
-	currentHealth = maxHealth;
-	attack = atk;
-	defence = def;
-	magicAttack = matk;
-	magicDefence = mdef;
-	critRate = crit;
-	speed = spd;
-	//actions = { "attack", "guard" };
-}
-*/
 void Character::initializeActions()
 {
 	actions.push_back(new Skill("Attack", 0, Skill::physical));
@@ -172,7 +153,6 @@ void Character::chooseAction()
 		{
 			static_cast<Skill*>(actions[action])->useAction(this);
 		}
-		//enemies[target]->takeDamage(static_cast<Skill*>(actions[action]));
 	}
 	else {
 		int action = randomizeInt(0, actions.size() -1); 
@@ -237,11 +217,6 @@ void Character::setPlayerList(std::vector<Character*> plrs)
 	friends = plrs;
 }
 
-void Character::setTarget(int newTarget)
-{
-	target = newTarget;
-}
-
 void Character::applyStatus(status effect) 
 {
 	if (statusTimer == 0 && !guarding) //guard block statuses
@@ -258,36 +233,11 @@ void Character::applyStatus(status effect)
 		std::cout << name << " avoided status by guarding. \n"; 
 	}
 }
-/*
-void Character::dealDamage(Character* target)
-{
-	bool critical;
-	critical = critRate >= randomizeInt(1, 100);
-
-	float critBonus = 2.0f;
-	std::cout << name << " attacks " << target->getName() << "!\n";
-	if (critical) 
-	{
-		std::cout << "Critical Hit!\n";
-		target->applyStatus(poisoned); //apply poison on critical hit (for testing purposes)
-		target->takeDamage(static_cast<float>(attack) * critBonus, physical);
-	}
-	else
-	{
-		target->takeDamage(static_cast<float>(attack), physical);
-	}
-}
-*/
 
 void Character::guard() {
 	guarding = true;
 	std::cout << name << " is guarding.\n\n";
 }
-/*
-void Character::physicalAttack() { // this will be more relevant once magic attacks are added
-	dealDamage(enemies[target]);
-}
-*/
 
 void Character::takeDamage(float baseDamage, damageType dmgType) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
 {

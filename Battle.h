@@ -13,6 +13,7 @@ private:
 public:
 	Battle(std::vector<Character*> enms, std::vector<Character*> plrs);
 	std::vector<Character*> turnOrder();
+	void setupBattle();
 	void simulateBattle();
 	//void turnOrder(Character &player);
 	//void turnOrder();

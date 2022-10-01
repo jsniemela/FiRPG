@@ -26,15 +26,14 @@ private:
 	std::vector<Character*> enemies;
 	std::vector<Character*> friends;
 	std::vector<Action*> actions;
-	//std::vector<std::string> actions; // vector of abilities that the character has available. it should be able to change based on several factors.
 	bool guarding;
 	bool controlled;
 
 	void chooseAction();
-	//void physicalAttack();
 	void initializeActions();
 	void removeDeadTargets();
 	void targetSelection();
+	void die();
 
 public:
 	enum status { normal, poisoned, KO, slow, haste, petrify, protect, shell } condition;
@@ -44,15 +43,12 @@ public:
 	Skill* getSkill();
 	Action* getAction();
 
-	//void initializeStats(int hp, int atk, int def, int matk, int mdef, int crit, int spd);
 	void dealDamage(Character* target);
 	void levelUp();
 	void showStats();
 	void takeDamage(float baseDamage, damageType dmgType);
-	void die();
 	void takeTurn();
 	void applyStatus(status);
-	void setTarget(int newTarget);
 	void setEnemyList(std::vector<Character*> enms);
 	void setPlayerList(std::vector<Character*> plrs);
 	void guard();
