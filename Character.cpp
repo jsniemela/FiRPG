@@ -43,7 +43,22 @@ int Character::getSpeed()
 }
 enum Character::status Character::getStatus() {
 	return condition;
+}
+
+std::string Character::getStatusName() {
+	std::string status = "";
+	switch (condition) {
+	case 0:
+		return "Normal";
+	case 1:
+		return "Poisoned";
+	case 2:
+		return "KO";
+	default:
+		return "Normal";
+	}
 };
+
 int Character::getTarget()
 {
 	return target;
@@ -61,7 +76,8 @@ void Character::initializeActions()
 {
 	actions.push_back(new Skill("Attack", 0, Skill::physical));
 	actions.push_back(new Skill("Block", false));
-	actions.push_back(new Skill("Strong attack", 50, Skill::physical));
+	actions.push_back(new Skill("Poison attack", 0, Skill::physical, Skill::poisoned));
+	actions.push_back(new Skill("Kill", 0, Skill::statusOnly, Skill::KO));
 	//actions.push_back(new Skill("Skip turn", 0, Skill::physical)); 
 }
 
@@ -114,7 +130,7 @@ void Character::targetSelection()
 	{
 		std::cout << "(" << i << "): ";
 		i++;
-		std::cout << en->getName() << " - health: " << en->getCurrentHealth() << "\n";
+		std::cout << en->getName() << " - " << en->getCurrentHealth() << " HP, status: " << en->getStatusName() << "\n";
 	}
 
 	while (target < 1 || target > enemies.size())
@@ -217,20 +233,26 @@ void Character::setPlayerList(std::vector<Character*> plrs)
 	friends = plrs;
 }
 
+void Character::setHealth(int hp) {
+	currentHealth = hp;
+}
+
 void Character::applyStatus(status effect) 
 {
-	if (statusTimer == 0 && !guarding) //guard block statuses
+	if (guarding)
 	{
-		condition = effect;
-		statusTimer = 3; //apply status for 3 turns 
-		if (effect == poisoned)
-		{
-			std::cout << name << " is now poisoned.\n";
-		}
+		std::cout << name << " avoided status by guarding. \n\n";
 	}
-	else if (guarding)
+	else
 	{
-		std::cout << name << " avoided status by guarding. \n"; 
+		if (effect == KO) {
+			die();
+		}
+		else {
+			condition = effect;
+			statusTimer = 3; //apply status for 3 turns 
+			std::cout << name << "'s status is now " << getStatusName() << ".\n\n";
+		}
 	}
 }
 
@@ -243,7 +265,7 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 {
 	int damage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence
-	if (dmgType == poison) {
+	if (dmgType == Skill::poisoned) {
 		damage = static_cast<int>(baseDamage);
 	}
 	else
@@ -274,6 +296,7 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 void Character::die()
 {
 	condition = KO;
+	currentHealth = 0;
 	statusTimer = 0;
 	std::cout << name << " died.\n\n";
 }

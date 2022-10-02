@@ -36,7 +36,7 @@ private:
 	void die();
 
 public:
-	enum status { normal, poisoned, KO, slow, haste, petrify, protect, shell } condition;
+	enum status { normal, poisoned, KO } condition;
 	enum damageType { physical, poison, fire, ice } dmgType;
 	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 
@@ -48,9 +48,7 @@ public:
 	void showStats();
 	void takeDamage(float baseDamage, damageType dmgType);
 	void takeTurn();
-	void applyStatus(status);
-	void setEnemyList(std::vector<Character*> enms);
-	void setPlayerList(std::vector<Character*> plrs);
+	void applyStatus(status effect);
 	void guard();
 
 	std::string getName();
@@ -61,9 +59,14 @@ public:
 	int getMagicDefence();
 	int getCritRate();
 	int getSpeed();
-	enum status getStatus();
+	status getStatus();
+	std::string getStatusName();
 	int getTarget();
 	bool getGuarding();
+
+	void setHealth(int hp);
+	void setEnemyList(std::vector<Character*> enms);
+	void setPlayerList(std::vector<Character*> plrs);
 
 protected:
 	Skill* s;

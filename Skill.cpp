@@ -14,47 +14,72 @@ Skill::Skill(std::string newName, bool req)
 	requiresTarget = req;
 }
 
-Skill::Skill(std::string newName, int atk, damageType damageType)
+Skill::Skill(std::string newName, int atk, damageType dmgType)
 {
 	name = newName;
 	baseDamage = atk;
-	type = damageType;
+	type = dmgType;
 	requiresTarget = true;
 }
-/*
-struct attack {
-	int attack;
-	enum status { normal, poisoned, KO, slow, haste, petrify, protect, shell } effect;
-	enum damageType { physical, defensive, healing, poison, fire, ice } type;
-};
-*/
+
+Skill::Skill(std::string newName, int atk, damageType dmgType, status eff)
+{
+	name = newName;
+	baseDamage = atk;
+	type = dmgType;
+	requiresTarget = true;
+	effect = eff;
+}
 
 bool Skill::getRequiresTarget()
 {
 	return requiresTarget;
 }
 
+std::string Skill::getEffectName() {
+	std::string status = "";
+	switch (effect) {
+	case 0:
+		return "status recovery";
+	case 1:
+		return "poison";
+	case 2:
+		return "death";
+	default:
+		return "status recovery";
+	}
+};
 
 void Skill::useAction(Character* user, Character* target, int atk, int cr)
 {
-	bool critical;
-	critical = cr >= randomizeInt(1, 100);
+	if (type != statusOnly) {
+		bool critical;
+		critical = cr >= randomizeInt(1, 100); //true if critical
+		std::cout << user->getName() << " uses " << name << " on " << target->getName() << "!\n";
+		float damage = calculateDamage(atk, critical);
+		target->takeDamage(damage, Character::physical);
+	}
+	if (effect != normal) { 
+		if (type == statusOnly) {
+			std::cout << user->getName() << " tried to apply " << getEffectName() << " on " << target->getName() << "...\n";
+		}
+		target->applyStatus(static_cast<Character::status>(effect));
+	}
+}
 
+float Skill::calculateDamage(float damage, bool crit) {
+	float dmg = 0;
 	float critBonus = 2.0f;
-	std::cout << user->getName() << " uses " << name << " on " << target->getName() << "!\n";
-	if (critical)
+	if (crit)
 	{
 		std::cout << "Critical Hit!\n";
-		//newAttack.attack = static_cast<float>(atk) * critBonus;
-		//newAttack.effect = ;
-		target->applyStatus(Character::poisoned); //apply poison on critical hit (for testing purposes)
-		target->takeDamage(static_cast<float>(baseDamage + atk) * critBonus, Character::physical);
+		dmg = static_cast<float>(baseDamage + damage) * critBonus;
 	}
 	else
 	{
-		target->takeDamage(static_cast<float>(baseDamage + atk), Character::physical);
-		//newAttack.attack = static_cast<float>(atk);
+		dmg = static_cast<float>(baseDamage + damage);
 	}
+	return dmg;
 }
 
 void Skill::useAction(Character* user)
