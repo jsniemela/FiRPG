@@ -54,9 +54,21 @@ std::string Skill::getEffectName() {
 
 void Skill::useAction(Character* user, Character* target, int atk, int cr)
 {
+	bool critical;
+	int critrate = cr;
+	if (type == statusOnly) {
+		critrate *= 2; // double chance for status if skill doesn't apply damage.
+	}
+	if (target->getStatus() == static_cast<Character::status>(sadness)) {
+		critrate *= 2; // double crit rate if target is sad
+	}
+	if (critrate > 100)
+	{
+		critrate = 100;
+	}
+	std::cout << critrate << "/100 chance for critical attack.\n";
+	critical = critrate >= randomizeInt(1, 100); //true if critical
 	if (type != statusOnly) {
-		bool critical;
-		critical = cr >= randomizeInt(1, 100); //true if critical
 		std::cout << user->getName() << " uses " << name << " on " << target->getName() << "!\n";
 		float damage = calculateDamage(atk, critical);
 		target->takeDamage(damage, Character::physical);
@@ -64,8 +76,13 @@ void Skill::useAction(Character* user, Character* target, int atk, int cr)
 	if (effect != normal) { 
 		if (type == statusOnly) {
 			std::cout << user->getName() << " tried to apply " << getEffectName() << " on " << target->getName() << "...\n";
+			if (!critical) {
+				std::cout << "and failed!\n\n";
+			}
 		}
-		target->applyStatus(static_cast<Character::status>(effect));
+		if (critical) {
+			target->applyStatus(static_cast<Character::status>(effect));
+		}
 	}
 }
 

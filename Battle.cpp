@@ -92,12 +92,12 @@ void Battle::simulateBattle()
 
 void createCharacters(CharacterManager& pm, CharacterManager& em)
 {
-	pm.addCharacters(new Character("Player 1", 100, 15, 3, 7, 2, 25, 10, true));
-	pm.addCharacters(new Character("Player 2", 100, 13, 3, 7, 2, 25, 8, false));
-	pm.addCharacters(new Character("Player 3", 100, 13, 3, 7, 2, 25, 8, false));
-	em.addCharacters(new Character("Enemy 1", 100, 12, 3, 7, 2, 25, 12, false));
-	em.addCharacters(new Character("Enemy 2", 100, 12, 5, 7, 2, 25, 6, false));
-	em.addCharacters(new Character("Enemy 3", 100, 12, 5, 7, 2, 25, 6, false));
+	pm.addCharacters(new Character("Player 1", 100, 15, 3, 7, 2, 10, 10, true));
+	pm.addCharacters(new Character("Player 2", 100, 13, 3, 7, 2, 10, 8, false));
+	pm.addCharacters(new Character("Player 3", 100, 13, 3, 7, 2, 10, 8, false));
+	em.addCharacters(new Character("Enemy 1", 100, 12, 3, 7, 2, 10, 12, false));
+	em.addCharacters(new Character("Enemy 2", 100, 12, 5, 7, 2, 10, 6, false));
+	em.addCharacters(new Character("Enemy 3", 100, 12, 5, 7, 2, 10, 6, false));
 }
 
 int main()

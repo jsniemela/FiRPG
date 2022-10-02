@@ -78,7 +78,7 @@ void Character::initializeActions()
 {
 	actions.push_back(new Skill("Attack", 0, Skill::physical));
 	actions.push_back(new Skill("Block", false));
-	actions.push_back(new Skill("Poison attack", 0, Skill::physical, Skill::poisoned));
+	actions.push_back(new Skill("Poison attack", 5, Skill::physical, Skill::poisoned));
 	actions.push_back(new Skill("Insult", 0, Skill::physical, Skill::sadness));
 	actions.push_back(new Skill("Kill", 0, Skill::statusOnly, Skill::KO));
 	//actions.push_back(new Skill("Skip turn", 0, Skill::physical)); 
@@ -206,7 +206,7 @@ void Character::takeTurn()
 			if (condition == poisoned) {
 				float poisonDamage = static_cast<float>(maxHealth) / 10;
 				std::cout << this->name << " is poisoned.\n";
-				takeDamage(poisonDamage, poison);
+				takeDamage(poisonDamage, ignoreDef);
 			}
 
 			if (statusTimer > 0) {
@@ -280,7 +280,7 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 	{
 		damage = 0;
 	}
-	if (guarding && dmgType != poison)
+	if (guarding && dmgType != ignoreDef)
 	{
 		damage /= 2; 
 	}
