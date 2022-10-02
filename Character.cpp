@@ -99,7 +99,11 @@ void Character::levelUp()
 
 void Character::showStats()
 {
-	std::cout << name << " - HP: " << currentHealth << "/" << maxHealth << " HP, status: " << getStatusName() << "\n";
+	std::cout << name << " - HP: " << currentHealth << "/" << maxHealth << " HP";
+	if (condition != normal) {
+		std::cout << ", status: " << getStatusName();
+	}
+	
 	/*
 	std::cout << "Level: " << level << "\n";
 	//std::cout << "Status: " << condition << "\n"; // prints number of the status affliction
@@ -109,7 +113,7 @@ void Character::showStats()
 	std::cout << "Magic Defence: " << magicDefence << "\n";
 	std::cout << "Crit Rate: " << critRate << "\n";
 	*/
-	std::cout << std::endl;
+	std::cout << "\n\n";
 }
 
 void Character::removeDeadTargets()
@@ -188,18 +192,29 @@ void Character::chooseAction()
 void Character::takeTurn()
 {
 	guarding = false;
+	bool skipTurn = false;
 	if (condition != KO)
 	{
-		removeDeadTargets();
-		std::cout << name << "'s turn.\n";
-		target = randomizeInt(0, enemies.size() -1);
-		if (enemies.size() > 0) {
-			chooseAction();
-			removeDeadTargets(); //remove again in case target(s) died.
+		if (condition == sadness) {
+			if (int x = randomizeInt(1, 10) > 4) //chance to skip turn.
+			{
+				skipTurn = true;
+				std::cout << name << " skips a turn while wallowing in sadness.\n\n";
+			}
 		}
-		else
+		removeDeadTargets();
+		if (!skipTurn)
 		{
-			std::cout << "No target available.\n";
+			std::cout << name << "'s turn.\n";
+			target = randomizeInt(0, enemies.size() - 1);
+			if (enemies.size() > 0) {
+				chooseAction();
+				removeDeadTargets(); //remove again in case target(s) died.
+			}
+			else
+			{
+				std::cout << "No target available.\n";
+			}
 		}
 		if (condition != KO && enemies.size() > 0) {
 			if (condition == poisoned) {
