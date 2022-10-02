@@ -76,7 +76,7 @@ bool Character::getGuarding()
 
 void Character::initializeActions()
 {
-	actions.push_back(new Skill("Attack", 0, Skill::physical));
+	actions.push_back(new Skill("Attack", 10, Skill::physical));
 	actions.push_back(new Skill("Block", false));
 	actions.push_back(new Skill("Poison attack", 5, Skill::physical, Skill::poisoned));
 	actions.push_back(new Skill("Insult", 0, Skill::physical, Skill::sadness));
@@ -99,8 +99,7 @@ void Character::levelUp()
 
 void Character::showStats()
 {
-	std::cout << "Name: " << name << "\n";
-	std::cout << "Health: " << currentHealth << "/" << maxHealth << "\n";
+	std::cout << name << " - HP: " << currentHealth << "/" << maxHealth << " HP, status: " << getStatusName() << "\n";
 	/*
 	std::cout << "Level: " << level << "\n";
 	//std::cout << "Status: " << condition << "\n"; // prints number of the status affliction
@@ -133,7 +132,7 @@ void Character::targetSelection()
 	{
 		std::cout << "(" << i << "): ";
 		i++;
-		std::cout << en->getName() << " - " << en->getCurrentHealth() << " HP, status: " << en->getStatusName() << "\n";
+		std::cout << en->getName() << " - " << en->getCurrentHealth() << "/" << en->getMaxHealth() << " HP, status: " << en->getStatusName() << "\n";
 	}
 
 	while (target < 1 || target > enemies.size())
