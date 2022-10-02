@@ -45,6 +45,8 @@ std::string Skill::getEffectName() {
 		return "poison";
 	case 2:
 		return "death";
+	case 3:
+		return "sad";
 	default:
 		return "status recovery";
 	}

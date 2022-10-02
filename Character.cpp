@@ -49,13 +49,15 @@ std::string Character::getStatusName() {
 	std::string status = "";
 	switch (condition) {
 	case 0:
-		return "Normal";
+		return "healthy";
 	case 1:
-		return "Poisoned";
+		return "poisoned";
 	case 2:
 		return "KO";
+	case 3:
+		return "sad";
 	default:
-		return "Normal";
+		return "healthy";
 	}
 };
 
@@ -77,6 +79,7 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Attack", 0, Skill::physical));
 	actions.push_back(new Skill("Block", false));
 	actions.push_back(new Skill("Poison attack", 0, Skill::physical, Skill::poisoned));
+	actions.push_back(new Skill("Insult", 0, Skill::physical, Skill::sadness));
 	actions.push_back(new Skill("Kill", 0, Skill::statusOnly, Skill::KO));
 	//actions.push_back(new Skill("Skip turn", 0, Skill::physical)); 
 }
@@ -185,6 +188,7 @@ void Character::chooseAction()
 
 void Character::takeTurn()
 {
+	guarding = false;
 	if (condition != KO)
 	{
 		removeDeadTargets();
@@ -276,9 +280,9 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 	{
 		damage = 0;
 	}
-	if (guarding)
+	if (guarding && dmgType != poison)
 	{
-		damage /= 2; // this applies to poison damage too. consider if it's desirable or not.
+		damage /= 2; 
 	}
 	currentHealth -= damage;
 	std::cout << name << " took " << damage << " damage.\n\n";
@@ -286,7 +290,6 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 	if (currentHealth < 0) {
 		currentHealth = 0;
 	}
-	guarding = false;
 	showStats();
 	if (currentHealth == 0) {
 		die();

@@ -11,7 +11,7 @@ private:
 	bool requiresTarget;
 public:
 	enum damageType { physical, defensive, healing, statusOnly, fire, ice, nothing } type;
-	enum status { normal, poisoned, KO } effect;
+	enum status { normal, poisoned, KO, sadness } effect;
 
 	Skill();
 	Skill(std::string newName, bool requiresTarget);

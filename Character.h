@@ -36,7 +36,7 @@ private:
 	void die();
 
 public:
-	enum status { normal, poisoned, KO } condition;
+	enum status { normal, poisoned, KO, sadness } condition;
 	enum damageType { physical, poison, fire, ice } dmgType;
 	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 
