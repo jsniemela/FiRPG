@@ -1,12 +1,14 @@
 #include "Battle.h"
 #include "CharacterManager.h"
 #include <algorithm>
+#include <chrono>
+#include <thread>
 //comment the next three lines if detecting memory leaks is not necessary
-
+/*
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-
+*/
 
 Battle::Battle(std::vector<Character*> enms, std::vector<Character*> plrs) 
 	: enemies{enms}, players{plrs}
@@ -54,6 +56,8 @@ void Battle::simulateBattle()
 			if (character->getStatus() != Character::KO)
 			{
 				character->takeTurn();
+				std::chrono::seconds dura(1);
+				std::this_thread::sleep_for(dura);
 			}
 
 			for (auto pl : players) {
@@ -92,23 +96,23 @@ void Battle::simulateBattle()
 
 void createCharacters(CharacterManager& pm, CharacterManager& em)
 {
-	pm.addCharacters(new Character("Player 1", 100, 15, 3, 7, 2, 20, 10, true));
-	pm.addCharacters(new Character("Player 2", 100, 13, 3, 7, 2, 20, 8, false));
-	pm.addCharacters(new Character("Player 3", 100, 13, 3, 7, 2, 20, 8, false));
-	em.addCharacters(new Character("Enemy 1", 100, 12, 3, 7, 2, 20, 12, false));
-	em.addCharacters(new Character("Enemy 2", 100, 12, 5, 7, 2, 20, 6, false));
-	em.addCharacters(new Character("Enemy 3", 100, 12, 5, 7, 2, 20, 6, false));
+	pm.addCharacters(new Character("Player 1", 100, 15, 3, 7, 2, 19, 10, true));
+	pm.addCharacters(new Character("Player 2", 100, 13, 3, 7, 2, 18, 8, true));
+	pm.addCharacters(new Character("Player 3", 100, 13, 3, 7, 2, 20, 8, true));
+	em.addCharacters(new Character("Enemy 1", 100, 12, 3, 7, 2, 21, 12, false));
+	em.addCharacters(new Character("Enemy 2", 100, 12, 5, 7, 2, 18, 6, false));
+	em.addCharacters(new Character("Enemy 3", 100, 12, 5, 7, 2, 17, 6, false));
 }
 
 int main()
 {
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	CharacterManager pm; //player manager
 	CharacterManager em; //enemy manager
 	createCharacters(pm, em);
 
 	Battle battle(em.getCharacters(), pm.getCharacters());
 	battle.simulateBattle();
-	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 	return 0;
 }
