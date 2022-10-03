@@ -6,6 +6,7 @@
 #include <vector>
 
 class Skill;
+class Magic;
 class Action;
 
 class Character 
@@ -37,10 +38,11 @@ private:
 
 public:
 	enum status { normal, poisoned, KO, sadness } condition;
-	enum damageType { physical, ignoreDef, fire, ice } dmgType;
+	enum damageType { physical, ignoreDef, magic } dmgType;
 	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 
 	Skill* getSkill();
+	Magic* getMagic();
 	Action* getAction();
 
 	void dealDamage(Character* target);

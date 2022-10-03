@@ -60,14 +60,16 @@ void Battle::simulateBattle()
 				std::this_thread::sleep_for(dura);
 			}
 
-			for (auto pl : players) {
+			for (auto pl : players)
+			{
 				if (pl->getStatus() == Character::KO) 
 				{
 					deadPlayers++;
 				}
 			}
 
-			for (auto en : enemies) {
+			for (auto en : enemies) 
+			{
 				if (en->getStatus() == Character::KO)
 				{
 					deadEnemies++;

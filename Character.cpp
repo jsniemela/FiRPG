@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "Skill.h"
+#include "Magic.h"
 
 Character::Character(std::string newName, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl) 
 	: name{newName}, maxHealth{ hp },attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd} , controlled{ctrl}
@@ -41,13 +42,16 @@ int Character::getSpeed()
 {
 	return speed;
 }
-enum Character::status Character::getStatus() {
+enum Character::status Character::getStatus() 
+{
 	return condition;
 }
 
-std::string Character::getStatusName() {
+std::string Character::getStatusName() 
+{
 	std::string status = "";
-	switch (condition) {
+	switch (condition) 
+	{
 	case 0:
 		return "healthy";
 	case 1:
@@ -81,6 +85,8 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Poison attack", 5, Skill::physical, Skill::poisoned));
 	actions.push_back(new Skill("Insult", 0, Skill::physical, Skill::sadness));
 	actions.push_back(new Skill("Kill", 0, Skill::statusOnly, Skill::KO));
+	//actions.push_back(new Magic("Fire", 30, Magic::fire, false));
+	//actions.push_back(new Magic("Ice", 30, Magic::fire, false));
 	//actions.push_back(new Skill("Skip turn", 0, Skill::physical)); 
 }
 
@@ -167,7 +173,8 @@ void Character::chooseAction()
 			std::cout << std::endl;
 		}
 		action--;
-		if (static_cast<Skill*>(actions[action])->getRequiresTarget()) {
+		if (static_cast<Skill*>(actions[action])->getRequiresTarget()) 
+		{
 			targetSelection();
 			static_cast<Skill*>(actions[action])->useAction(this, enemies[target], attack, critRate);
 		}
@@ -176,9 +183,11 @@ void Character::chooseAction()
 			static_cast<Skill*>(actions[action])->useAction(this);
 		}
 	}
-	else {
+	else 
+	{
 		int action = randomizeInt(0, actions.size() -1); 
-		if (static_cast<Skill*>(actions[action])->getRequiresTarget()) {
+		if (static_cast<Skill*>(actions[action])->getRequiresTarget()) 
+		{
 			target = randomizeInt(0, enemies.size() - 1);
 			static_cast<Skill*>(actions[action])->useAction(this, enemies[target], attack, critRate);
 		}
@@ -207,7 +216,8 @@ void Character::takeTurn()
 		{
 			std::cout << name << "'s turn.\n";
 			target = randomizeInt(0, enemies.size() - 1);
-			if (enemies.size() > 0) {
+			if (enemies.size() > 0) 
+			{
 				chooseAction();
 				removeDeadTargets(); //remove again in case target(s) died.
 			}
@@ -216,14 +226,17 @@ void Character::takeTurn()
 				std::cout << "No target available.\n";
 			}
 		}
-		if (condition != KO && enemies.size() > 0) {
-			if (condition == poisoned) {
+		if (condition != KO && enemies.size() > 0) 
+		{
+			if (condition == poisoned) 
+			{
 				float poisonDamage = static_cast<float>(maxHealth) / 10;
 				std::cout << this->name << " is poisoned.\n";
 				takeDamage(poisonDamage, ignoreDef);
 			}
 
-			if (statusTimer > 0) {
+			if (statusTimer > 0) 
+			{
 				statusTimer--; //decrement status effect timer by one each turn.
 			}
 
@@ -251,7 +264,8 @@ void Character::setPlayerList(std::vector<Character*> plrs)
 	friends = plrs;
 }
 
-void Character::setHealth(int hp) {
+void Character::setHealth(int hp) 
+{
 	currentHealth = hp;
 }
 
@@ -266,7 +280,8 @@ void Character::applyStatus(status effect)
 		if (effect == KO) {
 			die();
 		}
-		else {
+		else 
+		{
 			condition = effect;
 			statusTimer = 3; //apply status for 3 turns 
 			std::cout << name << "'s status is now " << getStatusName() << ".\n\n";
@@ -274,7 +289,8 @@ void Character::applyStatus(status effect)
 	}
 }
 
-void Character::guard() {
+void Character::guard() 
+{
 	guarding = true;
 	std::cout << name << " is guarding.\n\n";
 }
@@ -283,7 +299,8 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 {
 	int damage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence
-	if (dmgType == Skill::poisoned) {
+	if (dmgType == Skill::poisoned) 
+	{
 		damage = static_cast<int>(baseDamage);
 	}
 	else
@@ -301,11 +318,13 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 	currentHealth -= damage;
 	std::cout << name << " took " << damage << " damage.\n\n";
 	//std::cout << "Current health: " << currentHealth << "\n";
-	if (currentHealth < 0) {
+	if (currentHealth < 0) 
+	{
 		currentHealth = 0;
 	}
 	showStats();
-	if (currentHealth == 0) {
+	if (currentHealth == 0) 
+	{
 		die();
 	}
 }

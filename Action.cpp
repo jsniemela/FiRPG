@@ -11,6 +11,7 @@ std::string Action::getName()
 	return name;
 }
 
-void Action::useAction() {
+void Action::useAction() 
+{
 
 }
