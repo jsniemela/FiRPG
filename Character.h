@@ -35,6 +35,7 @@ private:
 	void removeDeadTargets();
 	void targetSelection();
 	void die();
+	void callAction(int action);
 
 public:
 	enum status { normal, poisoned, KO, sadness } condition;

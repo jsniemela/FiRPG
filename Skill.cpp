@@ -9,9 +9,9 @@ Skill::Skill()
 }
 
 Skill::Skill(std::string newName, bool req)
-	:requiresTarget{req}
 {
 	name = newName;
+	requiresTarget = req;
 }
 
 Skill::Skill(std::string newName, int atk, damageType dmgType)
@@ -26,11 +26,6 @@ Skill::Skill(std::string newName, int atk, damageType dmgType, status eff)
 {
 	name = newName;
 	requiresTarget = true;
-}
-
-bool Skill::getRequiresTarget()
-{
-	return requiresTarget;
 }
 
 std::string Skill::getEffectName() 
@@ -50,10 +45,10 @@ std::string Skill::getEffectName()
 	}
 };
 
-void Skill::useAction(Character* user, Character* target, int atk, int cr)
+void Skill::useAction(Character* user, Character* target)
 {
 	bool critical;
-	float critrate = static_cast<float>(cr);
+	float critrate = static_cast<float>(user->getCritRate());
 	if (type == statusOnly) 
 	{
 		critrate *= 1.4f; // higher chance for status if skill doesn't apply damage.
@@ -72,7 +67,7 @@ void Skill::useAction(Character* user, Character* target, int atk, int cr)
 	if (type != statusOnly) 
 	{
 		std::cout << user->getName() << " uses " << name << " on " << target->getName() << "!\n";
-		float damage = calculateDamage(atk, critical);
+		float damage = calculateDamage(user->getAttack(), critical);
 		target->takeDamage(damage, Character::physical);
 	}
 	if (effect != normal) 

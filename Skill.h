@@ -8,7 +8,6 @@ class Skill: public Action
 {
 private:
 	int baseDamage;
-	bool requiresTarget;
 public:
 	enum damageType { physical, defensive, healing, statusOnly, fire, ice, nothing } type;
 	enum status { normal, poisoned, KO, sadness } effect;
@@ -20,9 +19,8 @@ public:
 	~Skill(){}
 
 	Character* getCharacter();
-	bool getRequiresTarget();
 
-	void useAction(Character* user, Character* target, int atk, int cr);
+	void useAction(Character* user, Character* target);
 	void useAction(Character* user);
 	float calculateDamage(float damage, bool crit);
 	std::string getEffectName();

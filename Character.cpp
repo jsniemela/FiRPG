@@ -85,8 +85,8 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Poison attack", 5, Skill::physical, Skill::poisoned));
 	actions.push_back(new Skill("Insult", 0, Skill::physical, Skill::sadness));
 	actions.push_back(new Skill("Kill", 0, Skill::statusOnly, Skill::KO));
-	//actions.push_back(new Magic("Fire", 30, Magic::fire, false));
-	//actions.push_back(new Magic("Ice", 30, Magic::fire, false));
+	actions.push_back(new Magic("Fire", 30, Magic::fire));
+	actions.push_back(new Magic("Ice", 30, Magic::ice));
 	//actions.push_back(new Skill("Skip turn", 0, Skill::physical)); 
 }
 
@@ -136,29 +136,37 @@ void Character::removeDeadTargets()
 
 void Character::targetSelection()
 {
-	int i = 1;
-	target = 0;
-	for (auto en : enemies)
-	{
-		std::cout << "(" << i << "): ";
-		i++;
-		std::cout << en->getName() << " - " << en->getCurrentHealth() << "/" << en->getMaxHealth() << " HP, status: " << en->getStatusName() << "\n";
-	}
 
-	while (target < 1 || target > enemies.size())
+	if (controlled)
 	{
-		std::cout << "Choose target:";
-		std::cin >> target;
-		std::cout << std::endl;
+		int i = 1;
+		target = 0;
+		for (auto en : enemies)
+		{
+			std::cout << "(" << i << "): ";
+			i++;
+			std::cout << en->getName() << " - " << en->getCurrentHealth() << "/" << en->getMaxHealth() << " HP, status: " << en->getStatusName() << "\n";
+		}
+
+		while (target < 1 || target > enemies.size())
+		{
+			std::cout << "Choose target:";
+			std::cin >> target;
+			std::cout << std::endl;
+		}
+		target--;
 	}
-	target--;
+	else
+	{
+		target = randomizeInt(0, enemies.size() - 1);
+	}
 }
 
 void Character::chooseAction()
 {
+	int action = 0;
 	if (controlled)
 	{
-		int action = 0;
 		while (action < 1 || action > actions.size()) 
 		{
 			int i = 1;
@@ -173,28 +181,25 @@ void Character::chooseAction()
 			std::cout << std::endl;
 		}
 		action--;
-		if (static_cast<Skill*>(actions[action])->getRequiresTarget()) 
-		{
-			targetSelection();
-			static_cast<Skill*>(actions[action])->useAction(this, enemies[target], attack, critRate);
-		}
-		else
-		{
-			static_cast<Skill*>(actions[action])->useAction(this);
-		}
 	}
 	else 
 	{
-		int action = randomizeInt(0, actions.size() -1); 
-		if (static_cast<Skill*>(actions[action])->getRequiresTarget()) 
-		{
-			target = randomizeInt(0, enemies.size() - 1);
-			static_cast<Skill*>(actions[action])->useAction(this, enemies[target], attack, critRate);
-		}
-		else
-		{
-			static_cast<Skill*>(actions[action])->useAction(this);
-		}
+		action = randomizeInt(0, actions.size() - 1);
+	}
+	callAction(action);
+}
+
+void Character::callAction(int action)
+{
+
+	if (actions[action]->getRequiresTarget())
+	{
+		targetSelection();
+		static_cast<Skill*>(actions[action])->useAction(this, enemies[target]);
+	}
+	else
+	{
+		static_cast<Skill*>(actions[action])->useAction(this);
 	}
 }
 
