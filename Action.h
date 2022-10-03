@@ -11,9 +11,10 @@ protected:
 	std::string name;
 	bool requiresTarget;
 	Character* c;
-
+	
 public:
-	Action(std::string newName);
+	enum damageType { physical, defensive, healing, statusOnly, magic, nothing } type;
+	Action(std::string newName, damageType newType);
 	//Action(std::string newName);
 	Action(){}
 	virtual ~Action() {}
@@ -22,9 +23,10 @@ public:
 
 	std::string getName();
 	bool getRequiresTarget();
+	damageType getType();
 	//void useAction();
 	void useAction();
-	void useAction(Character* user);
-	void useAction(Character* user, Character* target);
-	void useAction(Character* user, std::vector<Character*> targets);
+	//void useAction(Character* user);
+	//void useAction(Character* user, Character* target);
+	//void useAction(Character* user, std::vector<Character*> targets);
 };

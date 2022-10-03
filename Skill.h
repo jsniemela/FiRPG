@@ -9,7 +9,6 @@ class Skill: public Action
 private:
 	int baseDamage;
 public:
-	enum damageType { physical, defensive, healing, statusOnly, fire, ice, nothing } type;
 	enum status { normal, poisoned, KO, sadness } effect;
 
 	Skill();

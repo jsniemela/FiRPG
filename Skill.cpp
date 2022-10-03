@@ -15,16 +15,18 @@ Skill::Skill(std::string newName, bool req)
 }
 
 Skill::Skill(std::string newName, int atk, damageType dmgType)
-	:baseDamage{atk}, type{dmgType}
+	:baseDamage{atk}
 {
 	name = newName;
 	requiresTarget = true;
+	type = dmgType;
 }
 
 Skill::Skill(std::string newName, int atk, damageType dmgType, status eff)
-	:baseDamage{ atk }, type{ dmgType }, effect{eff}
+	:baseDamage{ atk }, effect{eff}
 {
 	name = newName;
+	type = dmgType;
 	requiresTarget = true;
 }
 

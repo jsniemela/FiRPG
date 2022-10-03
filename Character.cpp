@@ -80,14 +80,13 @@ bool Character::getGuarding()
 
 void Character::initializeActions()
 {
-	actions.push_back(new Skill("Attack", 10, Skill::physical));
+	actions.push_back(new Skill("Attack", 10, Action::physical));
 	actions.push_back(new Skill("Block", false));
-	actions.push_back(new Skill("Poison attack", 5, Skill::physical, Skill::poisoned));
-	actions.push_back(new Skill("Insult", 0, Skill::physical, Skill::sadness));
-	actions.push_back(new Skill("Kill", 0, Skill::statusOnly, Skill::KO));
-	actions.push_back(new Magic("Fire", 30, Magic::fire));
-	actions.push_back(new Magic("Ice", 30, Magic::ice));
-	//actions.push_back(new Skill("Skip turn", 0, Skill::physical)); 
+	actions.push_back(new Skill("Poison attack", 5, Action::physical, Skill::poisoned));
+	actions.push_back(new Skill("Insult", 0, Action::physical, Skill::sadness));
+	actions.push_back(new Skill("Kill", 0, Action::statusOnly, Skill::KO));
+	actions.push_back(new Magic("Fire", 30, Action::magic, Magic::fire, true));
+	actions.push_back(new Magic("Blizzard", 10, Action::magic, Magic::ice, false)); 
 }
 
 void Character::levelUp() 
@@ -195,11 +194,29 @@ void Character::callAction(int action)
 	if (actions[action]->getRequiresTarget())
 	{
 		targetSelection();
-		static_cast<Skill*>(actions[action])->useAction(this, enemies[target]);
+		if (actions[action]->type == Action::physical)
+		{
+			//std::cout << "Action is physical\n";
+			static_cast<Skill*>(actions[action])->useAction(this, enemies[target]);
+		}
+		if (actions[action]->type == Action::magic)
+		{
+			//std::cout << "Action is magical\n";
+			static_cast<Magic*>(actions[action])->useAction(this, enemies[target]);
+		}
 	}
 	else
 	{
-		static_cast<Skill*>(actions[action])->useAction(this);
+		if (actions[action]->type == Action::physical)
+		{
+			//std::cout << "Action is physical\n";
+			static_cast<Skill*>(actions[action])->useAction(this);
+		}
+		if (actions[action]->type == Action::magic)
+		{
+			//std::cout << "Action is magical\n";
+			static_cast<Magic*>(actions[action])->useAction(this, enemies);
+		}
 	}
 }
 
