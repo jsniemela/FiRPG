@@ -319,15 +319,15 @@ void Character::guard()
 
 void Character::takeDamage(float baseDamage, damageType dmgType) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
 {
-	int damage; 
+	int damage = baseDamage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence
-	if (dmgType == Skill::poisoned) 
+	if (dmgType == physical)
 	{
-		damage = static_cast<int>(baseDamage);
+		damage -= defence;
 	}
-	else
+	else if (dmgType == magic)
 	{
-		damage = static_cast<int>(baseDamage - defence);
+		damage -= magicDefence;
 	}
 	if (damage < 0)
 	{
