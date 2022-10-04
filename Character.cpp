@@ -139,15 +139,15 @@ void Character::targetSelection()
 	if (controlled)
 	{
 		int i = 1;
-		target = 0;
+		target = -1;
 		for (auto en : enemies)
 		{
 			std::cout << "(" << i << "): ";
 			i++;
 			std::cout << en->getName() << " - " << en->getCurrentHealth() << "/" << en->getMaxHealth() << " HP, status: " << en->getStatusName() << "\n";
 		}
-
-		while (target < 1 || target > enemies.size())
+		std::cout << "(0): [Go back]" << std::endl;
+		while (target < 0 || target > enemies.size())
 		{
 			std::cout << "Choose target:";
 			std::cin >> target;
@@ -190,19 +190,24 @@ void Character::chooseAction()
 
 void Character::callAction(int action)
 {
-
 	if (actions[action]->getRequiresTarget())
 	{
 		targetSelection();
-		if (actions[action]->type == Action::physical)
+		if (target == -1)
 		{
-			//std::cout << "Action is physical\n";
-			static_cast<Skill*>(actions[action])->useAction(this, enemies[target]);
+			chooseAction();
 		}
-		if (actions[action]->type == Action::magic)
-		{
-			//std::cout << "Action is magical\n";
-			static_cast<Magic*>(actions[action])->useAction(this, enemies[target]);
+		else {
+			if (actions[action]->type == Action::physical)
+			{
+				//std::cout << "Action is physical\n";
+				static_cast<Skill*>(actions[action])->useAction(this, enemies[target]);
+			}
+			if (actions[action]->type == Action::magic)
+			{
+				//std::cout << "Action is magical\n";
+				static_cast<Magic*>(actions[action])->useAction(this, enemies[target]);
+			}
 		}
 	}
 	else
