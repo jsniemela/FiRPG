@@ -2,11 +2,12 @@
 #include "Skill.h"
 #include "Magic.h"
 
-Character::Character(std::string newName, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl) 
-	: name{newName}, maxHealth{ hp },attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd} , controlled{ctrl}
+Character::Character(std::string newName, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl) 
+	: name{newName}, maxHealth{ hp }, maxSP{sp}, attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd} , controlled{ctrl}
 {
 	level = 1;
 	currentHealth = maxHealth;
+	currentSP = maxSP;
 	condition = normal;
 	statusTimer = 0;
 	target = 0;
@@ -85,10 +86,10 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Poison attack", 5, Action::physical, Skill::poisoned));
 	actions.push_back(new Skill("Insult", 0, Action::physical, Skill::sadness));
 	actions.push_back(new Skill("Kill", 0, Action::statusOnly, Skill::KO));
-	actions.push_back(new Magic("Fire", 30, Action::magic, Magic::fire, true));
-	actions.push_back(new Magic("Blizzard", 10, Action::magic, Magic::ice, false)); 
-	actions.push_back(new Magic("Cure", 25, Action::magic, Magic::healing, true));
-	actions.push_back(new Magic("Cure All", 10, Action::magic, Magic::healing, false));
+	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true));
+	actions.push_back(new Magic("Blizzard", 10, 7, Action::magic, Magic::ice, false)); 
+	actions.push_back(new Magic("Cure", 25, 6, Action::magic, Magic::healing, true));
+	actions.push_back(new Magic("Cure All", 10, 10, Action::magic, Magic::healing, false));
 }
 
 void Character::levelUp() 
@@ -106,7 +107,8 @@ void Character::levelUp()
 
 void Character::showStats()
 {
-	std::cout << name << " - HP: " << currentHealth << "/" << maxHealth << " HP";
+	std::cout << name << " - HP: " << currentHealth << "/" << maxHealth;
+	std::cout << ", SP: " << currentSP << "/" << maxSP;
 	if (condition != normal) {
 		std::cout << ", status: " << getStatusName();
 	}
@@ -163,6 +165,16 @@ void Character::targetSelection(std::vector<Character*> targets)
 	}
 }
 
+void Character::loseSP(int spLoss)
+{
+	currentSP -= spLoss;
+	if (currentSP < 0)
+	{
+		currentSP = 0;
+	}
+	std::cout << name << " now has " << currentSP << "/" << maxSP << " SP. \n";
+}
+
 void Character::chooseAction()
 {
 	int action = 0;
@@ -179,6 +191,11 @@ void Character::chooseAction()
 			}
 			std::cout << "Choose action:";
 			std::cin >> action;
+			if (actions[action - 1]->type == Action::magic && static_cast<Magic*>(actions[action-1])->getSPcost() > currentSP)
+			{
+				std::cout << "Not enough SP!\n";
+				action = 0;
+			}
 			std::cout << std::endl;
 		}
 		action--;

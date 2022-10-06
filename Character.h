@@ -16,6 +16,8 @@ private:
 	std::string name;
 	int currentHealth;
 	int maxHealth;
+	int currentSP;
+	int maxSP;
 	int attack;
 	int defence;
 	int magicAttack;
@@ -40,7 +42,7 @@ private:
 public:
 	enum status { normal, poisoned, KO, sadness } condition;
 	enum damageType { physical, ignoreDef, magic } dmgType;
-	Character(std::string name, int hp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
+	Character(std::string name, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 
 	Skill* getSkill();
 	Magic* getMagic();
@@ -54,6 +56,7 @@ public:
 	void applyStatus(status effect);
 	void guard();
 	void recover(int healAmount);
+	void loseSP(int spLoss);
 
 	std::string getName();
 	int getMaxHealth();
