@@ -19,15 +19,29 @@ void Magic::useAction(Character* user, Character* target)
 {
 	float damage = user->getMagicAttack() + baseDamage;
 	std::cout << user->getName() << " used " << name << "!\n";
-	target->takeDamage(damage, Character::magic);
+	if (element == healing)
+	{
+		target->recover(damage);
+	}
+	else
+	{
+		target->takeDamage(damage, Character::magic);
+	}
 }
 
 void Magic::useAction(Character* user, std::vector<Character*> targets)
 {
 	float damage = user->getMagicAttack() + baseDamage;
-	std::cout << user->getName() << " used " << name << " on all enemies!\n"; //not yet implemented
+	std::cout << user->getName() << " used " << name << "!\n";
 	for (auto t : targets) 
 	{
-		t->takeDamage(damage, Character::magic);
+		if (element == healing)
+		{
+			t->recover(damage);
+		}
+		else
+		{
+			t->takeDamage(damage, Character::magic);
+		}
 	}
 }

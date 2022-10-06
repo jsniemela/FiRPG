@@ -87,6 +87,8 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Kill", 0, Action::statusOnly, Skill::KO));
 	actions.push_back(new Magic("Fire", 30, Action::magic, Magic::fire, true));
 	actions.push_back(new Magic("Blizzard", 10, Action::magic, Magic::ice, false)); 
+	actions.push_back(new Magic("Cure", 25, Action::magic, Magic::healing, true));
+	actions.push_back(new Magic("Cure All", 10, Action::magic, Magic::healing, false));
 }
 
 void Character::levelUp() 
@@ -133,21 +135,21 @@ void Character::removeDeadTargets()
 	);
 }
 
-void Character::targetSelection()
+void Character::targetSelection(std::vector<Character*> targets)
 {
 
 	if (controlled)
 	{
 		int i = 1;
 		target = -1;
-		for (auto en : enemies)
+		for (auto t : targets)
 		{
 			std::cout << "(" << i << "): ";
 			i++;
-			std::cout << en->getName() << " - " << en->getCurrentHealth() << "/" << en->getMaxHealth() << " HP, status: " << en->getStatusName() << "\n";
+			std::cout << t->getName() << " - " << t->getCurrentHealth() << "/" << t->getMaxHealth() << " HP, status: " << t->getStatusName() << "\n";
 		}
 		std::cout << "(0): [Go back]" << std::endl;
-		while (target < 0 || target > enemies.size())
+		while (target < 0 || target > targets.size())
 		{
 			std::cout << "Choose target:";
 			std::cin >> target;
@@ -157,7 +159,7 @@ void Character::targetSelection()
 	}
 	else
 	{
-		target = randomizeInt(0, enemies.size() - 1);
+		target = randomizeInt(0, targets.size() - 1);
 	}
 }
 
@@ -192,10 +194,17 @@ void Character::callAction(int action)
 {
 	if (actions[action]->getRequiresTarget())
 	{
-		targetSelection();
+		if (static_cast<Magic*>(actions[action])->element == Action::healing)
+		{
+			targetSelection(friends);
+		}
+		else {
+			targetSelection(enemies);
+		}
 		if (target == -1)
 		{
 			chooseAction();
+			return;
 		}
 		else {
 			if (actions[action]->type == Action::physical)
@@ -206,7 +215,14 @@ void Character::callAction(int action)
 			if (actions[action]->type == Action::magic)
 			{
 				//std::cout << "Action is magical\n";
-				static_cast<Magic*>(actions[action])->useAction(this, enemies[target]);
+				if (static_cast<Magic*>(actions[action])->element == Action::healing)
+				{
+					static_cast<Magic*>(actions[action])->useAction(this, friends[target]);
+				}
+				else
+				{
+					static_cast<Magic*>(actions[action])->useAction(this, enemies[target]);
+				}
 			}
 		}
 	}
@@ -220,7 +236,14 @@ void Character::callAction(int action)
 		if (actions[action]->type == Action::magic)
 		{
 			//std::cout << "Action is magical\n";
-			static_cast<Magic*>(actions[action])->useAction(this, enemies);
+			if (static_cast<Magic*>(actions[action])->element == Action::healing)
+			{
+				static_cast<Magic*>(actions[action])->useAction(this, friends);
+			}
+			else
+			{
+				static_cast<Magic*>(actions[action])->useAction(this, enemies);
+			}
 		}
 	}
 }
@@ -354,6 +377,21 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 	{
 		die();
 	}
+}
+
+void Character::recover(int healAmount)
+{
+	currentHealth += healAmount;
+	if (currentHealth > maxHealth)
+	{
+		currentHealth = maxHealth;
+		std::cout << name << " recovered to full HP.\n\n";
+	} 
+	else
+	{
+		std::cout << name << " recovered " << healAmount << " HP.\n\n";
+	}
+	showStats();
 }
 
 void Character::die()

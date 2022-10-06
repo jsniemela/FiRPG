@@ -33,7 +33,7 @@ private:
 	void chooseAction();
 	void initializeActions();
 	void removeDeadTargets();
-	void targetSelection();
+	void targetSelection(std::vector<Character*> targets);
 	void die();
 	void callAction(int action);
 
@@ -53,6 +53,7 @@ public:
 	void takeTurn();
 	void applyStatus(status effect);
 	void guard();
+	void recover(int healAmount);
 
 	std::string getName();
 	int getMaxHealth();

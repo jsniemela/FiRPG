@@ -8,7 +8,7 @@ private:
 	int baseDamage;
 	//bool targetAll;
 public:
-	enum Element { fire, ice } element;
+	enum Element { fire, ice, healing } element;
 
 	Magic();
 	Magic(std::string newName, int dmg, damageType dmgType, Element elem, bool req);
