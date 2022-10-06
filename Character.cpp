@@ -186,12 +186,17 @@ void Character::chooseAction()
 			for (auto act : actions)
 			{
 				std::cout << "(" << i << ")";
-				std::cout << act->getName() << std::endl;
+				std::cout << act->getName();
+				if (act->type == Action::magic)
+				{
+					std::cout << " [" << static_cast<Magic*>(act)->getSPcost() << " SP]";
+				}
+				std::cout << std::endl;
 				i++;
 			}
 			std::cout << "Choose action:";
 			std::cin >> action;
-			if (actions[action - 1]->type == Action::magic && static_cast<Magic*>(actions[action-1])->getSPcost() > currentSP)
+			if (action != 0 && actions[action - 1]->type == Action::magic && static_cast<Magic*>(actions[action-1])->getSPcost() > currentSP)
 			{
 				std::cout << "Not enough SP!\n";
 				action = 0;
@@ -282,6 +287,7 @@ void Character::takeTurn()
 		if (!skipTurn)
 		{
 			std::cout << name << "'s turn.\n";
+			showStats();
 			target = randomizeInt(0, enemies.size() - 1);
 			if (enemies.size() > 0) 
 			{
