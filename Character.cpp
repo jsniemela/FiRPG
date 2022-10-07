@@ -81,8 +81,8 @@ bool Character::getGuarding()
 
 void Character::initializeActions()
 {
-	actions.push_back(new Skill("Attack", 10, Action::physical));
-	actions.push_back(new Skill("Block", false));
+	actions.push_back(new Skill("Attack", 10, Action::basic));
+	actions.push_back(new Skill("Block", Action::basic, false));
 	actions.push_back(new Skill("Poison attack", 5, Action::physical, Skill::poisoned));
 	actions.push_back(new Skill("Insult", 0, Action::physical, Skill::sadness));
 	actions.push_back(new Skill("Kill", 0, Action::statusOnly, Skill::KO));
@@ -200,64 +200,58 @@ void Character::chooseAction()
 		else if (command == 2)
 		{
 			std::vector<Magic*>magics;
-			while (action < 0 || action > actions.size()) 
+			int i = 1;
+			for (auto act : actions)
 			{
-				int i = 1;
-				for (auto act : actions)
+				if (act->type == Action::magic)
 				{
-					if (act->type == Action::magic)
-					{
-						std::cout << "(" << i << ") ";
-						std::cout << act->getName();
-						std::cout << " [" << static_cast<Magic*>(act)->getSPcost() << " SP]";
-						std::cout << std::endl;
-						magics.push_back(static_cast<Magic*>(act));
-						i++;
-					}
+					std::cout << "(" << i << ") ";
+					std::cout << act->getName();
+					std::cout << " [" << static_cast<Magic*>(act)->getSPcost() << " SP]";
+					std::cout << std::endl;
+					magics.push_back(static_cast<Magic*>(act));
+					i++;
 				}
-				std::cout << "(0) [Go back]" << std::endl;
-				std::cout << "Choose magic: ";
-				std::cin >> action;
-				std::cout << std::endl;
-				if (action != 0 && magics[action-1]->getSPcost() > currentSP)
-				{
-					std::cout << "Not enough SP!\n\n";
-					action = 0;
-				}
-				if (action == 0)
-				{
-					chooseAction();
-					return;
-				}
+			}
+			std::cout << "(0) [Go back]" << std::endl;
+			std::cout << "Choose magic: ";
+			std::cin >> action;
+			std::cout << std::endl;
+			if (action > 0 && action <= magics.size() && magics[action-1]->getSPcost() > currentSP)
+			{
+				std::cout << "Not enough SP!\n\n";
+				action = 0;
+			}
+			if (action < 1 || action > magics.size())
+			{
+				chooseAction();
+				return;
 			}
 			callAction(magics[action - 1]);
 		}
 		else if (command == 3)
 		{
 			std::vector<Skill*>skills;
-			while (action < 1 || action > actions.size()) 
+			int i = 1;
+			for (auto act : actions)
 			{
-				int i = 1;
-				for (auto act : actions)
+				if (act->type == Action::physical)
 				{
-					if (act->type == Action::physical)
-					{
-						std::cout << "(" << i << ") ";
-						std::cout << act->getName();
-						std::cout << std::endl;
-						skills.push_back(static_cast<Skill*>(act));
-						i++;
-					}
+					std::cout << "(" << i << ") ";
+					std::cout << act->getName();
+					std::cout << std::endl;
+					skills.push_back(static_cast<Skill*>(act));
+					i++;
 				}
-				std::cout << "(0) [Go back]" << std::endl;
-				std::cout << "Choose skill: ";
-				std::cin >> action;
-				std::cout << std::endl;
-				if (action == 0)
-				{
-					chooseAction();
-					return;
-				}
+			}
+			std::cout << "(0) [Go back]" << std::endl;
+			std::cout << "Choose skill: ";
+			std::cin >> action;
+			std::cout << std::endl;
+			if (action < 1 || action > skills.size())
+			{
+				chooseAction();
+				return;
 			}
 			callAction(skills[action - 1]);
 		}
@@ -291,7 +285,7 @@ void Character::callAction(Action* act)
 			return;
 		}
 		else {
-			if (act->type == Action::physical)
+			if (act->type == Action::physical || act->type == Action::basic)
 			{
 				//std::cout << "Action is physical\n";
 				static_cast<Skill*>(act)->useAction(this, enemies[target]);
@@ -312,7 +306,7 @@ void Character::callAction(Action* act)
 	}
 	else
 	{
-		if (act->type == Action::physical)
+		if (act->type == Action::physical || act->type == Action::basic)
 		{
 			//std::cout << "Action is physical\n";
 			static_cast<Skill*>(act)->useAction(this);

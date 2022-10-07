@@ -12,7 +12,7 @@ public:
 	enum status { normal, poisoned, KO, sadness } effect;
 
 	Skill();
-	Skill(std::string newName, bool requiresTarget);
+	Skill(std::string newName, damageType dmgType, bool requiresTarget);
 	Skill(std::string newName, int atk, damageType dmgType);
 	Skill(std::string newName, int atk, damageType dmgType, status eff);
 	~Skill(){}

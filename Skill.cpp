@@ -5,12 +5,13 @@ Skill::Skill()
 {
 	name = "Pass turn";
 	baseDamage = 0;
-	type = nothing;
+	type = basic;
 }
 
-Skill::Skill(std::string newName, bool req)
+Skill::Skill(std::string newName, damageType dmgType, bool req)
 {
 	name = newName;
+	type = dmgType;
 	requiresTarget = req;
 }
 
