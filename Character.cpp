@@ -177,31 +177,75 @@ void Character::loseSP(int spLoss)
 
 void Character::chooseAction()
 {
+	int command = 0;
 	int action = 0;
+	
 	if (controlled)
 	{
-		while (action < 1 || action > actions.size()) 
+		while (command < 1 || command > 4)
 		{
-			int i = 1;
-			for (auto act : actions)
+			std::cout << "(1)Attack\n";
+			std::cout << "(2)Magic\n";
+			std::cout << "(3)Skill\n";
+			std::cout << "(4)Guard\n";
+			std::cout << "Choose command: ";
+			std::cin >> command;
+		}
+		
+		if (command == 1)
+		{
+			action = 1;
+		}
+
+		if (command == 2)
+		{
+			while (action < 1 || action > actions.size()) 
 			{
-				std::cout << "(" << i << ")";
-				std::cout << act->getName();
-				if (act->type == Action::magic)
+				int i = 1;
+				for (auto act : actions)
 				{
-					std::cout << " [" << static_cast<Magic*>(act)->getSPcost() << " SP]";
+					if (act->type == Action::magic)
+					{
+						std::cout << "(" << i << ")";
+						std::cout << act->getName();
+						std::cout << " [" << static_cast<Magic*>(act)->getSPcost() << " SP]";
+						std::cout << std::endl;
+						i++;
+					}
 				}
+				std::cout << "Choose magic: ";
+				std::cin >> action;
 				std::cout << std::endl;
-				i++;
+				if (action != 0 && static_cast<Magic*>(actions[action-1])->getSPcost() > currentSP)
+				{
+					std::cout << "Not enough SP!\n";
+					action = 0;
+				}
 			}
-			std::cout << "Choose action:";
-			std::cin >> action;
-			if (action != 0 && actions[action - 1]->type == Action::magic && static_cast<Magic*>(actions[action-1])->getSPcost() > currentSP)
+		}
+		if (command == 3)
+		{
+			while (action < 1 || action > actions.size()) 
 			{
-				std::cout << "Not enough SP!\n";
-				action = 0;
+				int i = 1;
+				for (auto act : actions)
+				{
+					if (act->type == Action::physical)
+					{
+						std::cout << "(" << i << ")";
+						std::cout << act->getName();
+						std::cout << std::endl;
+						i++;
+					}
+				}
+				std::cout << "Choose skill: ";
+				std::cin >> action;
+				std::cout << std::endl;
 			}
-			std::cout << std::endl;
+		}
+		if (command == 4)
+		{
+			action = 2;
 		}
 		action--;
 	}
