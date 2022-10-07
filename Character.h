@@ -37,7 +37,7 @@ private:
 	void removeDeadTargets();
 	void targetSelection(std::vector<Character*> targets);
 	void die();
-	void callAction(int action);
+	void callAction(Action* act);
 
 public:
 	enum status { normal, poisoned, KO, sadness } condition;

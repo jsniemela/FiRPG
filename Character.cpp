@@ -178,7 +178,7 @@ void Character::loseSP(int spLoss)
 void Character::chooseAction()
 {
 	int command = 0;
-	int action = 0;
+	int action = -1;
 	
 	if (controlled)
 	{
@@ -194,37 +194,47 @@ void Character::chooseAction()
 		
 		if (command == 1)
 		{
-			action = 1;
+			callAction(actions[0]);
 		}
 
-		if (command == 2)
+		else if (command == 2)
 		{
-			while (action < 1 || action > actions.size()) 
+			std::vector<Magic*>magics;
+			while (action < 0 || action > actions.size()) 
 			{
 				int i = 1;
 				for (auto act : actions)
 				{
 					if (act->type == Action::magic)
 					{
-						std::cout << "(" << i << ")";
+						std::cout << "(" << i << ") ";
 						std::cout << act->getName();
 						std::cout << " [" << static_cast<Magic*>(act)->getSPcost() << " SP]";
 						std::cout << std::endl;
+						magics.push_back(static_cast<Magic*>(act));
 						i++;
 					}
 				}
+				std::cout << "(0) [Go back]" << std::endl;
 				std::cout << "Choose magic: ";
 				std::cin >> action;
 				std::cout << std::endl;
-				if (action != 0 && static_cast<Magic*>(actions[action-1])->getSPcost() > currentSP)
+				if (action != 0 && magics[action-1]->getSPcost() > currentSP)
 				{
-					std::cout << "Not enough SP!\n";
+					std::cout << "Not enough SP!\n\n";
 					action = 0;
 				}
+				if (action == 0)
+				{
+					chooseAction();
+					return;
+				}
 			}
+			callAction(magics[action - 1]);
 		}
-		if (command == 3)
+		else if (command == 3)
 		{
+			std::vector<Skill*>skills;
 			while (action < 1 || action > actions.size()) 
 			{
 				int i = 1;
@@ -232,35 +242,43 @@ void Character::chooseAction()
 				{
 					if (act->type == Action::physical)
 					{
-						std::cout << "(" << i << ")";
+						std::cout << "(" << i << ") ";
 						std::cout << act->getName();
 						std::cout << std::endl;
+						skills.push_back(static_cast<Skill*>(act));
 						i++;
 					}
 				}
+				std::cout << "(0) [Go back]" << std::endl;
 				std::cout << "Choose skill: ";
 				std::cin >> action;
 				std::cout << std::endl;
+				if (action == 0)
+				{
+					chooseAction();
+					return;
+				}
 			}
+			callAction(skills[action - 1]);
 		}
-		if (command == 4)
+		else if (command == 4)
 		{
-			action = 2;
+			callAction(actions[1]);
 		}
 		action--;
 	}
-	else 
+	else
 	{
 		action = randomizeInt(0, actions.size() - 1);
+		callAction(actions[action]);
 	}
-	callAction(action);
 }
 
-void Character::callAction(int action)
+void Character::callAction(Action* act)
 {
-	if (actions[action]->getRequiresTarget())
+	if (act->getRequiresTarget())
 	{
-		if (static_cast<Magic*>(actions[action])->element == Action::healing)
+		if (static_cast<Magic*>(act)->element == Action::healing)
 		{
 			targetSelection(friends);
 		}
@@ -273,42 +291,42 @@ void Character::callAction(int action)
 			return;
 		}
 		else {
-			if (actions[action]->type == Action::physical)
+			if (act->type == Action::physical)
 			{
 				//std::cout << "Action is physical\n";
-				static_cast<Skill*>(actions[action])->useAction(this, enemies[target]);
+				static_cast<Skill*>(act)->useAction(this, enemies[target]);
 			}
-			if (actions[action]->type == Action::magic)
+			if (act->type == Action::magic)
 			{
 				//std::cout << "Action is magical\n";
-				if (static_cast<Magic*>(actions[action])->element == Action::healing)
+				if (static_cast<Magic*>(act)->element == Action::healing)
 				{
-					static_cast<Magic*>(actions[action])->useAction(this, friends[target]);
+					static_cast<Magic*>(act)->useAction(this, friends[target]);
 				}
 				else
 				{
-					static_cast<Magic*>(actions[action])->useAction(this, enemies[target]);
+					static_cast<Magic*>(act)->useAction(this, enemies[target]);
 				}
 			}
 		}
 	}
 	else
 	{
-		if (actions[action]->type == Action::physical)
+		if (act->type == Action::physical)
 		{
 			//std::cout << "Action is physical\n";
-			static_cast<Skill*>(actions[action])->useAction(this);
+			static_cast<Skill*>(act)->useAction(this);
 		}
-		if (actions[action]->type == Action::magic)
+		if (act->type == Action::magic)
 		{
 			//std::cout << "Action is magical\n";
-			if (static_cast<Magic*>(actions[action])->element == Action::healing)
+			if (static_cast<Magic*>(act)->element == Action::healing)
 			{
-				static_cast<Magic*>(actions[action])->useAction(this, friends);
+				static_cast<Magic*>(act)->useAction(this, friends);
 			}
 			else
 			{
-				static_cast<Magic*>(actions[action])->useAction(this, enemies);
+				static_cast<Magic*>(act)->useAction(this, enemies);
 			}
 		}
 	}
