@@ -264,7 +264,20 @@ void Character::chooseAction()
 	else
 	{
 		action = randomizeInt(0, actions.size() - 1);
-		callAction(actions[action]);
+		if (actions[action]->type == Action::magic && static_cast<Magic*>(actions[action])->getSPcost() > currentSP)
+		{
+			chooseAction(); //restart action randomization if not enough SP.
+			return;
+		}
+		else if (actions[action]->type == Action::magic && static_cast<Magic*>(actions[action])->element == Magic::healing && currentHealth == maxHealth)
+		{
+			chooseAction(); //restart action healing with max health (only checks own hp for now)
+			return;
+		}
+		else
+		{
+			callAction(actions[action]);
+		}
 	}
 }
 
