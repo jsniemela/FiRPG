@@ -269,6 +269,7 @@ void Character::chooseAction()
 			chooseAction(); //restart action randomization if not enough SP.
 			return;
 		}
+		/*
 		else if (actions[action]->type == Action::magic && static_cast<Magic*>(actions[action])->element == Magic::healing && currentHealth == maxHealth)
 		{
 			chooseAction(); //restart action healing with max health (only checks own hp for now)
@@ -276,8 +277,9 @@ void Character::chooseAction()
 		}
 		else
 		{
+		*/
 			callAction(actions[action]);
-		}
+		//}
 	}
 }
 
@@ -288,6 +290,15 @@ void Character::callAction(Action* act)
 		if (static_cast<Magic*>(act)->element == Action::healing)
 		{
 			targetSelection(friends);
+			if (friends[target]->getCurrentHealth() == friends[target]->getMaxHealth())
+			{
+				if (controlled)
+				{
+					std::cout << "Target health is already full.\n\n";
+				}
+				chooseAction();
+				return;
+			}
 		}
 		else {
 			targetSelection(enemies);
@@ -329,7 +340,26 @@ void Character::callAction(Action* act)
 			//std::cout << "Action is magical\n";
 			if (static_cast<Magic*>(act)->element == Action::healing)
 			{
-				static_cast<Magic*>(act)->useAction(this, friends);
+				int i = friends.size();
+				for (auto fr : friends)
+				{
+					if (fr->getCurrentHealth() == friends[target]->getMaxHealth())
+					{
+						i--;
+					}
+				}
+				if (i == 0) {
+					if (controlled)
+					{
+						std::cout << "All targets are already at full health.\n\n";
+					}
+					chooseAction();
+					return;
+				}
+				else
+				{
+					static_cast<Magic*>(act)->useAction(this, friends);
+				}
 			}
 			else
 			{
@@ -474,7 +504,7 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 void Character::recover(int healAmount)
 {
 	currentHealth += healAmount;
-	if (currentHealth > maxHealth)
+	if (currentHealth >= maxHealth)
 	{
 		currentHealth = maxHealth;
 		std::cout << name << " recovered to full HP.\n\n";
