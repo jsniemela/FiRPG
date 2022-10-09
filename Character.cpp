@@ -85,7 +85,7 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Block", Action::basic, false));
 	actions.push_back(new Skill("Poison attack", 5, Action::physical, Skill::poisoned));
 	actions.push_back(new Skill("Insult", 0, Action::physical, Skill::sadness));
-	actions.push_back(new Skill("Kill", 0, Action::statusOnly, Skill::KO));
+	//actions.push_back(new Skill("Kill", 0, Action::statusOnly, Skill::KO));
 	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true));
 	actions.push_back(new Magic("Blizzard", 10, 7, Action::magic, Magic::ice, false)); 
 	actions.push_back(new Magic("Cure", 25, 6, Action::magic, Magic::healing, true));
