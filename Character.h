@@ -40,7 +40,7 @@ private:
 	void callAction(Action* act);
 
 public:
-	enum status { normal, poisoned, KO, sadness } condition;
+	enum status { normal, poisoned, KO, sadness, sleep } condition;
 	enum damageType { physical, ignoreDef, magic } dmgType;
 	Character(std::string name, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 

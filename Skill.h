@@ -9,7 +9,7 @@ class Skill: public Action
 private:
 	int baseDamage;
 public:
-	enum status { normal, poisoned, KO, sadness } effect;
+	enum status { normal, poisoned, KO, sadness, sleep } effect;
 
 	Skill();
 	Skill(std::string newName, damageType dmgType, bool requiresTarget);

@@ -61,6 +61,8 @@ std::string Character::getStatusName()
 		return "KO";
 	case 3:
 		return "sad";
+	case 4:
+		return "sleeping";
 	default:
 		return "healthy";
 	}
@@ -86,6 +88,7 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Poison attack", 5, Action::physical, Skill::poisoned));
 	actions.push_back(new Skill("Insult", 0, Action::physical, Skill::sadness));
 	actions.push_back(new Skill("Kill", 0, Action::statusOnly, Skill::KO));
+	actions.push_back(new Skill("Sleep", 0, Action::statusOnly, Skill::sleep));
 	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true));
 	actions.push_back(new Magic("Blizzard", 10, 7, Action::magic, Magic::ice, false)); 
 	actions.push_back(new Magic("Cure", 25, 6, Action::magic, Magic::healing, true));
@@ -382,6 +385,11 @@ void Character::takeTurn()
 				std::cout << name << " skips a turn while wallowing in sadness.\n\n";
 			}
 		}
+		if (condition == sleep) 
+		{
+			skipTurn = true;
+			std::cout << name << " is sleeping.\n\n";
+		}
 		removeDeadTargets();
 		if (!skipTurn)
 		{
@@ -414,7 +422,13 @@ void Character::takeTurn()
 
 			if (statusTimer == 0 && condition != normal && condition != KO)
 			{
-				std::cout << name << "'s status is back to normal.\n\n";
+				if (condition == sleep)
+				{
+					std::cout << name << " woke up!\n\n";
+				}
+				else {
+					std::cout << name << "'s status is back to normal.\n\n";
+				}
 				condition = normal;
 			}
 		}
@@ -456,7 +470,7 @@ void Character::applyStatus(status effect)
 		{
 			condition = effect;
 			statusTimer = 3; //apply status for 3 turns 
-			std::cout << name << "'s status is now " << getStatusName() << ".\n\n";
+			std::cout << name << " is now " << getStatusName() << ".\n\n";
 		}
 	}
 }
