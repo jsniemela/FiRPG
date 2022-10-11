@@ -312,7 +312,7 @@ void Character::callAction(Action* act)
 			return;
 		}
 		else {
-			if (act->type == Action::physical || act->type == Action::basic || Action::statusOnly)
+			if (act->type == Action::physical || act->type == Action::basic || act->type == Action::statusOnly)
 			{
 				//std::cout << "Action is physical\n";
 				static_cast<Skill*>(act)->useAction(this, enemies[target]);
