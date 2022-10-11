@@ -502,7 +502,14 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 		damage /= 2; 
 	}
 	currentHealth -= damage;
-	std::cout << name << " took " << damage << " damage.\n\n";
+	std::cout << name << " took " << damage << " damage.\n";
+	if (dmgType == physical && condition == sleep)
+	{
+		statusTimer = 0;
+		condition = normal;
+		std::cout << name << " woke up!\n\n";
+	}
+	std::cout << "\n";
 	//std::cout << "Current health: " << currentHealth << "\n";
 	if (currentHealth < 0) 
 	{
