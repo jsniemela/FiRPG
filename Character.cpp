@@ -457,20 +457,23 @@ void Character::setHealth(int hp)
 
 void Character::applyStatus(status effect) 
 {
-	if (guarding)
+	if (condition != KO)
 	{
-		std::cout << name << " avoided status by guarding. \n\n";
-	}
-	else
-	{
-		if (effect == KO) {
-			die();
-		}
-		else 
+		if (guarding)
 		{
-			condition = effect;
-			statusTimer = 3; //apply status for 3 turns 
-			std::cout << name << " is now " << getStatusName() << ".\n\n";
+			std::cout << name << " avoided status by guarding. \n\n";
+		}
+		else
+		{
+			if (effect == KO) {
+				die();
+			}
+			else
+			{
+				condition = effect;
+				statusTimer = 3; //apply status for 3 turns 
+				std::cout << name << " is now " << getStatusName() << ".\n\n";
+			}
 		}
 	}
 }
