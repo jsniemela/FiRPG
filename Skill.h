@@ -8,13 +8,14 @@ class Skill: public Action
 {
 private:
 	int baseDamage;
+	int statusProbability;
 public:
 	enum status { normal, poisoned, KO, sadness, sleep } effect;
 
 	Skill();
 	Skill(std::string newName, damageType dmgType, bool requiresTarget);
 	Skill(std::string newName, int atk, damageType dmgType);
-	Skill(std::string newName, int atk, damageType dmgType, status eff);
+	Skill(std::string newName, int atk, damageType dmgType, status eff, int statusProb);
 	~Skill(){}
 
 	Character* getCharacter();

@@ -6,6 +6,7 @@ Skill::Skill()
 	name = "Pass turn";
 	baseDamage = 0;
 	type = basic;
+	statusProbability = 0;
 }
 
 Skill::Skill(std::string newName, damageType dmgType, bool req)
@@ -13,6 +14,7 @@ Skill::Skill(std::string newName, damageType dmgType, bool req)
 	name = newName;
 	type = dmgType;
 	requiresTarget = req;
+	statusProbability = 0;
 }
 
 Skill::Skill(std::string newName, int atk, damageType dmgType)
@@ -21,10 +23,11 @@ Skill::Skill(std::string newName, int atk, damageType dmgType)
 	name = newName;
 	requiresTarget = true;
 	type = dmgType;
+	statusProbability = 0;
 }
 
-Skill::Skill(std::string newName, int atk, damageType dmgType, status eff)
-	:baseDamage{ atk }, effect{eff}
+Skill::Skill(std::string newName, int atk, damageType dmgType, status eff, int statusProb)
+	:baseDamage{ atk }, effect{eff}, statusProbability{statusProb}
 {
 	name = newName;
 	type = dmgType;
@@ -54,9 +57,9 @@ void Skill::useAction(Character* user, Character* target)
 {
 	bool critical;
 	float critrate = static_cast<float>(user->getCritRate());
-	if (type == statusOnly) 
+	if (statusProbability != 0)
 	{
-		critrate *= 1.4f; // higher chance for status if skill doesn't apply damage.
+		critrate = statusProbability; // replaces crit rate with statusProbability but still uses crit calculation
 	}
 	if (target->getStatus() == static_cast<Character::status>(sadness)) 
 	{
@@ -67,7 +70,14 @@ void Skill::useAction(Character* user, Character* target)
 		critrate = 100;
 	}
 	critrate = static_cast<int>(critrate);
-	std::cout << critrate << "/100 chance for critical attack.\n";
+	if (type == statusOnly)
+	{
+		std::cout << critrate << "/100 chance to apply status.\n";
+	}
+	else
+	{
+		std::cout << critrate << "/100 chance for critical attack.\n";
+	}
 	critical = critrate >= randomizeInt(1, 100); //true if critical
 	if (type != statusOnly) 
 	{
