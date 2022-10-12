@@ -160,6 +160,11 @@ void Character::targetSelection(std::vector<Character*> targets)
 			std::cin >> target;
 			std::cout << std::endl;
 		}
+		if (target == 0)
+		{
+			chooseAction();
+			return;
+		}
 		target--;
 	}
 	else
