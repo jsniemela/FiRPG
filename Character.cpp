@@ -277,17 +277,7 @@ void Character::chooseAction()
 			chooseAction(); //restart action randomization if not enough SP.
 			return;
 		}
-		/*
-		else if (actions[action]->type == Action::magic && static_cast<Magic*>(actions[action])->element == Magic::healing && currentHealth == maxHealth)
-		{
-			chooseAction(); //restart action healing with max health (only checks own hp for now)
-			return;
-		}
-		else
-		{
-		*/
-			callAction(actions[action]);
-		//}
+		callAction(actions[action]);
 	}
 }
 
@@ -295,7 +285,7 @@ void Character::callAction(Action* act)
 {
 	if (act->getRequiresTarget())
 	{
-		if (static_cast<Magic*>(act)->element == Action::healing)
+		if (act->type == Action::magic && static_cast<Magic*>(act)->element == Action::healing)
 		{
 			targetSelection(friends);
 			if (friends[target]->getCurrentHealth() == friends[target]->getMaxHealth())
