@@ -160,11 +160,6 @@ void Character::targetSelection(std::vector<Character*> targets)
 			std::cin >> target;
 			std::cout << std::endl;
 		}
-		if (target == 0)
-		{
-			chooseAction();
-			return;
-		}
 		target--;
 	}
 	else
@@ -288,6 +283,10 @@ void Character::callAction(Action* act)
 		if (act->type == Action::magic && static_cast<Magic*>(act)->element == Action::healing)
 		{
 			targetSelection(friends);
+			if (target == -1)
+			{
+				return;
+			}
 			if (friends[target]->getCurrentHealth() == friends[target]->getMaxHealth())
 			{
 				if (controlled)
@@ -298,31 +297,30 @@ void Character::callAction(Action* act)
 				return;
 			}
 		}
-		else {
-			targetSelection(enemies);
-		}
-		if (target == -1)
+		else 
 		{
-			chooseAction();
-			return;
-		}
-		else {
-			if (act->type == Action::physical || act->type == Action::basic || act->type == Action::statusOnly)
+			targetSelection(enemies);
+			if (target == -1)
 			{
-				//std::cout << "Action is physical\n";
-				static_cast<Skill*>(act)->useAction(this, enemies[target]);
+				chooseAction();
+				return;
 			}
-			if (act->type == Action::magic)
+		}
+		if (act->type == Action::physical || act->type == Action::basic || act->type == Action::statusOnly)
+		{
+			//std::cout << "Action is physical\n";
+			static_cast<Skill*>(act)->useAction(this, enemies[target]);
+		}
+		if (act->type == Action::magic)
+		{
+			//std::cout << "Action is magical\n";
+			if (static_cast<Magic*>(act)->element == Action::healing)
 			{
-				//std::cout << "Action is magical\n";
-				if (static_cast<Magic*>(act)->element == Action::healing)
-				{
-					static_cast<Magic*>(act)->useAction(this, friends[target]);
-				}
-				else
-				{
-					static_cast<Magic*>(act)->useAction(this, enemies[target]);
-				}
+				static_cast<Magic*>(act)->useAction(this, friends[target]);
+			}
+			else
+			{
+				static_cast<Magic*>(act)->useAction(this, enemies[target]);
 			}
 		}
 	}
