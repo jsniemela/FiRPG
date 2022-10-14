@@ -499,7 +499,7 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 	}
 	currentHealth -= damage;
 	std::cout << name << " took " << damage << " damage.\n";
-	if (dmgType == physical && condition == sleep)
+	if (dmgType == physical && condition == sleep && randomizeInt(0, 1) == 1)
 	{
 		statusTimer = 0;
 		condition = normal;
