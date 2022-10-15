@@ -30,6 +30,7 @@ private:
 	std::vector<Character*> friends;
 	std::vector<Action*> actions;
 	bool guarding;
+	bool counter;
 	bool controlled;
 
 	void chooseAction();
@@ -51,7 +52,7 @@ public:
 	void dealDamage(Character* target);
 	void levelUp();
 	void showStats();
-	void takeDamage(float baseDamage, damageType dmgType);
+	void takeDamage(float baseDamage, damageType dmgType, Character* damager);
 	void takeTurn();
 	void applyStatus(status effect);
 	void guard();

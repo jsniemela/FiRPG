@@ -31,7 +31,7 @@ void Magic::useAction(Character* user, Character* target)
 	}
 	else
 	{
-		target->takeDamage(damage, Character::magic);
+		target->takeDamage(damage, Character::magic, user);
 	}
 }
 
@@ -48,7 +48,7 @@ void Magic::useAction(Character* user, std::vector<Character*> targets)
 		}
 		else
 		{
-			t->takeDamage(damage, Character::magic);
+			t->takeDamage(damage, Character::magic, user);
 		}
 	}
 

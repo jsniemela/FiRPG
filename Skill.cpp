@@ -83,7 +83,7 @@ void Skill::useAction(Character* user, Character* target)
 	{
 		std::cout << user->getName() << " uses " << name << " on " << target->getName() << "!\n";
 		float damage = calculateDamage(user->getAttack(), critical);
-		target->takeDamage(damage, Character::physical);
+		target->takeDamage(damage, Character::physical, user);
 	}
 	if (effect != normal) 
 	{ 

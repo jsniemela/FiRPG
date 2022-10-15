@@ -12,6 +12,7 @@ Character::Character(std::string newName, int hp, int sp, int atk, int def, int 
 	statusTimer = 0;
 	target = 0;
 	guarding = false;
+	counter = false;
 	initializeActions();
 }
 
@@ -405,7 +406,7 @@ void Character::takeTurn()
 			{
 				float poisonDamage = static_cast<float>(maxHealth) / 10;
 				std::cout << this->name << " is poisoned.\n";
-				takeDamage(poisonDamage, ignoreDef);
+				takeDamage(poisonDamage, ignoreDef, this);
 			}
 
 			if (statusTimer > 0) 
@@ -474,10 +475,11 @@ void Character::applyStatus(status effect)
 void Character::guard() 
 {
 	guarding = true;
+	counter = true;
 	std::cout << name << " is guarding.\n\n";
 }
 
-void Character::takeDamage(float baseDamage, damageType dmgType) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
+void Character::takeDamage(float baseDamage, damageType dmgType, Character* damager) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
 {
 	int damage = baseDamage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence
@@ -515,6 +517,12 @@ void Character::takeDamage(float baseDamage, damageType dmgType) //add damage ty
 	if (currentHealth == 0) 
 	{
 		die();
+	}
+	else if (counter && dmgType == physical)
+	{
+		std::cout << "Counter attack!\n";
+		static_cast<Skill*>(actions[0])->useAction(this, damager);
+		counter = false;
 	}
 }
 
