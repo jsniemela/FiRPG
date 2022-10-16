@@ -9,21 +9,27 @@ class Skill: public Action
 private:
 	int baseDamage;
 	int statusProbability;
+	int hpCost;
 public:
 	enum status { normal, poisoned, KO, sadness, sleep } effect;
 
 	Skill();
 	Skill(std::string newName, damageType dmgType, bool requiresTarget);
-	Skill(std::string newName, int atk, damageType dmgType);
-	Skill(std::string newName, int atk, damageType dmgType, status eff, int statusProb);
+	Skill(std::string newName, int atk, int hp, damageType dmgType);
+	Skill(std::string newName, int atk, int hp, damageType dmgType, bool req);
+	Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb);
+	Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb, bool req);
 	~Skill(){}
 
 	Character* getCharacter();
 
 	void useAction(Character* user, Character* target);
-	void useAction(Character* user);
+	void useAction(Character* user, std::vector<Character*> targets);
+	//void useAction(Character* user);
 	float calculateDamage(float damage, bool crit);
 	std::string getEffectName();
+
+	int getHPcost();
 protected:
 	Character* c;
 

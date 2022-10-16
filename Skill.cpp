@@ -17,7 +17,7 @@ Skill::Skill(std::string newName, damageType dmgType, bool req)
 	statusProbability = 0;
 }
 
-Skill::Skill(std::string newName, int atk, damageType dmgType)
+Skill::Skill(std::string newName, int atk, int hp, damageType dmgType)
 	:baseDamage{atk}
 {
 	name = newName;
@@ -26,12 +26,28 @@ Skill::Skill(std::string newName, int atk, damageType dmgType)
 	statusProbability = 0;
 }
 
-Skill::Skill(std::string newName, int atk, damageType dmgType, status eff, int statusProb)
-	:baseDamage{ atk }, effect{eff}, statusProbability{statusProb}
+Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, bool req)
+	:baseDamage{ atk }, hpCost{ hp }
+{
+	name = newName;
+	type = dmgType;
+	requiresTarget = req;
+}
+
+Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb)
+	:baseDamage{ atk }, hpCost{ hp }, effect { eff }, statusProbability{ statusProb }
 {
 	name = newName;
 	type = dmgType;
 	requiresTarget = true;
+}
+
+Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb, bool req)
+	:baseDamage{ atk }, hpCost{hp}, effect{ eff }, statusProbability{ statusProb }
+{
+	name = newName;
+	type = dmgType;
+	requiresTarget = req;
 }
 
 std::string Skill::getEffectName() 
@@ -100,6 +116,10 @@ void Skill::useAction(Character* user, Character* target)
 			target->applyStatus(static_cast<Character::status>(effect));
 		}
 	}
+	if (hpCost != 0)
+	{
+		user->takeDamage(hpCost, Character::ignoreDef, user);
+	}
 }
 
 float Skill::calculateDamage(float damage, bool crit) 
@@ -118,7 +138,34 @@ float Skill::calculateDamage(float damage, bool crit)
 	return dmg;
 }
 
+void Skill::useAction(Character* user, std::vector<Character*> targets)
+{
+	if (type == basic)
+	{
+		user->guard();
+	}
+	else
+	{
+		float damage = user->getAttack() + baseDamage;
+		std::cout << user->getName() << " used " << name << "!\n";
+		for (auto t : targets)
+		{
+			t->takeDamage(damage, Character::physical, user);
+		}
+		if (hpCost != 0)
+		{
+			user->takeDamage(hpCost, Character::ignoreDef, user);
+		}
+	}
+}
+/*
 void Skill::useAction(Character* user)
 {
 	user->guard();
+}
+*/
+
+int Skill::getHPcost()
+{
+	return hpCost;
 }

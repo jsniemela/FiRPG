@@ -84,12 +84,13 @@ bool Character::getGuarding()
 
 void Character::initializeActions()
 {
-	actions.push_back(new Skill("Attack", 10, Action::basic));
+	actions.push_back(new Skill("Attack", 0, 0, Action::basic));
 	actions.push_back(new Skill("Block", Action::basic, false));
-	actions.push_back(new Skill("Poison attack", 5, Action::physical, Skill::poisoned, 0)); // 0% to apply status, uses critrate instead
-	actions.push_back(new Skill("Insult", 0, Action::statusOnly, Skill::sadness, 50)); // 50% to apply sadness
-	actions.push_back(new Skill("Kill", 0, Action::statusOnly, Skill::KO, 15));
-	actions.push_back(new Skill("Sleep", 0, Action::statusOnly, Skill::sleep, 50));
+	actions.push_back(new Skill("Poison attack", 5, 5, Action::physical, Skill::poisoned, 0)); // 0% to apply status, uses critrate instead
+	actions.push_back(new Skill("Spin attack", 0, 5, Action::physical, false)); // 0% to apply status, uses critrate instead
+	actions.push_back(new Skill("Insult", 0, 0, Action::statusOnly, Skill::sadness, 50)); // 50% to apply sadness
+	actions.push_back(new Skill("Kill", 0, 0, Action::statusOnly, Skill::KO, 15));
+	actions.push_back(new Skill("Sleep", 0, 0, Action::statusOnly, Skill::sleep, 50));
 	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true));
 	actions.push_back(new Magic("Blizzard", 10, 7, Action::magic, Magic::ice, false)); 
 	actions.push_back(new Magic("Cure", 25, 6, Action::magic, Magic::healing, true));
@@ -243,6 +244,10 @@ void Character::chooseAction()
 				{
 					std::cout << "(" << i << ") ";
 					std::cout << act->getName();
+					if (static_cast<Skill*>(act)->getHPcost() > 0)
+					{
+						std::cout << " [" << static_cast<Skill*>(act)->getHPcost() << " HP]";
+					}
 					std::cout << std::endl;
 					skills.push_back(static_cast<Skill*>(act));
 					i++;
@@ -330,7 +335,7 @@ void Character::callAction(Action* act)
 		if (act->type == Action::physical || act->type == Action::basic)
 		{
 			//std::cout << "Action is physical\n";
-			static_cast<Skill*>(act)->useAction(this);
+			static_cast<Skill*>(act)->useAction(this, enemies);
 		}
 		if (act->type == Action::magic)
 		{
