@@ -8,8 +8,12 @@ class Skill: public Action
 {
 private:
 	int baseDamage;
+	int* baseDamagePtr;
+	int baseDamageDivider;
 	int statusProbability;
 	int hpCost;
+	int* hpCostPtr;
+	int hpCostDivider;
 public:
 	enum status { normal, poisoned, KO, sadness, sleep } effect;
 
@@ -17,6 +21,7 @@ public:
 	Skill(std::string newName, damageType dmgType, bool requiresTarget);
 	Skill(std::string newName, int atk, int hp, damageType dmgType);
 	Skill(std::string newName, int atk, int hp, damageType dmgType, bool req);
+	Skill(std::string newName, int* atk, int *hp, int bdd, int hpcd, damageType dmgType, bool req);
 	Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb);
 	Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb, bool req);
 	~Skill(){}

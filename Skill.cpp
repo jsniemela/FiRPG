@@ -7,6 +7,8 @@ Skill::Skill()
 	baseDamage = 0;
 	type = basic;
 	statusProbability = 0;
+	baseDamageDivider = 0;
+	hpCostDivider = 0;
 }
 
 Skill::Skill(std::string newName, damageType dmgType, bool req)
@@ -15,6 +17,8 @@ Skill::Skill(std::string newName, damageType dmgType, bool req)
 	type = dmgType;
 	requiresTarget = req;
 	statusProbability = 0;
+	baseDamageDivider = 0;
+	hpCostDivider = 0;
 }
 
 Skill::Skill(std::string newName, int atk, int hp, damageType dmgType)
@@ -24,10 +28,22 @@ Skill::Skill(std::string newName, int atk, int hp, damageType dmgType)
 	requiresTarget = true;
 	type = dmgType;
 	statusProbability = 0;
+	baseDamageDivider = 0;
+	hpCostDivider = 0;
 }
 
 Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, bool req)
 	:baseDamage{ atk }, hpCost{ hp }
+{
+	name = newName;
+	type = dmgType;
+	requiresTarget = req;
+	baseDamageDivider = 0;
+	hpCostDivider = 0;
+}
+
+Skill::Skill(std::string newName, int* atk, int* hp, int bdd, int hpcd, damageType dmgType, bool req)
+	:baseDamagePtr{ atk }, hpCostPtr{ hp }, baseDamageDivider{ bdd }, hpCostDivider{hpcd}
 {
 	name = newName;
 	type = dmgType;
@@ -40,6 +56,8 @@ Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, status ef
 	name = newName;
 	type = dmgType;
 	requiresTarget = true;
+	baseDamageDivider = 0;
+	hpCostDivider = 0;
 }
 
 Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb, bool req)
@@ -48,6 +66,8 @@ Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, status ef
 	name = newName;
 	type = dmgType;
 	requiresTarget = req;
+	baseDamageDivider = 0;
+	hpCostDivider = 0;
 }
 
 std::string Skill::getEffectName() 
@@ -146,7 +166,23 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 	}
 	else
 	{
-		float damage = user->getAttack() + baseDamage;
+		float damage = user->getAttack();
+		if (baseDamagePtr != nullptr)
+		{
+			std::cout << "used pointer\n";
+			if (baseDamageDivider != 0)
+			{
+				damage += *baseDamagePtr/baseDamageDivider;
+			}
+			else
+			{
+				damage += *baseDamagePtr;
+			}
+		}
+		else {
+			damage += baseDamage;
+			std::cout << "used direct atk power\n";
+		}
 		std::cout << user->getName() << " used " << name << "!\n";
 		for (auto t : targets)
 		{
@@ -154,7 +190,23 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 		}
 		if (hpCost != 0)
 		{
-			user->takeDamage(hpCost, Character::ignoreDef, user);
+			if (hpCostPtr != nullptr)
+			{
+				if (baseDamageDivider != 0)
+				{
+					user->takeDamage(*hpCostPtr, Character::ignoreDef, user);
+				}
+				else
+				{
+					user->takeDamage(*hpCostPtr / hpCostDivider, Character::ignoreDef, user);
+				}
+				std::cout << "used pointer";
+			}
+			else
+			{
+				user->takeDamage(hpCost, Character::ignoreDef, user);
+				std::cout << "used direct hpCost\n";
+			}
 		}
 	}
 }
@@ -167,5 +219,11 @@ void Skill::useAction(Character* user)
 
 int Skill::getHPcost()
 {
-	return hpCost;
+	if (hpCostPtr != nullptr)
+	{
+		return *hpCostPtr;
+	}
+	else {
+		return hpCost;
+	}
 }
