@@ -188,7 +188,7 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 		{
 			t->takeDamage(damage, Character::physical, user);
 		}
-		if (hpCost != 0)
+		if (hpCost != 0 || hpCostPtr != nullptr)
 		{
 			if (hpCostPtr != nullptr)
 			{
@@ -200,7 +200,7 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 				{
 					user->takeDamage(*hpCostPtr / hpCostDivider, Character::ignoreDef, user);
 				}
-				std::cout << "used pointer";
+				std::cout << "used pointer\n";
 			}
 			else
 			{
