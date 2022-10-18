@@ -161,6 +161,12 @@ void Character::targetSelection(std::vector<Character*> targets)
 		{
 			std::cout << "Choose target:";
 			std::cin >> target;
+			if (std::cin.fail())
+			{
+				target = -1;
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			}
 			std::cout << std::endl;
 		}
 		target--;
@@ -196,6 +202,12 @@ void Character::chooseAction()
 			std::cout << "(4)Guard\n";
 			std::cout << "Choose command: ";
 			std::cin >> command;
+			if (std::cin.fail())
+			{
+				command = -1;
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			}
 		}
 		
 		if (command == 1) // attack
@@ -207,22 +219,33 @@ void Character::chooseAction()
 		{
 			std::vector<Magic*>magics;
 			int i = 1;
-			for (auto act : actions)
+			while (action < 0 || action > magics.size())
 			{
-				if (act->type == Action::magic)
+				for (auto act : actions)
 				{
-					std::cout << "(" << i << ") ";
-					std::cout << act->getName();
-					std::cout << " [" << static_cast<Magic*>(act)->getSPcost() << " SP]";
-					std::cout << std::endl;
-					magics.push_back(static_cast<Magic*>(act));
-					i++;
+					if (act->type == Action::magic)
+					{
+						std::cout << "(" << i << ") ";
+						std::cout << act->getName();
+						std::cout << " [" << static_cast<Magic*>(act)->getSPcost() << " SP]";
+						std::cout << std::endl;
+						magics.push_back(static_cast<Magic*>(act));
+						i++;
+					}
 				}
+				std::cout << "(0) [Go back]" << std::endl;
+				std::cout << "Choose magic: ";
+				std::cin >> action;
+				if (std::cin.fail())
+				{
+					action = -1;
+					std::cin.clear();
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				}
+				std::cout << std::endl;
+				i = 1;
 			}
-			std::cout << "(0) [Go back]" << std::endl;
-			std::cout << "Choose magic: ";
-			std::cin >> action;
-			std::cout << std::endl;
+			
 			if (action > 0 && action <= magics.size() && magics[action-1]->getSPcost() > currentSP)
 			{
 				std::cout << "Not enough SP!\n\n";
@@ -239,25 +262,35 @@ void Character::chooseAction()
 		{
 			std::vector<Skill*>skills;
 			int i = 1;
-			for (auto act : actions)
+			while (action < 0 || action > skills.size())
 			{
-				if (act->type == Action::physical || act->type == Action::statusOnly)
+				for (auto act : actions)
 				{
-					std::cout << "(" << i << ") ";
-					std::cout << act->getName();
-					if (static_cast<Skill*>(act)->getHPcost() > 0)
+					if (act->type == Action::physical || act->type == Action::statusOnly)
 					{
-						std::cout << " [" << static_cast<Skill*>(act)->getHPcost() << " HP]";
+						std::cout << "(" << i << ") ";
+						std::cout << act->getName();
+						if (static_cast<Skill*>(act)->getHPcost() > 0)
+						{
+							std::cout << " [" << static_cast<Skill*>(act)->getHPcost() << " HP]";
+						}
+						std::cout << std::endl;
+						skills.push_back(static_cast<Skill*>(act));
+						i++;
 					}
-					std::cout << std::endl;
-					skills.push_back(static_cast<Skill*>(act));
-					i++;
 				}
+				std::cout << "(0) [Go back]" << std::endl;
+				std::cout << "Choose skill: ";
+				std::cin >> action;
+				if (std::cin.fail())
+				{
+					action = -1;
+					std::cin.clear();
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				}
+				std::cout << std::endl;
+				i = 1;
 			}
-			std::cout << "(0) [Go back]" << std::endl;
-			std::cout << "Choose skill: ";
-			std::cin >> action;
-			std::cout << std::endl;
 			if (action < 1 || action > skills.size())
 			{
 				chooseAction();
