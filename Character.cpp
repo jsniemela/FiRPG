@@ -198,12 +198,12 @@ void Character::chooseAction()
 			std::cin >> command;
 		}
 		
-		if (command == 1)
+		if (command == 1) // attack
 		{
 			callAction(actions[0]);
 		}
 
-		else if (command == 2)
+		else if (command == 2) // magic
 		{
 			std::vector<Magic*>magics;
 			int i = 1;
@@ -235,7 +235,7 @@ void Character::chooseAction()
 			}
 			callAction(magics[action - 1]);
 		}
-		else if (command == 3)
+		else if (command == 3) // skill
 		{
 			std::vector<Skill*>skills;
 			int i = 1;
@@ -265,7 +265,7 @@ void Character::chooseAction()
 			}
 			callAction(skills[action - 1]);
 		}
-		else if (command == 4)
+		else if (command == 4) // guard
 		{
 			callAction(actions[1]);
 		}
@@ -292,6 +292,7 @@ void Character::callAction(Action* act)
 			targetSelection(friends);
 			if (target == -1)
 			{
+				chooseAction();
 				return;
 			}
 			if (friends[target]->getCurrentHealth() == friends[target]->getMaxHealth())

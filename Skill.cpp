@@ -169,7 +169,7 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 		float damage = user->getAttack();
 		if (baseDamagePtr != nullptr)
 		{
-			std::cout << "used pointer\n";
+			//std::cout << "used pointer\n";
 			if (baseDamageDivider != 0)
 			{
 				damage += *baseDamagePtr/baseDamageDivider;
@@ -181,7 +181,7 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 		}
 		else {
 			damage += baseDamage;
-			std::cout << "used direct atk power\n";
+			//std::cout << "used direct atk power\n";
 		}
 		std::cout << user->getName() << " used " << name << "!\n";
 		for (auto t : targets)
@@ -200,12 +200,12 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 				{
 					user->takeDamage(*hpCostPtr / hpCostDivider, Character::ignoreDef, user);
 				}
-				std::cout << "used pointer\n";
+				//std::cout << "used pointer\n";
 			}
 			else
 			{
 				user->takeDamage(hpCost, Character::ignoreDef, user);
-				std::cout << "used direct hpCost\n";
+				//std::cout << "used direct hpCost\n";
 			}
 		}
 	}
