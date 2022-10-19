@@ -70,7 +70,7 @@ void Battle::simulateBattle()
 
 			for (auto en : enemies) 
 			{
-				if (en->getStatus() == Character::KO)
+				if (en->getCurrentHealth() < 1)
 				{
 					deadEnemies++;
 				}
@@ -78,6 +78,17 @@ void Battle::simulateBattle()
 
 			if (deadPlayers == players.size() || deadEnemies == enemies.size())
 			{
+				for (auto en : enemies) 
+				{
+					expTotal += en->getExpDrop();
+				}
+				for (auto pl : players)
+				{
+					if (pl->getCurrentHealth() > 0)
+					{
+						pl->gainExp(expTotal);
+					}
+				}
 				break;
 			}
 		}

@@ -8,6 +8,7 @@ class Battle
 private:
 	std::vector<Character*> enemies; 
 	std::vector<Character*> players;
+	int expTotal;
 	//Character* character;
 	//Character* character2;
 public:

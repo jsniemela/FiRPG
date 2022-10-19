@@ -24,8 +24,10 @@ private:
 	int magicDefence;
 	int critRate;
 	int speed;
-	int statusTimer;
+	int statusTimer; // status ends when timer goes to zero.
 	int target;
+	int exp; // total gained exp
+	int expDrop; // how much a character gives exp to enemies after battle
 	std::vector<Character*> enemies;
 	std::vector<Character*> friends;
 	std::vector<Action*> actions;
@@ -39,6 +41,8 @@ private:
 	void targetSelection(std::vector<Character*> targets);
 	void die();
 	void callAction(Action* act);
+	bool checkLevelUp();
+	int requiredExp();
 
 public:
 	enum status { normal, poisoned, KO, sadness, sleep } condition;
@@ -50,6 +54,7 @@ public:
 	Action* getAction();
 
 	void dealDamage(Character* target);
+	void gainExp(int expGain);
 	void levelUp();
 	void showStats();
 	void takeDamage(float baseDamage, damageType dmgType, Character* damager);
@@ -71,6 +76,7 @@ public:
 	std::string getStatusName();
 	int getTarget();
 	bool getGuarding();
+	int getExpDrop();
 
 	void setHealth(int hp);
 	void setEnemyList(std::vector<Character*> enms);

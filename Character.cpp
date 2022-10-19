@@ -1,6 +1,7 @@
 #include "Character.h"
 #include "Skill.h"
 #include "Magic.h"
+#include <cmath>
 
 Character::Character(std::string newName, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl) 
 	: name{newName}, maxHealth{ hp }, maxSP{sp}, attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd} , controlled{ctrl}
@@ -13,7 +14,38 @@ Character::Character(std::string newName, int hp, int sp, int atk, int def, int 
 	target = 0;
 	guarding = false;
 	counter = false;
+	expDrop = 50;
 	initializeActions();
+}
+
+void Character::gainExp(int expGain)
+{
+	exp += expGain;
+	std::cout << name << " gained " << expGain << " experience.\n\n";
+	while (checkLevelUp())
+	{
+		std::cout << name << " needs " << requiredExp() << " for next level.\n";
+		exp -= requiredExp();
+		levelUp();
+	}
+}
+
+bool Character::checkLevelUp()
+{
+	if (exp > requiredExp())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+int Character::requiredExp()
+{
+	int reqExp = 100 * pow((1+0.2), level);
+	return reqExp;
 }
 
 int Character::getMaxHealth()
@@ -48,7 +80,10 @@ enum Character::status Character::getStatus()
 {
 	return condition;
 }
-
+int Character::getExpDrop()
+{
+	return expDrop;
+}
 std::string Character::getStatusName() 
 {
 	std::string status = "";
