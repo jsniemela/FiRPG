@@ -92,20 +92,19 @@ std::string Skill::getEffectName()
 void Skill::useAction(Character* user, Character* target)
 {
 	bool critical;
-	float critrate = static_cast<float>(user->getCritRate());
+	int critrate = user->getCritRate();
 	if (statusProbability != 0)
 	{
 		critrate = statusProbability; // replaces crit rate with statusProbability but still uses crit calculation
 	}
 	if (target->getStatus() == static_cast<Character::status>(sadness)) 
 	{
-		critrate *= 2.0f; // higher crit rate if target is sad
+		critrate *= 2; // higher crit rate if target is sad
 	}
 	if (critrate > 100)
 	{
 		critrate = 100;
 	}
-	critrate = static_cast<int>(critrate);
 	if (type == statusOnly)
 	{
 		std::cout << critrate << "/100 chance to apply status.\n";
@@ -118,7 +117,7 @@ void Skill::useAction(Character* user, Character* target)
 	if (type != statusOnly) 
 	{
 		std::cout << user->getName() << " uses " << name << " on " << target->getName() << "!\n";
-		float damage = calculateDamage(user->getAttack(), critical);
+		int damage = calculateDamage(user->getAttack(), critical);
 		target->takeDamage(damage, Character::physical, user);
 	}
 	if (effect != normal) 
@@ -142,18 +141,18 @@ void Skill::useAction(Character* user, Character* target)
 	}
 }
 
-float Skill::calculateDamage(float damage, bool crit) 
+int Skill::calculateDamage(int damage, bool crit) 
 {
-	float dmg = 0;
-	float critBonus = 2.0f;
+	int dmg = 0;
+	int critBonus = 2;
 	if (crit)
 	{
 		std::cout << "Critical Hit!\n";
-		dmg = static_cast<float>(baseDamage + damage) * critBonus;
+		dmg = baseDamage + damage * critBonus;
 	}
 	else
 	{
-		dmg = static_cast<float>(baseDamage + damage);
+		dmg = baseDamage + damage;
 	}
 	return dmg;
 }
@@ -166,7 +165,7 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 	}
 	else
 	{
-		float damage = user->getAttack();
+		int damage = user->getAttack();
 		if (baseDamagePtr != nullptr)
 		{
 			//std::cout << "used pointer\n";

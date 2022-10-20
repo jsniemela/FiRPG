@@ -554,7 +554,7 @@ void Character::guard()
 	std::cout << name << " is guarding.\n\n";
 }
 
-void Character::takeDamage(float baseDamage, damageType dmgType, Character* damager) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
+void Character::takeDamage(int baseDamage, damageType dmgType, Character* damager) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
 {
 	int damage = baseDamage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence

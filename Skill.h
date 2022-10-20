@@ -31,7 +31,7 @@ public:
 	void useAction(Character* user, Character* target);
 	void useAction(Character* user, std::vector<Character*> targets);
 	//void useAction(Character* user);
-	float calculateDamage(float damage, bool crit);
+	int calculateDamage(int damage, bool crit);
 	std::string getEffectName();
 
 	int getHPcost();

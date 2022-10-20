@@ -16,7 +16,7 @@ public:
 	enum damageType { physical, basic, healing, statusOnly, magic, nothing } type;
 	Action(std::string newName, damageType newType);
 	//Action(std::string newName);
-	Action(){}
+	Action();
 	virtual ~Action() {}
 
 	Character* getCharacter();

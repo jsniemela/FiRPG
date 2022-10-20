@@ -22,7 +22,7 @@ int Magic::getSPcost()
 
 void Magic::useAction(Character* user, Character* target)
 {
-	float damage = user->getMagicAttack() + baseDamage;
+	int damage = user->getMagicAttack() + baseDamage;
 	std::cout << user->getName() << " used " << name << "!\n";
 	user->loseSP(spCost);
 	if (element == healing)
@@ -37,7 +37,7 @@ void Magic::useAction(Character* user, Character* target)
 
 void Magic::useAction(Character* user, std::vector<Character*> targets)
 {
-	float damage = user->getMagicAttack() + baseDamage;
+	int damage = user->getMagicAttack() + baseDamage;
 	std::cout << user->getName() << " used " << name << "!\n";
 	user->loseSP(spCost);
 	for (auto t : targets) 

@@ -57,7 +57,7 @@ public:
 	void gainExp(int expGain);
 	void levelUp();
 	void showStats();
-	void takeDamage(float baseDamage, damageType dmgType, Character* damager);
+	void takeDamage(int baseDamage, damageType dmgType, Character* damager);
 	void takeTurn();
 	void applyStatus(status effect);
 	void guard();
