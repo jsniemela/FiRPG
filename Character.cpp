@@ -148,7 +148,7 @@ void Character::levelUp()
 
 void Character::showStats()
 {
-	std::cout << name << " - HP: " << currentHealth << "/" << maxHealth;
+	std::cout << name << " - Level " << level << ", HP: " << currentHealth << " / " << maxHealth;
 	std::cout << ", SP: " << currentSP << "/" << maxSP;
 	if (condition != normal) {
 		std::cout << ", status: " << getStatusName();
@@ -545,6 +545,15 @@ void Character::applyStatus(status effect)
 			}
 		}
 	}
+}
+
+void Character::recoverStatus()
+{
+	if (condition != normal && condition != KO) {
+		std::cout << name << "'s status is back to normal.\n";
+	}
+	condition = normal;
+	statusTimer = 0;
 }
 
 void Character::guard() 

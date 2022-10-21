@@ -10,6 +10,15 @@ void CharacterManager::clearCharacters()
 	characters.clear();
 }
 
+void CharacterManager::healCharacters()
+{
+	for (auto ch : characters)
+	{
+		ch->recoverStatus();
+		ch->recover(ch->getMaxHealth());
+	}
+}
+
 std::vector<Character*> CharacterManager::getCharacters()
 {
 	return characters;

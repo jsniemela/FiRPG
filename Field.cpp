@@ -10,9 +10,15 @@ void createPlayers(CharacterManager& pm)
 
 void createEnemies(CharacterManager& em)
 {
-	em.addCharacters(new Character("Enemy 1", 100, 20, 12, 3, 7, 2, 21, 12, false));
-	em.addCharacters(new Character("Enemy 2", 100, 20, 12, 5, 7, 2, 18, 6, false));
-	em.addCharacters(new Character("Enemy 3", 100, 20, 12, 5, 7, 2, 17, 6, false));
+	em.addCharacters(new Character("Enemy 1", 50, 10, 6, 3, 7, 2, 21, 12, false));
+	em.addCharacters(new Character("Enemy 2", 50, 10, 6, 5, 7, 2, 18, 6, false));
+	em.addCharacters(new Character("Enemy 3", 50, 10, 6, 5, 7, 2, 17, 6, false));
+}
+
+void CreateBattle(CharacterManager pm, CharacterManager em)
+{
+	Battle battle(em.getCharacters(), pm.getCharacters());
+	battle.simulateBattle();
 }
 
 int main()
@@ -21,13 +27,30 @@ int main()
 	CharacterManager pm; //player manager
 	CharacterManager em; //enemy manager
 	createPlayers(pm);
-	createEnemies(em);
-	Battle battle(em.getCharacters(), pm.getCharacters());
-	battle.simulateBattle();
-	//em.clearCharacters();
-	//createEnemies(em);
-	//std::cout << "Starting a new battle.\n\n";
-	//battle.simulateBattle();
+	int choice = 1;
+	
+	while (choice > 0 && choice << 3)
+	{
+		std::cout << "(1)Start Battle\n(2)Heal\n(3)Exit\nMake your choice: ";
+		std::cin >> choice;
+		switch (choice)
+		{
+			case 1:
+				std::cout << "Starting a new battle.\n\n";
+				createEnemies(em);
+				CreateBattle(pm, em);
+				em.clearCharacters();
+				break;
+			case 2:
+				std::cout << "Healed everyone!\n\n";
+				pm.healCharacters();
+				break;
+			default:
+				break;
+		}
+		
+	}
+	std::cout << "Exiting...";
 	//_CrtDumpMemoryLeaks();
 	return 0;
 }

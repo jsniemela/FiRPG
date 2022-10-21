@@ -63,6 +63,7 @@ public:
 	void guard();
 	void recover(int healAmount);
 	void loseSP(int spLoss);
+	void recoverStatus();
 
 	std::string getName();
 	int getMaxHealth();

@@ -15,6 +15,11 @@ Battle::Battle(std::vector<Character*> enms, std::vector<Character*> plrs)
 	expTotal = 0;
 }
 
+Battle::~Battle()
+{
+	std::cout << "Battle ended\n\n";
+}
+
 std::vector<Character*> Battle::turnOrder()
 {
 	std::vector<Character*> characters;
@@ -93,9 +98,9 @@ void Battle::simulateBattle()
 		}
 	}
 	std::cout << "Exiting battle. \n\n";
-	for (auto ch : characters)
+	for (auto pl : players)
 	{
-		ch->showStats();
+		pl->showStats();
 	}
 	
 	/*

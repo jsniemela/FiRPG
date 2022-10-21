@@ -9,5 +9,6 @@ private:
 public:
 	void addCharacters(Character* ch);
 	void clearCharacters();
+	void healCharacters();
 	std::vector<Character*> getCharacters();
 };
