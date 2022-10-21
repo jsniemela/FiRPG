@@ -98,10 +98,11 @@ void Battle::simulateBattle()
 		ch->showStats();
 	}
 	
+	/*
 	for (auto c : characters)
 	{
 		delete c;
 	}
 	characters.clear();
-	
+	*/
 }
