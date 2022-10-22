@@ -29,7 +29,7 @@ int main()
 	createPlayers(pm);
 	int choice = 1;
 	
-	while (choice > 0 && choice << 3)
+	while (choice > 0 && choice < 3)
 	{
 		std::cout << "(1)Start Battle\n(2)Heal\n(3)Exit\nMake your choice: ";
 		std::cin >> choice;

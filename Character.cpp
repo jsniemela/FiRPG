@@ -103,7 +103,10 @@ std::string Character::getStatusName()
 		return "healthy";
 	}
 };
-
+int Character::getMaxSP()
+{
+	return maxSP;
+}
 int Character::getTarget()
 {
 	return target;
@@ -622,7 +625,22 @@ void Character::recover(int healAmount)
 	{
 		std::cout << name << " recovered " << healAmount << " HP.\n\n";
 	}
-	showStats();
+	//showStats();
+}
+
+void Character::recoverSP(int healAmount)
+{
+	currentSP += healAmount;
+	if (currentSP >= maxSP)
+	{
+		currentSP = maxSP;
+		std::cout << name << " recovered to full SP.\n\n";
+	}
+	else
+	{
+		std::cout << name << " recovered " << healAmount << " SP.\n\n";
+	}
+	//showStats();
 }
 
 void Character::die()

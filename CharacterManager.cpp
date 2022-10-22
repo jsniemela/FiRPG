@@ -16,6 +16,8 @@ void CharacterManager::healCharacters()
 	{
 		ch->recoverStatus();
 		ch->recover(ch->getMaxHealth());
+		ch->recoverSP(ch->getMaxSP());
+		ch->showStats();
 	}
 }
 

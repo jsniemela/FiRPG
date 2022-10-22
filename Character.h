@@ -62,12 +62,14 @@ public:
 	void applyStatus(status effect);
 	void guard();
 	void recover(int healAmount);
+	void recoverSP(int healAmount);
 	void loseSP(int spLoss);
 	void recoverStatus();
 
 	std::string getName();
 	int getMaxHealth();
 	int getCurrentHealth();
+	int getMaxSP();
 	int getAttack();
 	int getMagicAttack();
 	int getMagicDefence();
