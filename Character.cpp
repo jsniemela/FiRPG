@@ -15,6 +15,7 @@ Character::Character(std::string newName, int hp, int sp, int atk, int def, int 
 	guarding = false;
 	counter = false;
 	expDrop = 50;
+	equippedWeapon = new Weapon(Weapon::fists, 0, "Fists");
 	initializeActions();
 }
 
@@ -641,6 +642,22 @@ void Character::recoverSP(int healAmount)
 		std::cout << name << " recovered " << healAmount << " SP.\n\n";
 	}
 	//showStats();
+}
+
+void Character::EquipWeapon(Weapon* wpn) {
+	attack -= equippedWeapon->getAttack();
+	equippedWeapon = wpn;
+	attack += wpn->getAttack();
+	std::cout << name << " equipped " << wpn->getName() << "\n\n";
+}
+
+void Character::unEquipWeapon() {
+	if (equippedWeapon != nullptr)
+	{
+		attack -= equippedWeapon->getAttack();
+		equippedWeapon = new Weapon(Weapon::fists, 0, "Fists");
+		std::cout << name << " unequipped weapon.\n\n";
+	}
 }
 
 void Character::die()

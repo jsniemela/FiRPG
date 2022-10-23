@@ -34,6 +34,7 @@ private:
 	bool guarding;
 	bool counter;
 	bool controlled;
+	Weapon* equippedWeapon;
 
 	void chooseAction();
 	void initializeActions();
@@ -65,6 +66,8 @@ public:
 	void recoverSP(int healAmount);
 	void loseSP(int spLoss);
 	void recoverStatus();
+	void EquipWeapon(Weapon* wpn);
+	void unEquipWeapon();
 
 	std::string getName();
 	int getMaxHealth();

@@ -29,9 +29,9 @@ int main()
 	createPlayers(pm);
 	int choice = 1;
 	
-	while (choice > 0 && choice < 3)
+	while (choice > 0 && choice < 4)
 	{
-		std::cout << "(1)Start Battle\n(2)Heal\n(3)Exit\nMake your choice: ";
+		std::cout << "(1)Start Battle\n(2)Heal\n(3)Equip weapons (test)\n(4)Exit\nMake your choice: ";
 		std::cin >> choice;
 		switch (choice)
 		{
@@ -45,6 +45,11 @@ int main()
 				std::cout << "Healed everyone!\n\n";
 				pm.healCharacters();
 				break;
+			case 3: 
+				for (auto pl : pm.getCharacters())
+				{
+					pl->EquipWeapon(new Weapon(Weapon::sword, 5, "Wooden sword"));
+				}
 			default:
 				break;
 		}
