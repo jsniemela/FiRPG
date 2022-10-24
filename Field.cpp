@@ -24,8 +24,8 @@ void CreateBattle(CharacterManager pm, CharacterManager em)
 int main()
 {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	CharacterManager pm; //player manager
-	CharacterManager em; //enemy manager
+	CharacterManager pm(0); //player manager
+	CharacterManager em(50); //enemy manager
 	createPlayers(pm);
 	int choice = 1;
 	
@@ -39,6 +39,7 @@ int main()
 				std::cout << "Starting a new battle.\n\n";
 				createEnemies(em);
 				CreateBattle(pm, em);
+				pm.receiveMoney(em.getMoney());
 				em.clearCharacters();
 				break;
 			case 2:
