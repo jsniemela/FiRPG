@@ -129,12 +129,17 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Spin attack", 0, 5, Action::physical, false));
 	actions.push_back(new Skill("Explode", &currentHealth, &currentHealth, 2, 0, Action::physical, false)); // use all health to deal 50% (minus opponents defense) of it to all enemies
 	actions.push_back(new Skill("Insult", 0, 0, Action::statusOnly, Skill::sadness, 50)); // 50% to apply sadness
-	actions.push_back(new Skill("Kill", 0, 0, Action::statusOnly, Skill::KO, 15));
 	actions.push_back(new Skill("Sleep", 0, 0, Action::statusOnly, Skill::sleep, 50));
 	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true));
 	actions.push_back(new Magic("Blizzard", 10, 7, Action::magic, Magic::ice, false)); 
 	actions.push_back(new Magic("Cure", 25, 6, Action::magic, Magic::healing, true));
 	actions.push_back(new Magic("Cure All", 10, 10, Action::magic, Magic::healing, false));
+}
+
+void Character::learnSkill(Skill* skill)
+{
+	actions.push_back(skill);
+	std::cout << name << " learned " << skill->getName() << "!\n";
 }
 
 void Character::levelUp() 
@@ -147,7 +152,12 @@ void Character::levelUp()
 	defence += randomizeInt(1, 3);
 	magicAttack += randomizeInt(1, 3);
 	magicDefence += randomizeInt(1, 3);
-	std::cout << name << " leveled up!" << "\n\n";
+	std::cout << name << " leveled up!" << "\n";
+	if (level == 2)
+	{
+		learnSkill(new Skill("Kill", 0, 0, Action::statusOnly, Skill::KO, 15));
+	}
+	std::cout << "\n";
 }
 
 void Character::showStats()
