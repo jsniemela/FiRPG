@@ -73,6 +73,7 @@ public:
 	std::string getName();
 	int getMaxHealth();
 	int getCurrentHealth();
+	int getCurrentSP();
 	int getMaxSP();
 	int getAttack();
 	int getMagicAttack();

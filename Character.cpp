@@ -57,6 +57,10 @@ int Character::getCurrentHealth()
 {
 	return currentHealth;
 }
+int Character::getCurrentSP()
+{
+	return currentSP;
+}
 int Character::getAttack()
 {
 	return attack;

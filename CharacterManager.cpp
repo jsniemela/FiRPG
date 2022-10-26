@@ -20,9 +20,26 @@ void CharacterManager::healCharacters()
 {
 	for (auto ch : characters)
 	{
-		ch->recoverStatus();
-		ch->recover(ch->getMaxHealth());
-		ch->recoverSP(ch->getMaxSP());
+		if (ch->getStatus() != Character::normal)
+		{
+			ch->recoverStatus();
+		}
+		if (ch->getCurrentHealth() < ch->getMaxHealth())
+		{
+			ch->recover(ch->getMaxHealth());
+		}
+		else
+		{
+			std::cout << ch->getName() << " is already at full health.\n";
+		}
+		if (ch->getCurrentSP() < ch->getMaxSP())
+		{
+			ch->recoverSP(ch->getMaxSP());
+		}
+		else
+		{
+			std::cout << ch->getName() << " is already at full SP.\n";
+		}
 		ch->showStats();
 	}
 }
