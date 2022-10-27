@@ -47,7 +47,7 @@ private:
 	void learnSkill(Skill* skill);
 
 public:
-	enum status { normal, poisoned, KO, sadness, sleep } condition;
+	enum status { normal, poisoned, KO, sadness, sleep, frozen } condition;
 	enum damageType { physical, ignoreDef, magic } dmgType;
 	Character(std::string name, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 

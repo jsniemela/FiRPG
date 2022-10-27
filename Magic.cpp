@@ -28,6 +28,11 @@ void Magic::useAction(Character* user, Character* target)
 	if (element == healing)
 	{
 		target->recover(damage);
+	} 
+	else if (element == ice)
+	{
+		target->takeDamage(damage, Character::magic, user);
+		target->applyStatus(Character::frozen);
 	}
 	else
 	{

@@ -104,6 +104,8 @@ std::string Character::getStatusName()
 		return "sad";
 	case 4:
 		return "sleeping";
+	case 5:
+		return "frozen";
 	default:
 		return "healthy";
 	}
@@ -135,6 +137,7 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Insult", 0, 0, Action::statusOnly, Skill::sadness, 50)); // 50% to apply sadness
 	actions.push_back(new Skill("Sleep", 0, 0, Action::statusOnly, Skill::sleep, 50));
 	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true));
+	actions.push_back(new Magic("Freeze", 15, 5, Action::magic, Magic::ice, true));
 	actions.push_back(new Magic("Blizzard", 10, 7, Action::magic, Magic::ice, false)); 
 	actions.push_back(new Magic("Cure", 25, 6, Action::magic, Magic::healing, true));
 	actions.push_back(new Magic("Cure All", 10, 10, Action::magic, Magic::healing, false));
@@ -472,10 +475,15 @@ void Character::takeTurn()
 				std::cout << name << " skips a turn while wallowing in sadness.\n\n";
 			}
 		}
-		if (condition == sleep) 
+		else if (condition == sleep) 
 		{
 			skipTurn = true;
 			std::cout << name << " is sleeping.\n\n";
+		}
+		else if (condition == frozen)
+		{
+			skipTurn = true;
+			std::cout << name << " skips a turn while defrosting.\n\n";
 		}
 		removeDeadTargets();
 		if (!skipTurn)
@@ -558,7 +566,12 @@ void Character::applyStatus(status effect)
 			else
 			{
 				condition = effect;
-				statusTimer = 3; //apply status for 3 turns 
+				if (effect == frozen) {
+					statusTimer = 1;
+				}
+				else {
+					statusTimer = 3; //apply status for 3 turns 
+				}
 				std::cout << name << " is now " << getStatusName() << ".\n\n";
 			}
 		}
@@ -600,6 +613,10 @@ void Character::takeDamage(int baseDamage, damageType dmgType, Character* damage
 	if (guarding && dmgType != ignoreDef)
 	{
 		damage /= 2; 
+	}
+	if (condition == frozen)
+	{
+		damage *= 2;
 	}
 	currentHealth -= damage;
 	std::cout << name << " took " << damage << " damage.\n";
