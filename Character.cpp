@@ -137,6 +137,7 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Insult", 0, 0, Action::statusOnly, Skill::sadness, 50)); // 50% to apply sadness
 	actions.push_back(new Skill("Sleep", 0, 0, Action::statusOnly, Skill::sleep, 50));
 	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true));
+	actions.push_back(new Magic("Fire Storm", 15, 10, Action::magic, Magic::fire, false));
 	actions.push_back(new Magic("Freeze", 15, 5, Action::magic, Magic::ice, true));
 	actions.push_back(new Magic("Blizzard", 10, 7, Action::magic, Magic::ice, false)); 
 	actions.push_back(new Magic("Cure", 25, 6, Action::magic, Magic::healing, true));
