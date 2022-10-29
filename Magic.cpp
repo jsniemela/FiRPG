@@ -58,6 +58,11 @@ void Magic::useAction(Character* user, std::vector<Character*> targets)
 				std::cout << t->getName() << " can't be healed while dead.\n";
 			}
 		}
+		else if (element == ice)
+		{
+			t->takeDamage(damage, Character::magic, user);
+			t->applyStatus(Character::frozen);
+		}
 		else
 		{
 			t->takeDamage(damage, Character::magic, user);

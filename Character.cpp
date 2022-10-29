@@ -97,15 +97,15 @@ std::string Character::getStatusName()
 	case 0:
 		return "healthy";
 	case 1:
-		return "poisoned";
+		return "poisoned"; //10% of max hp as damage per turn for 3 turns
 	case 2:
-		return "KO";
+		return "KO"; //can't act, can't be healed
 	case 3:
-		return "sad";
+		return "sad"; //40% change to skip turn for 3 turns, double chance to take critical damage
 	case 4:
-		return "sleeping";
+		return "sleeping"; //skip 3 turns
 	case 5:
-		return "frozen";
+		return "frozen"; //target skips a turn but takes half damage
 	default:
 		return "healthy";
 	}
@@ -139,7 +139,7 @@ void Character::initializeActions()
 	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true));
 	actions.push_back(new Magic("Fire Storm", 15, 10, Action::magic, Magic::fire, false));
 	actions.push_back(new Magic("Freeze", 15, 5, Action::magic, Magic::ice, true));
-	actions.push_back(new Magic("Blizzard", 10, 7, Action::magic, Magic::ice, false)); 
+	actions.push_back(new Magic("Blizzard", 10, 10, Action::magic, Magic::ice, false)); 
 	actions.push_back(new Magic("Cure", 25, 6, Action::magic, Magic::healing, true));
 	actions.push_back(new Magic("Cure All", 10, 10, Action::magic, Magic::healing, false));
 }
@@ -617,7 +617,7 @@ void Character::takeDamage(int baseDamage, damageType dmgType, Character* damage
 	}
 	if (condition == frozen)
 	{
-		damage *= 2;
+		damage /= 2;
 	}
 	currentHealth -= damage;
 	std::cout << name << " took " << damage << " damage.\n";
@@ -625,7 +625,13 @@ void Character::takeDamage(int baseDamage, damageType dmgType, Character* damage
 	{
 		statusTimer = 0;
 		condition = normal;
-		std::cout << name << " woke up!\n\n";
+		std::cout << name << " woke up!\n";
+	}
+	if (condition == frozen)
+	{
+		statusTimer = 0;
+		condition = normal;
+		std::cout << name << "'s ice melted!\n";
 	}
 	std::cout << "\n";
 	//std::cout << "Current health: " << currentHealth << "\n";
