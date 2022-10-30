@@ -508,7 +508,7 @@ void Character::takeTurn()
 			{
 				float poisonDamage = static_cast<float>(maxHealth) / 10;
 				std::cout << this->name << " is poisoned.\n";
-				takeDamage(poisonDamage, ignoreDef, this);
+				takeDamage(poisonDamage, ignoreDef, this, Character::none);
 			}
 
 			if (statusTimer > 0) 
@@ -553,7 +553,7 @@ void Character::setHealth(int hp)
 
 void Character::applyStatus(status effect) 
 {
-	if (condition != KO)
+	if (condition != KO && condition != effect)
 	{
 		if (guarding)
 		{
@@ -595,7 +595,7 @@ void Character::guard()
 	std::cout << name << " is guarding.\n\n";
 }
 
-void Character::takeDamage(int baseDamage, damageType dmgType, Character* damager) //add damage type here and maybe replace ignoreDefence if the type is always going to imply defence type anyway
+void Character::takeDamage(int baseDamage, damageType dmgType, Character* damager, Element elem)
 {
 	int damage = baseDamage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence
@@ -627,7 +627,7 @@ void Character::takeDamage(int baseDamage, damageType dmgType, Character* damage
 		condition = normal;
 		std::cout << name << " woke up!\n";
 	}
-	if (condition == frozen)
+	if (condition == frozen && elem != ice)
 	{
 		statusTimer = 0;
 		condition = normal;

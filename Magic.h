@@ -9,7 +9,7 @@ private:
 	int spCost;
 	//bool targetAll;
 public:
-	enum Element { fire, ice, healing } element;
+	enum Element { fire, ice, healing, none } element;
 
 	Magic();
 	Magic(std::string newName, int dmg, int sp, damageType dmgType, Element elem, bool req);

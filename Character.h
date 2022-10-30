@@ -49,6 +49,7 @@ private:
 public:
 	enum status { normal, poisoned, KO, sadness, sleep, frozen } condition;
 	enum damageType { physical, ignoreDef, magic } dmgType;
+	enum Element { fire, ice, healing, none } element;
 	Character(std::string name, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
 
 	Skill* getSkill();
@@ -59,7 +60,7 @@ public:
 	void gainExp(int expGain);
 	void levelUp();
 	void showStats();
-	void takeDamage(int baseDamage, damageType dmgType, Character* damager);
+	void takeDamage(int baseDamage, damageType dmgType, Character* damager, Element elem = none);
 	void takeTurn();
 	void applyStatus(status effect);
 	void guard();
