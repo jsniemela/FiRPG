@@ -50,7 +50,8 @@ public:
 	enum status { normal, poisoned, KO, sadness, sleep, frozen } condition;
 	enum damageType { physical, ignoreDef, magic } dmgType;
 	enum Element { fire, ice, healing, none } element;
-	Character(std::string name, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl);// std::string name, int hp, int atk, int def, int matk, int mdef, int crit);
+	enum Weakness { wFire, wIce, wHealing, wNone } weakness;
+	Character(std::string name, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl, Weakness wkn = Weakness::wNone);
 
 	Skill* getSkill();
 	Magic* getMagic();

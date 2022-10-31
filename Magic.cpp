@@ -31,8 +31,12 @@ void Magic::useAction(Character* user, Character* target)
 	} 
 	else if (element == ice)
 	{
-		target->takeDamage(damage, Character::magic, user, Character::ice);
+		target->takeDamage(damage, Character::magic, user, Character::Element::ice);
 		target->applyStatus(Character::frozen);
+	}
+	else if (element == fire)
+	{
+		target->takeDamage(damage, Character::magic, user, Character::Element::fire);
 	}
 	else
 	{
@@ -60,8 +64,12 @@ void Magic::useAction(Character* user, std::vector<Character*> targets)
 		}
 		else if (element == ice)
 		{
-			t->takeDamage(damage, Character::magic, user, Character::ice);
+			t->takeDamage(damage, Character::magic, user, Character::Element::ice);
 			t->applyStatus(Character::frozen);
+		}
+		else if (element == fire)
+		{
+			t->takeDamage(damage, Character::magic, user, Character::Element::fire);
 		}
 		else
 		{

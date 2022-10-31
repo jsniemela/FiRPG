@@ -3,8 +3,8 @@
 #include "Magic.h"
 #include <cmath>
 
-Character::Character(std::string newName, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl) 
-	: name{newName}, maxHealth{ hp }, maxSP{sp}, attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd} , controlled{ctrl}
+Character::Character(std::string newName, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl, Weakness wkn) 
+	: name{newName}, maxHealth{ hp }, maxSP{sp}, attack{atk}, defence{def}, magicAttack{matk}, magicDefence{mdef}, critRate{crit}, speed{spd} , controlled{ctrl}, weakness{wkn}
 {
 	level = 1;
 	currentHealth = maxHealth;
@@ -508,7 +508,7 @@ void Character::takeTurn()
 			{
 				float poisonDamage = static_cast<float>(maxHealth) / 10;
 				std::cout << this->name << " is poisoned.\n";
-				takeDamage(poisonDamage, ignoreDef, this, Character::none);
+				takeDamage(poisonDamage, ignoreDef, this);
 			}
 
 			if (statusTimer > 0) 
@@ -618,6 +618,11 @@ void Character::takeDamage(int baseDamage, damageType dmgType, Character* damage
 	if (condition == frozen)
 	{
 		damage /= 2;
+	}
+	if (weakness != none && elem == weakness)
+	{
+		damage *= 2;
+		std::cout << "Double damage from weakness!\n";
 	}
 	currentHealth -= damage;
 	std::cout << name << " took " << damage << " damage.\n";

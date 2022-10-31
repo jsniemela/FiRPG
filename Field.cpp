@@ -10,9 +10,9 @@ void createPlayers(CharacterManager& pm)
 
 void createEnemies(CharacterManager& em)
 {
-	em.addCharacters(new Character("Enemy 1", 50, 10, 6, 3, 7, 2, 21, 12, false));
-	em.addCharacters(new Character("Enemy 2", 50, 10, 6, 5, 7, 2, 18, 6, false));
-	em.addCharacters(new Character("Enemy 3", 50, 10, 6, 5, 7, 2, 17, 6, false));
+	em.addCharacters(new Character("Enemy 1", 50, 10, 6, 3, 7, 2, 21, 12, false, Character::wFire));
+	em.addCharacters(new Character("Enemy 2", 50, 10, 6, 5, 7, 2, 18, 6, false, Character::wFire));
+	em.addCharacters(new Character("Enemy 3", 50, 10, 6, 5, 7, 2, 17, 6, false, Character::wFire));
 }
 
 void CreateBattle(CharacterManager pm, CharacterManager em)
