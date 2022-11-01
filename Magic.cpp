@@ -29,18 +29,13 @@ void Magic::useAction(Character* user, Character* target)
 	{
 		target->recover(damage);
 	} 
-	else if (element == ice)
-	{
-		target->takeDamage(damage, Character::magic, user, Character::Element::ice);
-		target->applyStatus(Character::frozen);
-	}
-	else if (element == fire)
-	{
-		target->takeDamage(damage, Character::magic, user, Character::Element::fire);
-	}
 	else
 	{
-		target->takeDamage(damage, Character::magic, user);
+		target->takeDamage(damage, Character::magic, user, static_cast<Character::Element>(element));
+	}
+	if (element == ice)
+	{
+		target->applyStatus(Character::frozen);
 	}
 }
 
@@ -62,18 +57,13 @@ void Magic::useAction(Character* user, std::vector<Character*> targets)
 				std::cout << t->getName() << " can't be healed while dead.\n";
 			}
 		}
-		else if (element == ice)
+		else 
 		{
-			t->takeDamage(damage, Character::magic, user, Character::Element::ice);
+			t->takeDamage(damage, Character::magic, user, static_cast<Character::Element>(element));
+		}
+		if (element == ice)
+		{
 			t->applyStatus(Character::frozen);
-		}
-		else if (element == fire)
-		{
-			t->takeDamage(damage, Character::magic, user, Character::Element::fire);
-		}
-		else
-		{
-			t->takeDamage(damage, Character::magic, user);
 		}
 	}
 
