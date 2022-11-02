@@ -103,9 +103,11 @@ std::string Character::getStatusName()
 	case 3:
 		return "sad"; //40% change to skip turn for 3 turns, double chance to take critical damage
 	case 4:
-		return "sleeping"; //skip 3 turns
+		return "sleeping"; //skip 3 turns. 50% chance to wake up when taking physical damage
 	case 5:
 		return "frozen"; //target skips a turn but takes half damage
+	case 6:
+		return "burning"; //target takes 20% of max hp as damage upon taking next action, unless it's Guard
 	default:
 		return "healthy";
 	}
@@ -357,6 +359,10 @@ void Character::chooseAction()
 		}
 		else if (command == 4) // guard
 		{
+			if (condition == burning)
+			{
+				recoverStatus();
+			}
 			callAction(actions[1]);
 		}
 		action--;
@@ -460,6 +466,11 @@ void Character::callAction(Action* act)
 				static_cast<Magic*>(act)->useAction(this, enemies);
 			}
 		}
+	}
+	if (condition == burning)
+	{
+		std::cout << name << " is burning.\n";
+		takeDamage(static_cast<int>(maxHealth * 0.2), ignoreDef, this);
 	}
 }
 
@@ -567,7 +578,7 @@ void Character::applyStatus(status effect)
 			else
 			{
 				condition = effect;
-				if (effect == frozen) {
+				if (effect == frozen || effect == burning) {
 					statusTimer = 1;
 				}
 				else {

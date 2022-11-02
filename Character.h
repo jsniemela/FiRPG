@@ -47,7 +47,7 @@ private:
 	void learnSkill(Skill* skill);
 
 public:
-	enum status { normal, poisoned, KO, sadness, sleep, frozen } condition;
+	enum status { normal, poisoned, KO, sadness, sleep, frozen, burning } condition;
 	enum damageType { physical, ignoreDef, magic } dmgType;
 	enum Element { fire, ice, healing, none } element;
 	enum Weakness { wFire, wIce, wHealing, wNone } weakness;

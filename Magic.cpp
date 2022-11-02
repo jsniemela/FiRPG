@@ -37,6 +37,10 @@ void Magic::useAction(Character* user, Character* target)
 	{
 		target->applyStatus(Character::frozen);
 	}
+	else if (element == fire)
+	{
+		target->applyStatus(Character::burning);
+	}
 }
 
 void Magic::useAction(Character* user, std::vector<Character*> targets)
@@ -64,6 +68,10 @@ void Magic::useAction(Character* user, std::vector<Character*> targets)
 		if (element == ice)
 		{
 			t->applyStatus(Character::frozen);
+		}
+		else if (element == fire)
+		{
+			t->applyStatus(Character::burning);
 		}
 	}
 
