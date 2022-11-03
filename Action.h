@@ -13,8 +13,9 @@ protected:
 	Character* c;
 	
 public:
-	enum damageType { physical, basic, healing, statusOnly, magic, nothing } type;
-	Action(std::string newName, damageType newType);
+	enum DamageType { physical, basic, healing, statusOnly, magic, none } type;
+	enum Status { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning } effect;
+	Action(std::string newName, DamageType newType);
 	//Action(std::string newName);
 	Action();
 	virtual ~Action() {}
@@ -23,10 +24,7 @@ public:
 
 	std::string getName();
 	bool getRequiresTarget();
-	damageType getType();
-	//void useAction();
+	DamageType getType();
 	void useAction();
-	//void useAction(Character* user);
-	//void useAction(Character* user, Character* target);
-	//void useAction(Character* user, std::vector<Character*> targets);
+	std::string getEffectName();
 };

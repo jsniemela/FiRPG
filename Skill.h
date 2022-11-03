@@ -15,15 +15,13 @@ private:
 	int* hpCostPtr;
 	int hpCostDivider;
 public:
-	enum status { normal, poisoned, KO, sadness, sleep } effect;
 
 	Skill();
-	Skill(std::string newName, damageType dmgType, bool requiresTarget);
-	Skill(std::string newName, int atk, int hp, damageType dmgType);
-	Skill(std::string newName, int atk, int hp, damageType dmgType, bool req);
-	Skill(std::string newName, int* atk, int *hp, int bdd, int hpcd, damageType dmgType, bool req);
-	Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb);
-	Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb, bool req);
+	Skill(std::string newName, DamageType dmgType, bool requiresTarget);
+	Skill(std::string newName, int atk, int hp, DamageType dmgType);
+	Skill(std::string newName, int atk, int hp, DamageType dmgType, bool req);
+	Skill(std::string newName, int* atk, int *hp, int bdd, int hpcd, DamageType dmgType, bool req);
+	Skill(std::string newName, int atk, int hp, DamageType dmgType, Status eff, int statusProb, bool req = true);
 	~Skill(){}
 
 	Character* getCharacter();
@@ -32,7 +30,6 @@ public:
 	void useAction(Character* user, std::vector<Character*> targets);
 	//void useAction(Character* user);
 	int calculateDamage(int damage, bool crit);
-	std::string getEffectName();
 
 	int getHPcost();
 protected:

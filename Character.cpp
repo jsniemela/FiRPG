@@ -81,7 +81,7 @@ int Character::getSpeed()
 {
 	return speed;
 }
-enum Character::status Character::getStatus() 
+enum Character::Status Character::getStatus() 
 {
 	return condition;
 }
@@ -95,19 +95,21 @@ std::string Character::getStatusName()
 	switch (condition) 
 	{
 	case 0:
-		return "healthy";
+		return "nothing";
 	case 1:
-		return "poisoned"; //10% of max hp as damage per turn for 3 turns
+		return "healthy";
 	case 2:
-		return "KO"; //can't act, can't be healed
+		return "KO";
 	case 3:
-		return "sad"; //40% change to skip turn for 3 turns, double chance to take critical damage
+		return "poisoned";
 	case 4:
-		return "sleeping"; //skip 3 turns. 50% chance to wake up when taking physical damage
+		return "sad";
 	case 5:
-		return "frozen"; //target skips a turn but takes half damage
+		return "sleeping";
 	case 6:
-		return "burning"; //target takes 20% of max hp as damage upon taking next action, unless it's Guard
+		return "frozen";
+	case 7:
+		return "burning";
 	default:
 		return "healthy";
 	}
@@ -138,11 +140,12 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Explode", &currentHealth, &currentHealth, 2, 0, Action::physical, false)); // use all health to deal 50% (minus opponents defense) of it to all enemies
 	actions.push_back(new Skill("Insult", 0, 0, Action::statusOnly, Skill::sadness, 50)); // 50% to apply sadness
 	actions.push_back(new Skill("Sleep", 0, 0, Action::statusOnly, Skill::sleep, 50));
-	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true));
-	actions.push_back(new Magic("Fire Storm", 15, 10, Action::magic, Magic::fire, false));
-	actions.push_back(new Magic("Freeze", 15, 5, Action::magic, Magic::ice, true));
-	actions.push_back(new Magic("Blizzard", 10, 10, Action::magic, Magic::ice, false)); 
+	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true, Action::burning));
+	actions.push_back(new Magic("Fire Storm", 15, 10, Action::magic, Magic::fire, false, Action::burning));
+	actions.push_back(new Magic("Freeze", 15, 5, Action::magic, Magic::ice, true, Action::frozen));
+	actions.push_back(new Magic("Blizzard", 10, 10, Action::magic, Magic::ice, false, Action::frozen));
 	actions.push_back(new Magic("Cure", 25, 6, Action::magic, Magic::healing, true));
+	actions.push_back(new Magic("Cleanse", 0, 5, Action::magic, Magic::healing, true, Action::normal)); // cure status
 	actions.push_back(new Magic("Cure All", 10, 10, Action::magic, Magic::healing, false));
 }
 
@@ -391,11 +394,20 @@ void Character::callAction(Action* act)
 				chooseAction();
 				return;
 			}
-			if (friends[target]->getCurrentHealth() == friends[target]->getMaxHealth())
+			if (friends[target]->getCurrentHealth() == friends[target]->getMaxHealth() && static_cast<Magic*>(act)->effect == Action::nothing)
 			{
 				if (controlled)
 				{
 					std::cout << "Target health is already full.\n\n";
+				}
+				chooseAction();
+				return;
+			}
+			if (static_cast<Magic*>(act)->effect == Action::normal && friends[target]->getStatus() == normal)
+			{
+				if (controlled)
+				{
+					std::cout << "Target is already healthy.\n\n";
 				}
 				chooseAction();
 				return;
@@ -443,7 +455,7 @@ void Character::callAction(Action* act)
 				int i = friends.size();
 				for (auto fr : friends)
 				{
-					if (fr->getCurrentHealth() == friends[target]->getMaxHealth())
+					if (fr->getCurrentHealth() == fr->getMaxHealth())
 					{
 						i--;
 					}
@@ -562,7 +574,7 @@ void Character::setHealth(int hp)
 	currentHealth = hp;
 }
 
-void Character::applyStatus(status effect) 
+void Character::applyStatus(Status effect) 
 {
 	if (condition != KO && condition != effect)
 	{
@@ -606,7 +618,7 @@ void Character::guard()
 	std::cout << name << " is guarding.\n\n";
 }
 
-void Character::takeDamage(int baseDamage, damageType dmgType, Character* damager, Element elem)
+void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damager, Element elem)
 {
 	int damage = baseDamage; 
 	// base damage is attack (+ possible crit), damage is base damage - defence

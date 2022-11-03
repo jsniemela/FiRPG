@@ -11,7 +11,7 @@ Skill::Skill()
 	hpCostDivider = 0;
 }
 
-Skill::Skill(std::string newName, damageType dmgType, bool req)
+Skill::Skill(std::string newName, DamageType dmgType, bool req)
 {
 	name = newName;
 	type = dmgType;
@@ -21,7 +21,7 @@ Skill::Skill(std::string newName, damageType dmgType, bool req)
 	hpCostDivider = 0;
 }
 
-Skill::Skill(std::string newName, int atk, int hp, damageType dmgType)
+Skill::Skill(std::string newName, int atk, int hp, DamageType dmgType)
 	:baseDamage{atk}
 {
 	name = newName;
@@ -32,7 +32,7 @@ Skill::Skill(std::string newName, int atk, int hp, damageType dmgType)
 	hpCostDivider = 0;
 }
 
-Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, bool req)
+Skill::Skill(std::string newName, int atk, int hp, DamageType dmgType, bool req)
 	:baseDamage{ atk }, hpCost{ hp }
 {
 	name = newName;
@@ -42,52 +42,27 @@ Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, bool req)
 	hpCostDivider = 0;
 }
 
-Skill::Skill(std::string newName, int* atk, int* hp, int bdd, int hpcd, damageType dmgType, bool req)
-	:baseDamagePtr{ atk }, hpCostPtr{ hp }, baseDamageDivider{ bdd }, hpCostDivider{hpcd}
-{
-	name = newName;
-	type = dmgType;
-	requiresTarget = req;
-}
-
-Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb)
-	:baseDamage{ atk }, hpCost{ hp }, effect { eff }, statusProbability{ statusProb }
+Skill::Skill(std::string newName, int* atk, int* hp, int bdd, int hpcd, DamageType dmgType, bool req)
+	:baseDamage{ *atk }, hpCost{ *hp }
 {
 	name = newName;
 	type = dmgType;
 	requiresTarget = true;
-	baseDamageDivider = 0;
-	hpCostDivider = 0;
+	baseDamageDivider = bdd;
+	hpCostDivider = hpcd;
+	requiresTarget = req;
 }
 
-Skill::Skill(std::string newName, int atk, int hp, damageType dmgType, status eff, int statusProb, bool req)
-	:baseDamage{ atk }, hpCost{hp}, effect{ eff }, statusProbability{ statusProb }
+Skill::Skill(std::string newName, int atk, int hp, DamageType dmgType, Status eff, int statusProb, bool req)
+	:baseDamage{ atk }, hpCost{hp}, statusProbability{ statusProb }
 {
 	name = newName;
 	type = dmgType;
 	requiresTarget = req;
 	baseDamageDivider = 0;
 	hpCostDivider = 0;
+	effect = eff;
 }
-
-std::string Skill::getEffectName() 
-{
-	std::string status = "";
-	switch (effect) {
-	case 0:
-		return "status recovery";
-	case 1:
-		return "poison";
-	case 2:
-		return "death";
-	case 3:
-		return "sad";
-	case 4:
-		return "sleep";
-	default:
-		return "status recovery";
-	}
-};
 
 void Skill::useAction(Character* user, Character* target)
 {
@@ -97,7 +72,7 @@ void Skill::useAction(Character* user, Character* target)
 	{
 		critrate = statusProbability; // replaces crit rate with statusProbability but still uses crit calculation
 	}
-	if (target->getStatus() == static_cast<Character::status>(sadness)) 
+	if (target->getStatus() == static_cast<Character::Status>(sadness)) 
 	{
 		critrate *= 2; // higher crit rate if target is sad
 	}
@@ -130,9 +105,9 @@ void Skill::useAction(Character* user, Character* target)
 				std::cout << "and failed!\n\n";
 			}
 		}
-		if (critical) 
+		if (critical && effect != nothing)
 		{
-			target->applyStatus(static_cast<Character::status>(effect));
+			target->applyStatus(static_cast<Character::Status>(effect));
 		}
 	}
 	if (hpCost != 0)
@@ -168,7 +143,6 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 		int damage = user->getAttack();
 		if (baseDamagePtr != nullptr)
 		{
-			//std::cout << "used pointer\n";
 			if (baseDamageDivider != 0)
 			{
 				damage += *baseDamagePtr/baseDamageDivider;
@@ -180,7 +154,6 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 		}
 		else {
 			damage += baseDamage;
-			//std::cout << "used direct atk power\n";
 		}
 		std::cout << user->getName() << " used " << name << "!\n";
 		for (auto t : targets)
@@ -199,22 +172,14 @@ void Skill::useAction(Character* user, std::vector<Character*> targets)
 				{
 					user->takeDamage(*hpCostPtr / hpCostDivider, Character::ignoreDef, user);
 				}
-				//std::cout << "used pointer\n";
 			}
 			else
 			{
 				user->takeDamage(hpCost, Character::ignoreDef, user);
-				//std::cout << "used direct hpCost\n";
 			}
 		}
 	}
 }
-/*
-void Skill::useAction(Character* user)
-{
-	user->guard();
-}
-*/
 
 int Skill::getHPcost()
 {

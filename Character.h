@@ -47,8 +47,8 @@ private:
 	void learnSkill(Skill* skill);
 
 public:
-	enum status { normal, poisoned, KO, sadness, sleep, frozen, burning } condition;
-	enum damageType { physical, ignoreDef, magic } dmgType;
+	enum Status { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning } condition;
+	enum DamageType { physical, ignoreDef, magic } dmgType;
 	enum Element { fire, ice, healing, none } element;
 	enum Weakness { wFire, wIce, wHealing, wNone } weakness;
 	Character(std::string name, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl, Weakness wkn = Weakness::wNone);
@@ -61,9 +61,9 @@ public:
 	void gainExp(int expGain);
 	void levelUp();
 	void showStats();
-	void takeDamage(int baseDamage, damageType dmgType, Character* damager, Element elem = none);
+	void takeDamage(int baseDamage, DamageType dmgType, Character* damager, Element elem = none);
 	void takeTurn();
-	void applyStatus(status effect);
+	void applyStatus(Status effect);
 	void guard();
 	void recover(int healAmount);
 	void recoverSP(int healAmount);
@@ -82,7 +82,7 @@ public:
 	int getMagicDefence();
 	int getCritRate();
 	int getSpeed();
-	status getStatus();
+	Status getStatus();
 	std::string getStatusName();
 	int getTarget();
 	bool getGuarding();

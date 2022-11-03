@@ -1,18 +1,13 @@
 #include "Magic.h"
 #include "Character.h"
-/*
-Magic::Magic() 
-{
 
-}
-*/
-Magic::Magic(std::string newName, int dmg, int sp, damageType dmgType, Element elem, bool req)
+Magic::Magic(std::string newName, int dmg, int sp, DamageType dmgType, Element elem, bool req, Status eff)
 	:baseDamage{ dmg }, element {elem}, spCost {sp}
 {
 	name = newName;
 	type = dmgType;
 	requiresTarget = req;
-	//requiresTarget = tgtAll;
+	effect = eff;
 }
 
 int Magic::getSPcost()
@@ -22,24 +17,31 @@ int Magic::getSPcost()
 
 void Magic::useAction(Character* user, Character* target)
 {
-	int damage = user->getMagicAttack() + baseDamage;
+	int damage = baseDamage;
+	if (baseDamage != 0)
+	{
+		damage += user->getMagicAttack(); //only adds magic attack to damage to spells that are supposed to deal damage or heal.
+	}
 	std::cout << user->getName() << " used " << name << "!\n";
 	user->loseSP(spCost);
 	if (element == healing)
 	{
-		target->recover(damage);
+		if (damage != 0)
+		{
+			target->recover(damage);
+		}
+		if (effect == normal)
+		{
+			target->recoverStatus();
+		}
 	} 
 	else
 	{
 		target->takeDamage(damage, Character::magic, user, static_cast<Character::Element>(element));
 	}
-	if (element == ice)
+	if (effect != nothing)
 	{
-		target->applyStatus(Character::frozen);
-	}
-	else if (element == fire)
-	{
-		target->applyStatus(Character::burning);
+		target->applyStatus(static_cast<Character::Status>(effect));
 	}
 }
 
@@ -65,13 +67,9 @@ void Magic::useAction(Character* user, std::vector<Character*> targets)
 		{
 			t->takeDamage(damage, Character::magic, user, static_cast<Character::Element>(element));
 		}
-		if (element == ice)
+		if (effect != nothing)
 		{
-			t->applyStatus(Character::frozen);
-		}
-		else if (element == fire)
-		{
-			t->applyStatus(Character::burning);
+			t->applyStatus(static_cast<Character::Status>(effect));
 		}
 	}
 
