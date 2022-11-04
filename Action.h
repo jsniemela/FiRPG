@@ -13,7 +13,7 @@ protected:
 	Character* c;
 	
 public:
-	enum DamageType { physical, basic, healing, statusOnly, magic, none } type;
+	enum DamageType { physical, basic, healing, statusOnly, magic, none, analyze } type;
 	enum Status { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning } effect;
 	Action(std::string newName, DamageType newType);
 	//Action(std::string newName);

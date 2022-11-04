@@ -66,53 +66,59 @@ Skill::Skill(std::string newName, int atk, int hp, DamageType dmgType, Status ef
 
 void Skill::useAction(Character* user, Character* target)
 {
-	bool critical;
-	int critrate = user->getCritRate();
-	if (statusProbability != 0)
+	if (type == analyze)
 	{
-		critrate = statusProbability; // replaces crit rate with statusProbability but still uses crit calculation
+		std::cout << "Target's weakness is " << target->getWeaknessName() << ".\n\n";
 	}
-	if (target->getStatus() == static_cast<Character::Status>(sadness)) 
-	{
-		critrate *= 2; // higher crit rate if target is sad
-	}
-	if (critrate > 100)
-	{
-		critrate = 100;
-	}
-	if (type == statusOnly)
-	{
-		std::cout << critrate << "/100 chance to apply status.\n";
-	}
-	else
-	{
-		std::cout << critrate << "/100 chance for critical attack.\n";
-	}
-	critical = critrate >= randomizeInt(1, 100); //true if critical
-	if (type != statusOnly) 
-	{
-		std::cout << user->getName() << " uses " << name << " on " << target->getName() << "!\n";
-		int damage = calculateDamage(user->getAttack(), critical);
-		target->takeDamage(damage, Character::physical, user);
-	}
-	if (effect != normal) 
-	{ 
-		if (type == statusOnly) 
+	else {
+		bool critical;
+		int critrate = user->getCritRate();
+		if (statusProbability != 0)
 		{
-			std::cout << user->getName() << " tried to apply " << getEffectName() << " on " << target->getName() << "...\n";
-			if (!critical) 
+			critrate = statusProbability; // replaces crit rate with statusProbability but still uses crit calculation
+		}
+		if (target->getStatus() == static_cast<Character::Status>(sadness))
+		{
+			critrate *= 2; // higher crit rate if target is sad
+		}
+		if (critrate > 100)
+		{
+			critrate = 100;
+		}
+		if (type == statusOnly)
+		{
+			std::cout << critrate << "/100 chance to apply status.\n";
+		}
+		else
+		{
+			std::cout << critrate << "/100 chance for critical attack.\n";
+		}
+		critical = critrate >= randomizeInt(1, 100); //true if critical
+		if (type != statusOnly)
+		{
+			std::cout << user->getName() << " uses " << name << " on " << target->getName() << "!\n";
+			int damage = calculateDamage(user->getAttack(), critical);
+			target->takeDamage(damage, Character::physical, user);
+		}
+		if (effect != normal)
+		{
+			if (type == statusOnly)
 			{
-				std::cout << "and failed!\n\n";
+				std::cout << user->getName() << " tried to apply " << getEffectName() << " on " << target->getName() << "...\n";
+				if (!critical)
+				{
+					std::cout << "and failed!\n\n";
+				}
+			}
+			if (critical && effect != nothing)
+			{
+				target->applyStatus(static_cast<Character::Status>(effect));
 			}
 		}
-		if (critical && effect != nothing)
+		if (hpCost != 0)
 		{
-			target->applyStatus(static_cast<Character::Status>(effect));
+			user->takeDamage(hpCost, Character::ignoreDef, user);
 		}
-	}
-	if (hpCost != 0)
-	{
-		user->takeDamage(hpCost, Character::ignoreDef, user);
 	}
 }
 

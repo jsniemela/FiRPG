@@ -91,7 +91,6 @@ int Character::getExpDrop()
 }
 std::string Character::getStatusName() 
 {
-	std::string status = "";
 	switch (condition) 
 	{
 	case 0:
@@ -114,6 +113,20 @@ std::string Character::getStatusName()
 		return "healthy";
 	}
 };
+std::string Character::getWeaknessName()
+{
+	switch (weakness)
+	{
+	case Weakness::fire:
+		return "Fire";
+	case Weakness::ice:
+		return "Ice";
+	case Weakness::healing:
+		return "Healing";
+	case Weakness::none:
+		return "None";
+	}
+};
 int Character::getMaxSP()
 {
 	return maxSP;
@@ -134,6 +147,7 @@ bool Character::getGuarding()
 void Character::initializeActions()
 {
 	actions.push_back(new Skill("Attack", 0, 0, Action::basic));
+	actions.push_back(new Skill("Analyze", 0, 0, Action::analyze, true));
 	actions.push_back(new Skill("Block", Action::basic, false));
 	actions.push_back(new Skill("Poison attack", 5, 5, Action::physical, Skill::poisoned, 0)); // 0% to apply status, uses critrate instead
 	actions.push_back(new Skill("Spin attack", 0, 5, Action::physical, false));
@@ -328,7 +342,7 @@ void Character::chooseAction()
 			{
 				for (auto act : actions)
 				{
-					if (act->type == Action::physical || act->type == Action::statusOnly)
+					if (act->type == Action::physical || act->type == Action::statusOnly || act->type == Action::analyze)
 					{
 						std::cout << "(" << i << ") ";
 						std::cout << act->getName();
@@ -422,14 +436,14 @@ void Character::callAction(Action* act)
 				return;
 			}
 		}
-		if (act->type == Action::physical || act->type == Action::basic || act->type == Action::statusOnly)
+		if (act->type == Action::physical || act->type == Action::basic || act->type == Action::statusOnly || act->type == Action::analyze)
 		{
-			//std::cout << "Action is physical\n";
+			// action is a skill
 			static_cast<Skill*>(act)->useAction(this, enemies[target]);
 		}
 		if (act->type == Action::magic)
 		{
-			//std::cout << "Action is magical\n";
+			// action is magic
 			if (static_cast<Magic*>(act)->element == Action::healing)
 			{
 				static_cast<Magic*>(act)->useAction(this, friends[target]);
@@ -642,7 +656,7 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 	{
 		damage /= 2;
 	}
-	if (weakness != none && elem == weakness)
+	if (weakness != Weakness::none && elem == static_cast<Element>(weakness))
 	{
 		damage *= 2;
 		std::cout << "Double damage from weakness!\n";
@@ -655,7 +669,7 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 		condition = normal;
 		std::cout << name << " woke up!\n";
 	}
-	if (condition == frozen && elem != ice)
+	if (condition == frozen && elem != Element::ice)
 	{
 		statusTimer = 0;
 		condition = normal;

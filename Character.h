@@ -49,9 +49,9 @@ private:
 public:
 	enum Status { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning } condition;
 	enum DamageType { physical, ignoreDef, magic } dmgType;
-	enum Element { fire, ice, healing, none } element;
-	enum Weakness { wFire, wIce, wHealing, wNone } weakness;
-	Character(std::string name, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl, Weakness wkn = Weakness::wNone);
+	enum class Element { fire, ice, healing, none } element;
+	enum class Weakness { fire, ice, healing, none } weakness;
+	Character(std::string name, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl, Weakness wkn = Weakness::none);
 
 	Skill* getSkill();
 	Magic* getMagic();
@@ -61,7 +61,7 @@ public:
 	void gainExp(int expGain);
 	void levelUp();
 	void showStats();
-	void takeDamage(int baseDamage, DamageType dmgType, Character* damager, Element elem = none);
+	void takeDamage(int baseDamage, DamageType dmgType, Character* damager, Element elem = Element::none);
 	void takeTurn();
 	void applyStatus(Status effect);
 	void guard();
@@ -84,6 +84,7 @@ public:
 	int getSpeed();
 	Status getStatus();
 	std::string getStatusName();
+	std::string getWeaknessName();
 	int getTarget();
 	bool getGuarding();
 	int getExpDrop();
