@@ -146,6 +146,7 @@ bool Character::getGuarding()
 
 void Character::initializeActions()
 {
+	// TODO: create these actions elsewhere so that the same action isn't created again for each character that uses it
 	actions.push_back(new Skill("Attack", 0, 0, Action::basic));
 	actions.push_back(new Skill("Analyze", 0, 0, Action::analyze, true));
 	actions.push_back(new Skill("Block", Action::basic, false));
@@ -675,6 +676,12 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 		condition = normal;
 		std::cout << name << "'s ice melted!\n";
 	}
+	if (condition == burning && elem == Element::ice)
+	{
+		statusTimer = 0;
+		condition = normal;
+		std::cout << name << " is no longer burning!\n";
+	}
 	std::cout << "\n";
 	//std::cout << "Current health: " << currentHealth << "\n";
 	if (currentHealth < 0) 
@@ -725,6 +732,7 @@ void Character::recoverSP(int healAmount)
 }
 
 void Character::EquipWeapon(Weapon* wpn) {
+	delete(equippedWeapon);
 	attack -= equippedWeapon->getAttack();
 	equippedWeapon = wpn;
 	attack += wpn->getAttack();
@@ -732,6 +740,7 @@ void Character::EquipWeapon(Weapon* wpn) {
 }
 
 void Character::unEquipWeapon() {
+	delete(equippedWeapon);
 	if (equippedWeapon != nullptr)
 	{
 		attack -= equippedWeapon->getAttack();
@@ -748,3 +757,12 @@ void Character::die()
 	std::cout << name << " died.\n\n";
 }
 
+Character::~Character()
+{
+	delete(equippedWeapon);
+	for (auto act : actions)
+	{
+		delete(act);
+	}
+	std::cout << name << " deleted.\n";
+}

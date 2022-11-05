@@ -11,6 +11,7 @@ private:
 public:
 	enum weaponType { spear, sword, fists } type;
 	Weapon(weaponType type, int attack, std::string name);
+	~Weapon();
 	int getAttack();
 	std::string getName();
 	//void attachSkill(Skill weaponSkill) // Create a skill class first

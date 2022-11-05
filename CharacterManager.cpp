@@ -13,6 +13,10 @@ void CharacterManager::addCharacters(Character* ch)
 
 void CharacterManager::clearCharacters()
 {
+	for (auto ch : characters)
+	{
+		delete(ch);
+	}
 	characters.clear();
 }
 
@@ -58,4 +62,9 @@ void CharacterManager::receiveMoney(int gainedMoney)
 {
 	money += gainedMoney;
 	std::cout << "Gained " << gainedMoney << " money. Total: " << money << ".\n\n";
+}
+
+CharacterManager::~CharacterManager()
+{
+	//clearCharacters();
 }

@@ -52,7 +52,7 @@ public:
 	enum class Element { fire, ice, healing, none } element;
 	enum class Weakness { fire, ice, healing, none } weakness;
 	Character(std::string name, int hp, int sp, int atk, int def, int matk, int mdef, int crit, int spd, bool ctrl, Weakness wkn = Weakness::none);
-
+	~Character();
 	Skill* getSkill();
 	Magic* getMagic();
 	Action* getAction();

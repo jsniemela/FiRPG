@@ -15,3 +15,8 @@ std::string Weapon::getName()
 {
 	return name;
 }
+
+Weapon::~Weapon()
+{
+	//std::cout << name << " destroyed.\n";
+}

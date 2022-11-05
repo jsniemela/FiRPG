@@ -17,4 +17,5 @@ public:
 	int getMoney();
 
 	CharacterManager(int money);
+	~CharacterManager();
 };

@@ -2,12 +2,6 @@
 #include <algorithm>
 #include <chrono>
 #include <thread>
-//comment the next three lines if detecting memory leaks is not necessary
-/*
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-*/
 
 Battle::Battle(std::vector<Character*> enms, std::vector<Character*> plrs) 
 	: enemies{enms}, players{plrs}
