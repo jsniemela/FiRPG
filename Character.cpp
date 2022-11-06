@@ -146,7 +146,6 @@ bool Character::getGuarding()
 
 void Character::initializeActions()
 {
-	// TODO: create these actions elsewhere so that the same action isn't created again for each character that uses it
 	actions.push_back(new Skill("Attack", 0, 0, Action::basic));
 	actions.push_back(new Skill("Analyze", 0, 0, Action::analyze, true));
 	actions.push_back(new Skill("Block", Action::basic, false));
@@ -164,10 +163,13 @@ void Character::initializeActions()
 	actions.push_back(new Magic("Cure All", 10, 10, Action::magic, Magic::healing, false));
 }
 
-void Character::learnSkill(Skill* skill)
+void Character::learnAction(Action* action, bool notify)
 {
-	actions.push_back(skill);
-	std::cout << name << " learned " << skill->getName() << "!\n";
+	actions.push_back(action);
+	if (notify)
+	{
+		std::cout << name << " learned " << action->getName() << "!\n";
+	}
 }
 
 void Character::levelUp() 
@@ -183,7 +185,7 @@ void Character::levelUp()
 	std::cout << name << " leveled up!" << "\n";
 	if (level == 2)
 	{
-		learnSkill(new Skill("Kill", 0, 0, Action::statusOnly, Skill::KO, 15));
+		learnAction(new Skill("Kill", 0, 0, Action::statusOnly, Skill::KO, 15));
 	}
 	std::cout << "\n";
 }
@@ -764,5 +766,5 @@ Character::~Character()
 	{
 		delete(act);
 	}
-	std::cout << name << " deleted.\n";
+	//std::cout << name << " deleted.\n";
 }

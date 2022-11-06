@@ -44,7 +44,7 @@ private:
 	void callAction(Action* act);
 	bool checkLevelUp();
 	int requiredExp();
-	void learnSkill(Skill* skill);
+	void learnAction(Action* action, bool notify = false);
 
 public:
 	enum Status { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning } condition;
