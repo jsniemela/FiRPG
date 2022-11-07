@@ -42,6 +42,8 @@ std::string Action::getEffectName()
 		return "freeze";
 	case 7:
 		return "burn";
+	case 8:
+		return "protect";
 	default:
 		return "nothing";
 	}

@@ -9,7 +9,7 @@ Character::Character(std::string newName, int hp, int sp, int atk, int def, int 
 	level = 1;
 	currentHealth = maxHealth;
 	currentSP = maxSP;
-	condition = normal;
+	condition = normal; // TODO: make it possible to have multiple conditions and "normal" should mean that there are no status effects
 	statusTimer = 0;
 	target = 0;
 	guarding = false;
@@ -109,6 +109,8 @@ std::string Character::getStatusName()
 		return "frozen";
 	case 7:
 		return "burning";
+	case 8:
+		return "protected";
 	default:
 		return "healthy";
 	}
@@ -147,7 +149,6 @@ bool Character::getGuarding()
 void Character::initializeActions()
 {
 	actions.push_back(new Skill("Attack", 0, 0, Action::basic));
-	actions.push_back(new Skill("Analyze", 0, 0, Action::analyze, true));
 	actions.push_back(new Skill("Block", Action::basic, false));
 	actions.push_back(new Skill("Poison attack", 5, 5, Action::physical, Skill::poisoned, 0)); // 0% to apply status, uses critrate instead
 	actions.push_back(new Skill("Spin attack", 0, 5, Action::physical, false));
@@ -159,8 +160,10 @@ void Character::initializeActions()
 	actions.push_back(new Magic("Freeze", 15, 5, Action::magic, Magic::ice, true, Action::frozen));
 	actions.push_back(new Magic("Blizzard", 10, 10, Action::magic, Magic::ice, false, Action::frozen));
 	actions.push_back(new Magic("Cure", 25, 6, Action::magic, Magic::healing, true));
+	actions.push_back(new Magic("Protect", 0, 6, Action::magic, Magic::healing, true, Action::protect));
 	actions.push_back(new Magic("Cleanse", 0, 5, Action::magic, Magic::healing, true, Action::normal)); // cure status
 	actions.push_back(new Magic("Cure All", 10, 10, Action::magic, Magic::healing, false));
+	actions.push_back(new Skill("Analyze", 0, 0, Action::analyze, true));
 }
 
 void Character::learnAction(Action* action, bool notify)
@@ -597,7 +600,7 @@ void Character::applyStatus(Status effect)
 	{
 		if (guarding)
 		{
-			std::cout << name << " avoided status by guarding. \n\n";
+			std::cout << name << " avoided status by guarding. \n\n"; // TODO: don't block positive effects
 		}
 		else
 		{
@@ -656,6 +659,10 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 		damage /= 2; 
 	}
 	if (condition == frozen)
+	{
+		damage /= 2;
+	}
+	if (condition == protect && damager != this)
 	{
 		damage /= 2;
 	}
