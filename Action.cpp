@@ -44,6 +44,8 @@ std::string Action::getEffectName()
 		return "burn";
 	case 8:
 		return "protect";
+	case 9:
+		return "shell";
 	default:
 		return "nothing";
 	}

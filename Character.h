@@ -47,7 +47,7 @@ private:
 	void learnAction(Action* action, bool notify = false);
 
 public:
-	enum Status { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning, protect } condition;
+	enum Status { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning, protect, shell } condition;
 	enum DamageType { physical, ignoreDef, magic } dmgType;
 	enum class Element { fire, ice, healing, none } element;
 	enum class Weakness { fire, ice, healing, none } weakness;

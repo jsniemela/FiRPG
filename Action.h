@@ -14,7 +14,7 @@ protected:
 	
 public:
 	enum DamageType { physical, basic, healing, statusOnly, magic, none, analyze } type;
-	enum Status { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning, protect } effect;
+	enum Status { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning, protect, shell } effect;
 	Action(std::string newName, DamageType newType);
 	//Action(std::string newName);
 	Action();
