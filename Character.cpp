@@ -599,7 +599,8 @@ void Character::setHealth(int hp)
 
 void Character::applyStatus(Status effect) 
 {
-	if (condition != KO && condition != effect)
+	//if (condition != KO && condition != effect)
+	if (condition == normal)
 	{
 		if (guarding)
 		{
@@ -627,11 +628,21 @@ void Character::applyStatus(Status effect)
 
 void Character::recoverStatus()
 {
-	if (condition != normal && condition != KO) {
-		std::cout << name << "'s status is back to normal.\n";
+	
+	if (condition == KO)
+	{
+		std::cout << name << "'s status can't be healed while dead.\n";
 	}
-	condition = normal;
-	statusTimer = 0;
+	else if (condition == normal || condition == protect || condition == shell) // TODO: separate positive from negative effects
+	{
+		std::cout << name << "'s status is already normal.\n";
+	}
+	else
+	{
+		std::cout << name << "'s status is back to normal.\n";
+		condition = normal;
+		statusTimer = 0;
+	}
 }
 
 void Character::guard() 

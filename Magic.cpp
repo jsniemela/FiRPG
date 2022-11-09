@@ -28,7 +28,14 @@ void Magic::useAction(Character* user, Character* target)
 	{
 		if (damage != 0)
 		{
-			target->recover(damage);
+			if (target->condition != Character::KO)
+			{
+				target->recover(damage);
+			}
+			else
+			{
+				std::cout << target->getName() << " can't be healed while dead.\n";
+			}
 		}
 		if (effect == normal)
 		{
