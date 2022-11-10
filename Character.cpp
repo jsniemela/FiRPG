@@ -165,6 +165,7 @@ void Character::initializeActions()
 	actions.push_back(new Magic("Protect", 0, 6, Action::magic, Magic::healing, true, Action::protect));
 	actions.push_back(new Magic("Shell", 0, 6, Action::magic, Magic::healing, true, Action::shell));
 	actions.push_back(new Magic("Cleanse", 0, 5, Action::magic, Magic::healing, true, Action::normal)); // cure status
+	actions.push_back(new Magic("Revive", 0, 5, Action::magic, Magic::healing, true, Action::normal)); // cure KO
 	actions.push_back(new Magic("Cure All", 10, 10, Action::magic, Magic::healing, false));
 	actions.push_back(new Skill("Analyze", 0, 0, Action::analyze, true));
 }

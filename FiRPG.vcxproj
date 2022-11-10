@@ -135,6 +135,7 @@
     <ClInclude Include="Magic.h" />
     <ClInclude Include="Randomizer.h" />
     <ClInclude Include="Skill.h" />
+    <ClInclude Include="Status.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +147,7 @@
     <ClCompile Include="Magic.cpp" />
     <ClCompile Include="Randomizer.cpp" />
     <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="Status.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
