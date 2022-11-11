@@ -165,7 +165,7 @@ void Character::initializeActions()
 	actions.push_back(new Magic("Protect", 0, 6, Action::magic, Magic::healing, true, Action::protect));
 	actions.push_back(new Magic("Shell", 0, 6, Action::magic, Magic::healing, true, Action::shell));
 	actions.push_back(new Magic("Cleanse", 0, 5, Action::magic, Magic::healing, true, Action::normal)); // cure status
-	actions.push_back(new Magic("Revive", 0, 5, Action::magic, Magic::healing, true, Action::normal)); // cure KO
+	actions.push_back(new Magic("Revive", 0, 5, Action::magic, Magic::revival, true, Action::normal)); // cure KO
 	actions.push_back(new Magic("Cure All", 10, 10, Action::magic, Magic::healing, false));
 	actions.push_back(new Skill("Analyze", 0, 0, Action::analyze, true));
 }
@@ -410,7 +410,7 @@ void Character::callAction(Action* act)
 {
 	if (act->getRequiresTarget())
 	{
-		if (act->type == Action::magic && static_cast<Magic*>(act)->element == Action::healing)
+		if (act->type == Action::magic && static_cast<Magic*>(act)->element == Magic::healing || static_cast<Magic*>(act)->element == Magic::revival)
 		{
 			targetSelection(friends);
 			if (target == -1)
@@ -422,16 +422,25 @@ void Character::callAction(Action* act)
 			{
 				if (controlled)
 				{
-					std::cout << "Target health is already full.\n\n";
+					std::cout << "Target is already at full health.\n\n";
 				}
 				chooseAction();
 				return;
 			}
-			if (static_cast<Magic*>(act)->effect == Action::normal && friends[target]->getStatus() == normal)
+			if (static_cast<Magic*>(act)->element == Magic::healing && static_cast<Magic*>(act)->effect == Action::normal && friends[target]->getStatus() == normal)
 			{
 				if (controlled)
 				{
-					std::cout << "Target is already healthy.\n\n";
+					std::cout << "Target's condition is already normal.\n\n";
+				}
+				chooseAction();
+				return;
+			}
+			if (static_cast<Magic*>(act)->element == Magic::revival && friends[target]->getStatus() != KO)
+			{
+				if (controlled)
+				{
+					std::cout << "Target is not KO'd.\n\n";
 				}
 				chooseAction();
 				return;
@@ -454,7 +463,7 @@ void Character::callAction(Action* act)
 		if (act->type == Action::magic)
 		{
 			// action is magic
-			if (static_cast<Magic*>(act)->element == Action::healing)
+			if (static_cast<Magic*>(act)->element == Magic::healing || static_cast<Magic*>(act)->element == Magic::revival)
 			{
 				static_cast<Magic*>(act)->useAction(this, friends[target]);
 			}
@@ -474,7 +483,7 @@ void Character::callAction(Action* act)
 		if (act->type == Action::magic)
 		{
 			//std::cout << "Action is magical\n";
-			if (static_cast<Magic*>(act)->element == Action::healing)
+			if (static_cast<Magic*>(act)->element == Magic::healing || static_cast<Magic*>(act)->element == Magic::revival)
 			{
 				int i = friends.size();
 				for (auto fr : friends)
@@ -627,10 +636,10 @@ void Character::applyStatus(Status effect)
 	}
 }
 
-void Character::recoverStatus()
+void Character::recoverStatus(bool revive)
 {
 	
-	if (condition == KO)
+	if (condition == KO && revive == false)
 	{
 		std::cout << name << "'s status can't be healed while dead.\n";
 	}

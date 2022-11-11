@@ -68,7 +68,7 @@ public:
 	void recover(int healAmount);
 	void recoverSP(int healAmount);
 	void loseSP(int spLoss);
-	void recoverStatus();
+	void recoverStatus(bool revive = false);
 	void EquipWeapon(Weapon* wpn);
 	void unEquipWeapon();
 

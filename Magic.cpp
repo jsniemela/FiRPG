@@ -24,22 +24,33 @@ void Magic::useAction(Character* user, Character* target)
 	}
 	std::cout << user->getName() << " used " << name << "!\n";
 	user->loseSP(spCost);
-	if (element == healing)
+	if (element == healing || element == revival)
 	{
-		if (damage != 0)
+		if (effect == normal)
 		{
-			if (target->condition != Character::KO)
+			if (element == revival)
 			{
+				target->recoverStatus(true);
+			}
+			else
+			{
+				target->recoverStatus();
+			}
+		}
+		if (damage != 0 || element == revival)
+		{
+			if (element == revival || target->condition != Character::KO)
+			{
+				if (element == revival && damage == 0)
+				{
+					damage = 1; // always revive with at least 1 hp.
+				}
 				target->recover(damage);
 			}
 			else
 			{
 				std::cout << target->getName() << " can't be healed while dead.\n";
 			}
-		}
-		if (effect == normal)
-		{
-			target->recoverStatus();
 		}
 	} 
 	else
