@@ -81,7 +81,7 @@ int Character::getSpeed()
 {
 	return speed;
 }
-enum Character::Status Character::getStatus() 
+enum Character::Effect Character::getStatus() 
 {
 	return condition;
 }
@@ -607,7 +607,17 @@ void Character::setHealth(int hp)
 	currentHealth = hp;
 }
 
-void Character::applyStatus(Status effect) 
+void Character::addStatus(Status* effect)
+{
+	statuses.push_back(effect);
+	std::cout << name << " has the following status effects: \n";
+	for (auto st : statuses)
+	{
+		std::cout << st->name << "\n";
+	}
+}
+
+void Character::applyStatus(Effect effect) 
 {
 	//if (condition != KO && condition != effect)
 	if (condition == normal)

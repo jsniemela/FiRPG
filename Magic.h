@@ -12,7 +12,7 @@ public:
 	enum Element { fire, ice, healing, none, revival } element;
 
 	Magic();
-	Magic(std::string newName, int dmg, int sp, DamageType dmgType, Element elem, bool req, Status eff = nothing);
+	Magic(std::string newName, int dmg, int sp, DamageType dmgType, Element elem, bool req, Effect eff = nothing);
 	~Magic() {}
 
 	Character* getCharacter();

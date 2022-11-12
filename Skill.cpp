@@ -53,7 +53,7 @@ Skill::Skill(std::string newName, int* atk, int* hp, int bdd, int hpcd, DamageTy
 	requiresTarget = req;
 }
 
-Skill::Skill(std::string newName, int atk, int hp, DamageType dmgType, Status eff, int statusProb, bool req)
+Skill::Skill(std::string newName, int atk, int hp, DamageType dmgType, Effect eff, int statusProb, bool req)
 	:baseDamage{ atk }, hpCost{hp}, statusProbability{ statusProb }
 {
 	name = newName;
@@ -77,7 +77,7 @@ void Skill::useAction(Character* user, Character* target)
 		{
 			critrate = statusProbability; // replaces crit rate with statusProbability but still uses crit calculation
 		}
-		if (target->getStatus() == static_cast<Character::Status>(sadness))
+		if (target->getStatus() == static_cast<Character::Effect>(sadness))
 		{
 			critrate *= 2; // higher crit rate if target is sad
 		}
@@ -112,7 +112,8 @@ void Skill::useAction(Character* user, Character* target)
 			}
 			if (critical && effect != nothing)
 			{
-				target->applyStatus(static_cast<Character::Status>(effect));
+				target->applyStatus(static_cast<Character::Effect>(effect));
+				CreateStatusEffects(target); 
 			}
 		}
 		if (hpCost != 0)
@@ -196,4 +197,27 @@ int Skill::getHPcost()
 	else {
 		return hpCost;
 	}
+}
+
+void Skill::CreateStatusEffects(Character* target)
+{
+	switch (effect)
+	{
+	case poisoned:
+		target->addStatus(new Status ("Poison", 3, 10, 0, 0));
+		break;
+	case sadness:
+		target->addStatus(new Status("Sadness", 3, 0, 50, 50));
+		break;
+	case sleep:
+		target->addStatus(new Status("Sleep", 3, 0, 100, 0));
+		break;
+	case frozen:
+		target->addStatus(new Status("Frozen", 1, 0, 0, -50));
+		break;
+	case burning:
+		target->addStatus(new Status("Burning", 1, 10, 0, 0));
+		break;
+	}
+	//nothing, normal, KO, poisoned, sadness, sleep, frozen, burning, protect, shell
 }

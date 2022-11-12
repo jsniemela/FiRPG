@@ -1,6 +1,7 @@
 #pragma once
 #include "Randomizer.h"
 #include "Weapon.h"
+#include "Status.h"
 //#include "Battle.h"
 #include <iostream>
 #include <vector>
@@ -31,6 +32,7 @@ private:
 	std::vector<Character*> enemies;
 	std::vector<Character*> friends;
 	std::vector<Action*> actions;
+	std::vector<Status*> statuses;
 	bool guarding;
 	bool counter;
 	bool controlled;
@@ -47,7 +49,7 @@ private:
 	void learnAction(Action* action, bool notify = false);
 
 public:
-	enum Status { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning, protect, shell } condition;
+	enum Effect { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning, protect, shell } condition;
 	enum DamageType { physical, ignoreDef, magic } dmgType;
 	enum class Element { fire, ice, healing, none } element;
 	enum class Weakness { fire, ice, healing, none } weakness;
@@ -63,7 +65,8 @@ public:
 	void showStats();
 	void takeDamage(int baseDamage, DamageType dmgType, Character* damager, Element elem = Element::none);
 	void takeTurn();
-	void applyStatus(Status effect);
+	void addStatus(Status* effect);
+	void applyStatus(Effect effect);
 	void guard();
 	void recover(int healAmount);
 	void recoverSP(int healAmount);
@@ -82,7 +85,7 @@ public:
 	int getMagicDefence();
 	int getCritRate();
 	int getSpeed();
-	Status getStatus();
+	Effect getStatus();
 	std::string getStatusName();
 	std::string getWeaknessName();
 	int getTarget();

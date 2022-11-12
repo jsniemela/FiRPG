@@ -1,7 +1,7 @@
 #include "Magic.h"
 #include "Character.h"
 
-Magic::Magic(std::string newName, int dmg, int sp, DamageType dmgType, Element elem, bool req, Status eff)
+Magic::Magic(std::string newName, int dmg, int sp, DamageType dmgType, Element elem, bool req, Effect eff)
 	:baseDamage{ dmg }, element {elem}, spCost {sp}
 {
 	name = newName;
@@ -59,7 +59,7 @@ void Magic::useAction(Character* user, Character* target)
 	}
 	if (effect != nothing)
 	{
-		target->applyStatus(static_cast<Character::Status>(effect));
+		target->applyStatus(static_cast<Character::Effect>(effect));
 	}
 }
 
@@ -87,7 +87,7 @@ void Magic::useAction(Character* user, std::vector<Character*> targets)
 		}
 		if (effect != nothing)
 		{
-			t->applyStatus(static_cast<Character::Status>(effect));
+			t->applyStatus(static_cast<Character::Effect>(effect));
 		}
 	}
 
