@@ -1,8 +1,11 @@
 #pragma once
 #include <iostream>
 
-struct Status
+class Status
 {
+private:
+
+public:
 	std::string name;
 	int duration;
 	int damagePerTurn; // damage that the character takes every turn, negative values for healing(?)

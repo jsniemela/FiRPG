@@ -1,5 +1,6 @@
 #include "Action.h"
 #include "Character.h"
+#include "Status.h"
 
 Action::Action()
 {
@@ -50,6 +51,32 @@ std::string Action::getEffectName()
 		return "nothing";
 	}
 };
+
+void Action::CreateStatusEffects(Character* target)
+{
+	switch (effect)
+	{
+	case poisoned:
+		target->addStatus(new Status("Poison", 3, 10, 0, 0));
+		break;
+	case sadness:
+		target->addStatus(new Status("Sadness", 3, 0, 50, 50));
+		break;
+	case sleep:
+		target->addStatus(new Status("Sleep", 3, 0, 100, 0));
+		break;
+	case frozen:
+		target->addStatus(new Status("Frozen", 1, 0, 0, -50));
+		break;
+	case burning:
+		target->addStatus(new Status("Burning", 1, 10, 0, 0));
+		break;
+	default:
+		//no status effect
+		break;
+	}
+	//nothing, normal, KO, poisoned, sadness, sleep, frozen, burning, protect, shell
+}
 
 bool Action::getRequiresTarget()
 {

@@ -1,7 +1,6 @@
 #pragma once
 #include "Action.h"
 #include "Randomizer.h"
-#include "Status.h"
 
 class Character;
 
@@ -31,7 +30,6 @@ public:
 	void useAction(Character* user, std::vector<Character*> targets);
 	//void useAction(Character* user);
 	int calculateDamage(int damage, bool crit);
-	void CreateStatusEffects(Character* target);
 
 	int getHPcost();
 protected:

@@ -129,6 +129,8 @@ std::string Character::getWeaknessName()
 		return "Healing";
 	case Weakness::none:
 		return "None";
+	default:
+		return "None";
 	}
 };
 int Character::getMaxSP()
