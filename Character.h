@@ -29,11 +29,14 @@ private:
 	int target;
 	int exp; // total gained exp
 	int expDrop; // how much a character gives exp to enemies after battle
+	float defMultiplier; // multiplier applied in takeDamage
+	float mDefMultiplier; // multiplier applied in takeDamage
 	std::vector<Character*> enemies;
 	std::vector<Character*> friends;
 	std::vector<Action*> actions;
 	std::vector<Status*> statuses;
 	bool guarding;
+	bool skipTurn;
 	bool counter;
 	bool controlled;
 	Weapon* equippedWeapon;
@@ -42,14 +45,13 @@ private:
 	void initializeActions();
 	void removeDeadTargets();
 	void targetSelection(std::vector<Character*> targets);
-	void die();
 	void callAction(Action* act);
 	bool checkLevelUp();
 	int requiredExp();
 	void learnAction(Action* action, bool notify = false);
 
 public:
-	enum Effect { nothing, normal, KO, poisoned, sadness, sleep, frozen, burning, protect, shell } condition;
+	enum Effect { normal, KO } condition;
 	enum DamageType { physical, ignoreDef, magic } dmgType;
 	enum class Element { fire, ice, healing, none } element;
 	enum class Weakness { fire, ice, healing, none } weakness;
@@ -66,14 +68,19 @@ public:
 	void takeDamage(int baseDamage, DamageType dmgType, Character* damager, Element elem = Element::none);
 	void takeTurn();
 	void addStatus(Status* effect);
+	void removeStatus(Status* effect);
 	void applyStatus(Effect effect);
+	void clearStatuses();
+	void statusTick(int phase);
 	void guard();
 	void recover(int healAmount);
 	void recoverSP(int healAmount);
 	void loseSP(int spLoss);
-	void recoverStatus(bool revive = false);
+	//void recoverStatus(bool revive = false);
 	void EquipWeapon(Weapon* wpn);
 	void unEquipWeapon();
+	void die();
+	void revive();
 
 	std::string getName();
 	int getMaxHealth();

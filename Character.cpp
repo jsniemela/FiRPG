@@ -16,6 +16,9 @@ Character::Character(std::string newName, int hp, int sp, int atk, int def, int 
 	counter = false;
 	expDrop = 50;
 	equippedWeapon = new Weapon(Weapon::fists, 0, "Fists");
+	skipTurn = false;
+	defMultiplier = 1.0f;
+	mDefMultiplier = 1.0f;
 	initializeActions();
 }
 
@@ -89,6 +92,7 @@ int Character::getExpDrop()
 {
 	return expDrop;
 }
+/*
 std::string Character::getStatusName() 
 {
 	switch (condition) 
@@ -117,6 +121,7 @@ std::string Character::getStatusName()
 		return "healthy";
 	}
 };
+*/
 std::string Character::getWeaknessName()
 {
 	switch (weakness)
@@ -156,7 +161,6 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Block", Action::basic, false));
 	actions.push_back(new Skill("Poison attack", 5, 5, Action::physical, Skill::poisoned, 0)); // 0% to apply status, uses critrate instead
 	actions.push_back(new Skill("Spin attack", 0, 5, Action::physical, false));
-	actions.push_back(new Skill("Explode", &currentHealth, &currentHealth, 2, 0, Action::physical, false)); // use all health to deal 50% (minus opponents defense) of it to all enemies
 	actions.push_back(new Skill("Insult", 0, 0, Action::statusOnly, Skill::sadness, 50)); // 50% to apply sadness
 	actions.push_back(new Skill("Sleep", 0, 0, Action::statusOnly, Skill::sleep, 50));
 	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true, Action::burning));
@@ -192,10 +196,18 @@ void Character::levelUp()
 	magicAttack += randomizeInt(1, 3);
 	magicDefence += randomizeInt(1, 3);
 	std::cout << name << " leveled up!" << "\n";
+	
 	if (level == 2)
+	{
+		actions.push_back(new Skill("Explode", &currentHealth, &currentHealth, 2, 0, Action::physical, false)); // use all health to deal 50% (minus opponents defense) of it to all enemies
+	}
+	/*
+	if (level == 3)
 	{
 		learnAction(new Skill("Kill", 0, 0, Action::statusOnly, Skill::KO, 15));
 	}
+	*/
+	
 	std::cout << "\n";
 }
 
@@ -203,8 +215,14 @@ void Character::showStats()
 {
 	std::cout << name << " - Level " << level << ", HP: " << currentHealth << " / " << maxHealth;
 	std::cout << ", SP: " << currentSP << "/" << maxSP;
-	if (condition != normal) {
-		std::cout << ", status: " << getStatusName();
+	if (statuses.size() > 0)
+	{
+		std::cout << ", statuses: ";
+		for (auto s : statuses)
+		{
+			std::cout << s->name << " ";
+		}
+		//std::cout << "\n";
 	}
 	
 	/*
@@ -242,7 +260,16 @@ void Character::targetSelection(std::vector<Character*> targets)
 		{
 			std::cout << "(" << i << "): ";
 			i++;
-			std::cout << t->getName() << " - " << t->getCurrentHealth() << "/" << t->getMaxHealth() << " HP, status: " << t->getStatusName() << "\n";
+			std::cout << t->getName() << " - " << t->getCurrentHealth() << "/" << t->getMaxHealth() << " HP";
+			if (t->statuses.size() > 0)
+			{
+				std::cout << ", status: ";
+				for (auto st : t->statuses)
+				{
+					std::cout << st->name << " ";
+				}
+			}
+			std::cout << "\n";
 		}
 		std::cout << "(0): [Go back]" << std::endl;
 		while (target < 0 || target > targets.size())
@@ -388,10 +415,12 @@ void Character::chooseAction()
 		}
 		else if (command == 4) // guard
 		{
+			/*
 			if (condition == burning)
 			{
 				recoverStatus();
 			}
+			*/
 			callAction(actions[1]);
 		}
 		action--;
@@ -429,6 +458,8 @@ void Character::callAction(Action* act)
 				chooseAction();
 				return;
 			}
+			//temporarily disabled
+			/*
 			if (static_cast<Magic*>(act)->element == Magic::healing && static_cast<Magic*>(act)->effect == Action::normal && friends[target]->getStatus() == normal)
 			{
 				if (controlled)
@@ -438,6 +469,7 @@ void Character::callAction(Action* act)
 				chooseAction();
 				return;
 			}
+			*/
 			if (static_cast<Magic*>(act)->element == Magic::revival && friends[target]->getStatus() != KO)
 			{
 				if (controlled)
@@ -514,19 +546,23 @@ void Character::callAction(Action* act)
 			}
 		}
 	}
+	/*
 	if (condition == burning)
 	{
 		std::cout << name << " is burning.\n";
 		takeDamage(static_cast<int>(maxHealth * 0.2), ignoreDef, this);
 	}
+	*/
 }
 
 void Character::takeTurn()
 {
 	guarding = false;
-	bool skipTurn = false;
+	skipTurn = false;
 	if (condition != KO)
 	{
+		statusTick(0);
+		/*
 		if (condition == sadness) {
 			if (int x = randomizeInt(1, 10) > 4) //chance to skip turn.
 			{
@@ -544,10 +580,11 @@ void Character::takeTurn()
 			skipTurn = true;
 			std::cout << name << " skips a turn while defrosting.\n\n";
 		}
+		*/
 		removeDeadTargets();
 		if (!skipTurn)
 		{
-			std::cout << name << "'s turn.\n";
+			std::cout << "\n" << name << "'s turn.\n";
 			showStats();
 			target = randomizeInt(0, enemies.size() - 1);
 			if (enemies.size() > 0) 
@@ -562,6 +599,8 @@ void Character::takeTurn()
 		}
 		if (condition != KO && enemies.size() > 0) 
 		{
+			statusTick(1);
+			/*
 			if (condition == poisoned) 
 			{
 				float poisonDamage = static_cast<float>(maxHealth) / 10;
@@ -585,6 +624,7 @@ void Character::takeTurn()
 				}
 				condition = normal;
 			}
+			*/
 		}
 	}
 	else
@@ -619,7 +659,53 @@ void Character::addStatus(Status* effect)
 	}
 }
 
-void Character::applyStatus(Effect effect) 
+void Character::removeStatus(Status* effect)
+{
+	statuses.erase(std::remove(statuses.begin(), statuses.end(), effect), statuses.end());
+	std::cout << name << " no longer has " << effect->name << " status.\n";
+	delete(effect);
+}
+
+void Character::statusTick(int phase)
+{
+	for (auto st : statuses)
+	{
+		switch (phase)
+		{
+		case 0: //turn start phase
+			if (st->skipProbability > 0)
+			{
+				if (st->skipProbability > randomizeInt(0, 100))
+				{
+					skipTurn = true;
+					std::cout << name << " skipped turn due to " << st->name << " status.\n";
+				}
+			}
+			break;
+		case 1: //turn end phase
+			if (st->damagePerTurn != 0)
+			{
+				std::cout << name << " took damage from " << st->name << ".\n";
+				takeDamage(st->damagePerTurn, ignoreDef, this, Element::none);
+			}
+			st->duration--;
+			if (st->duration == 0)
+			{
+				removeStatus(st);
+			}
+			break;
+		case 2:
+			defMultiplier *= st->defMultiplier;
+			//std::cout << "physical damage multiplier is " << defMultiplier;
+			mDefMultiplier *= st->mDefMultiplier;
+			//std::cout << "magical damage multiplier is " << mDefMultiplier;
+		default:
+			break;
+		}
+	}
+}
+/*
+void Character::applyStatus(Effect effect) // temporary until status system is changed
 {
 	//if (condition != KO && condition != effect)
 	if (condition == normal)
@@ -647,10 +733,10 @@ void Character::applyStatus(Effect effect)
 		}
 	}
 }
-
-void Character::recoverStatus(bool revive)
+*/
+/*
+void Character::recoverStatus(bool revive) // temporary until status system is changed
 {
-	
 	if (condition == KO && revive == false)
 	{
 		std::cout << name << "'s status can't be healed while dead.\n";
@@ -664,6 +750,31 @@ void Character::recoverStatus(bool revive)
 		std::cout << name << "'s status is back to normal.\n";
 		condition = normal;
 		statusTimer = 0;
+	}
+}
+*/
+
+void Character::revive()
+{
+	if (condition == KO)
+	{
+		condition = normal;
+		std::cout << name << " was revived.\n";
+		if (currentHealth == 0) {
+			currentHealth = 1;
+		}
+	}
+}
+
+void Character::clearStatuses()
+{
+	if (statuses.size() > 0)
+	{
+		statuses.clear();
+		std::cout << name << "'s statuses were cleared!\n";
+	}
+	else {
+		std::cout << name << " has no negative statuses.\n";
 	}
 }
 
@@ -694,6 +805,7 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 	{
 		damage /= 2; 
 	}
+	/*
 	if (condition == frozen)
 	{
 		damage /= 2;
@@ -706,6 +818,24 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 	{
 		damage /= 2;
 	}
+	*/
+	defMultiplier = 1.0f;
+	mDefMultiplier = 1.0f;
+	if (dmgType != ignoreDef)
+	{
+		if (statuses.size() > 0)
+		{
+			statusTick(2); // apply multipliers from status effects
+		}
+		if (dmgType == physical)
+		{
+			damage *= defMultiplier;
+		}
+		if (dmgType == magic)
+		{
+			damage *= mDefMultiplier;
+		}
+	}
 	if (weakness != Weakness::none && elem == static_cast<Element>(weakness))
 	{
 		damage *= 2;
@@ -713,6 +843,7 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 	}
 	currentHealth -= damage;
 	std::cout << name << " took " << damage << " damage.\n";
+	/*
 	if (dmgType == physical && condition == sleep && randomizeInt(0, 1) == 1)
 	{
 		statusTimer = 0;
@@ -731,6 +862,7 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 		condition = normal;
 		std::cout << name << " is no longer burning!\n";
 	}
+	*/
 	std::cout << "\n";
 	//std::cout << "Current health: " << currentHealth << "\n";
 	if (currentHealth < 0) 
@@ -756,7 +888,7 @@ void Character::recover(int healAmount)
 	if (currentHealth >= maxHealth)
 	{
 		currentHealth = maxHealth;
-		std::cout << name << " recovered to full HP.\n\n";
+		std::cout << name << " recovered to full HP.\n";
 	} 
 	else
 	{
@@ -812,6 +944,10 @@ Character::~Character()
 	for (auto act : actions)
 	{
 		delete(act);
+	}
+	for (auto st : statuses)
+	{
+		delete(st);
 	}
 	//std::cout << name << " deleted.\n";
 }

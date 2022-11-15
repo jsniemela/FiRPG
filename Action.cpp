@@ -57,19 +57,31 @@ void Action::CreateStatusEffects(Character* target)
 	switch (effect)
 	{
 	case poisoned:
-		target->addStatus(new Status("Poison", 3, 10, 0, 0));
+		target->addStatus(new Status("Poison", 3, 10, 0, 1, 1));
 		break;
 	case sadness:
-		target->addStatus(new Status("Sadness", 3, 0, 50, 50));
+		target->addStatus(new Status("Sadness", 3, 0, 50, 2, 1));
 		break;
 	case sleep:
-		target->addStatus(new Status("Sleep", 3, 0, 100, 0));
+		target->addStatus(new Status("Sleep", 3, 0, 100, 1, 1));
 		break;
 	case frozen:
-		target->addStatus(new Status("Frozen", 1, 0, 0, -50));
+		target->addStatus(new Status("Frozen", 1, 0, 100, 0.5f, 1));
 		break;
 	case burning:
-		target->addStatus(new Status("Burning", 1, 10, 0, 0));
+		target->addStatus(new Status("Burning", 1, 10, 0, 1, 1));
+		break;
+	case protect:
+		target->addStatus(new Status("Protect", 3, 0, 0, 0.5f, 1));
+		break;
+	case shell:
+		target->addStatus(new Status("Shell", 3, 0, 0, 1, 0.5f));
+		break;
+	case KO:
+		target->die();
+		break;
+	case normal:
+		//target->clearStatuses();
 		break;
 	default:
 		//no status effect

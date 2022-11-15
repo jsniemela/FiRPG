@@ -24,10 +24,11 @@ void CharacterManager::healCharacters()
 {
 	for (auto ch : characters)
 	{
-		if (ch->getStatus() != Character::normal)
+		if (ch->getStatus() == Character::KO)
 		{
-			ch->recoverStatus();
+			ch->revive();
 		}
+		ch->clearStatuses();
 		if (ch->getCurrentHealth() < ch->getMaxHealth())
 		{
 			ch->recover(ch->getMaxHealth());

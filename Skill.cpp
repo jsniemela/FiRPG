@@ -112,7 +112,7 @@ void Skill::useAction(Character* user, Character* target)
 			}
 			if (critical && effect != nothing)
 			{
-				target->applyStatus(static_cast<Character::Effect>(effect));
+				//target->applyStatus(static_cast<Character::Effect>(effect));
 				CreateStatusEffects(target); 
 			}
 		}

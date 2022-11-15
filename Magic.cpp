@@ -30,11 +30,11 @@ void Magic::useAction(Character* user, Character* target)
 		{
 			if (element == revival)
 			{
-				target->recoverStatus(true);
+				target->revive();
 			}
 			else
 			{
-				target->recoverStatus();
+				target->clearStatuses();
 			}
 		}
 		if (damage != 0 || element == revival)
@@ -59,7 +59,8 @@ void Magic::useAction(Character* user, Character* target)
 	}
 	if (effect != nothing)
 	{
-		target->applyStatus(static_cast<Character::Effect>(effect));
+		//target->applyStatus(static_cast<Character::Effect>(effect));
+		CreateStatusEffects(target);
 	}
 }
 
@@ -87,7 +88,8 @@ void Magic::useAction(Character* user, std::vector<Character*> targets)
 		}
 		if (effect != nothing)
 		{
-			t->applyStatus(static_cast<Character::Effect>(effect));
+			//t->applyStatus(static_cast<Character::Effect>(effect));
+			CreateStatusEffects(t);
 		}
 	}
 
