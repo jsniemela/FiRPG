@@ -163,6 +163,7 @@ void Character::initializeActions()
 	actions.push_back(new Skill("Spin attack", 0, 5, Action::physical, false));
 	actions.push_back(new Skill("Insult", 0, 0, Action::statusOnly, Skill::sadness, 50)); // 50% to apply sadness
 	actions.push_back(new Skill("Sleep", 0, 0, Action::statusOnly, Skill::sleep, 50));
+	actions.push_back(new Skill("Kill", 0, 0, Action::statusOnly, Skill::KO, 15));
 	actions.push_back(new Magic("Fire", 30, 5, Action::magic, Magic::fire, true, Action::burning));
 	actions.push_back(new Magic("Fire Storm", 15, 10, Action::magic, Magic::fire, false, Action::burning));
 	actions.push_back(new Magic("Freeze", 15, 5, Action::magic, Magic::ice, true, Action::frozen));
@@ -201,12 +202,6 @@ void Character::levelUp()
 	{
 		actions.push_back(new Skill("Explode", &currentHealth, &currentHealth, 2, 0, Action::physical, false)); // use all health to deal 50% (minus opponents defense) of it to all enemies
 	}
-	/*
-	if (level == 3)
-	{
-		learnAction(new Skill("Kill", 0, 0, Action::statusOnly, Skill::KO, 15));
-	}
-	*/
 	
 	std::cout << "\n";
 }
