@@ -661,6 +661,14 @@ void Character::removeStatus(Status* effect)
 	delete(effect);
 }
 
+std::vector<std::string> Character::getStatuses()
+{
+	std::vector<std::string> statusNames;
+	for (auto st : statuses)
+		statusNames.push_back(st->name);
+	return statusNames;
+}
+
 void Character::statusTick(int phase)
 {
 	for (auto st : statuses)

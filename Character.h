@@ -93,7 +93,8 @@ public:
 	int getCritRate();
 	int getSpeed();
 	Effect getStatus();
-	std::string getStatusName();
+	std::vector<std::string> getStatuses();
+	//std::string getStatusName();
 	std::string getWeaknessName();
 	int getTarget();
 	bool getGuarding();
