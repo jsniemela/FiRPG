@@ -69,14 +69,12 @@ public:
 	void takeTurn();
 	void addStatus(Status* effect);
 	void removeStatus(Status* effect);
-	void applyStatus(Effect effect);
-	void clearStatuses();
+	void clearStatuses(bool notify = true);
 	void statusTick(int phase);
 	void guard();
 	void recover(int healAmount);
 	void recoverSP(int healAmount);
 	void loseSP(int spLoss);
-	//void recoverStatus(bool revive = false);
 	void EquipWeapon(Weapon* wpn);
 	void unEquipWeapon();
 	void die();
@@ -95,7 +93,6 @@ public:
 	int getSpeed();
 	Effect getStatus();
 	std::vector<std::string> getStatuses();
-	//std::string getStatusName();
 	std::string getWeaknessName();
 	int getTarget();
 	bool getGuarding();

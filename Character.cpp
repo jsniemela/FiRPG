@@ -10,7 +10,7 @@ Character::Character(std::string newName, int hp, int sp, int atk, int def, int 
 	currentHealth = maxHealth;
 	currentSP = maxSP;
 	condition = normal; // TODO: make it possible to have multiple conditions and "normal" should mean that there are no status effects
-	statusTimer = 0;
+	//statusTimer = 0;
 	target = 0;
 	guarding = false;
 	counter = false;
@@ -283,7 +283,7 @@ void Character::targetSelection(std::vector<Character*> targets)
 	}
 	else
 	{
-		target = randomizeInt(0, targets.size() - 1);
+		target = randomizeInt(0, static_cast<int>(targets.size()) - 1);
 	}
 }
 
@@ -422,7 +422,7 @@ void Character::chooseAction()
 	}
 	else
 	{
-		action = randomizeInt(0, actions.size() - 1);
+		action = randomizeInt(0, static_cast<int>(actions.size()) - 1);
 		if (actions[action]->type == Action::magic && static_cast<Magic*>(actions[action])->getSPcost() > currentSP)
 		{
 			chooseAction(); //restart action randomization if not enough SP.
@@ -514,7 +514,7 @@ void Character::callAction(Action* act)
 			//std::cout << "Action is magical\n";
 			if (static_cast<Magic*>(act)->element == Magic::healing || static_cast<Magic*>(act)->element == Magic::revival)
 			{
-				int i = friends.size();
+				int i = static_cast<int>(friends.size());
 				for (auto fr : friends)
 				{
 					if (fr->getCurrentHealth() == fr->getMaxHealth())
@@ -581,7 +581,7 @@ void Character::takeTurn()
 		{
 			std::cout << "\n" << name << "'s turn.\n";
 			showStats();
-			target = randomizeInt(0, enemies.size() - 1);
+			target = randomizeInt(0, static_cast<int>(enemies.size()) - 1);
 			if (enemies.size() > 0) 
 			{
 				chooseAction();
@@ -689,7 +689,7 @@ void Character::statusTick(int phase)
 		switch (phase)
 		{
 		case 0: //turn start phase
-			if (st->skipProbability > 0)
+			if (!skipTurn && st->skipProbability > 0)
 			{
 				if (st->skipProbability > randomizeInt(0, 100))
 				{
@@ -710,7 +710,7 @@ void Character::statusTick(int phase)
 				removeStatus(st);
 			}
 			break;
-		case 2:
+		case 2: //take damage phase
 			defMultiplier *= st->defMultiplier;
 			//std::cout << "physical damage multiplier is " << defMultiplier;
 			mDefMultiplier *= st->mDefMultiplier;
@@ -721,7 +721,7 @@ void Character::statusTick(int phase)
 	}
 }
 /*
-void Character::applyStatus(Effect effect) // temporary until status system is changed
+void Character::applyStatus(Effect effect) 
 {
 	//if (condition != KO && condition != effect)
 	if (condition == normal)
@@ -782,14 +782,22 @@ void Character::revive()
 	}
 }
 
-void Character::clearStatuses()
+void Character::clearStatuses(bool notify)
 {
 	if (statuses.size() > 0)
 	{
+		for (auto st : statuses)
+		{
+			delete(st);
+		}
 		statuses.clear();
-		std::cout << name << "'s statuses were cleared!\n";
+		if (notify)
+		{
+			std::cout << name << "'s statuses were cleared!\n";
+		}
 	}
-	else {
+	else if (notify)
+	{
 		std::cout << name << " has no negative statuses.\n";
 	}
 }
@@ -807,7 +815,7 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 	// base damage is attack (+ possible crit), damage is base damage - defence
 	if (dmgType == physical)
 	{
-		damage -= defence;
+		damage -= defence; // defence value is reduced from damage before applying status multipliers
 	}
 	else if (dmgType == magic)
 	{
@@ -817,28 +825,14 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 	{
 		damage = 0;
 	}
-	if (guarding && dmgType != ignoreDef)
-	{
-		damage /= 2; 
-	}
-	/*
-	if (condition == frozen)
-	{
-		damage /= 2;
-	}
-	if (dmgType == physical && condition == protect && damager != this)
-	{
-		damage /= 2;
-	}
-	if (dmgType == magic && condition == shell && damager != this)
-	{
-		damage /= 2;
-	}
-	*/
-	defMultiplier = 1.0f;
-	mDefMultiplier = 1.0f;
 	if (dmgType != ignoreDef)
 	{
+		if (guarding)
+		{
+			damage /= 2;
+		}
+		defMultiplier = 1.0f; // reset defence multipliers before re-calculating them
+		mDefMultiplier = 1.0f;
 		if (statuses.size() > 0)
 		{
 			statusTick(2); // apply multipliers from status effects
@@ -951,7 +945,11 @@ void Character::die()
 {
 	condition = KO;
 	currentHealth = 0;
-	statusTimer = 0;
+	//statusTimer = 0;
+	for (auto st : statuses)
+	{
+		clearStatuses(false);
+	}
 	std::cout << name << " died.\n\n";
 }
 
