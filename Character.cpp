@@ -48,7 +48,7 @@ bool Character::checkLevelUp()
 
 int Character::requiredExp()
 {
-	int reqExp = 100 * pow((1+0.2), level);
+	int reqExp = static_cast<int>(std::round(100 * pow((1+0.2), level)));
 	return reqExp;
 }
 
@@ -669,6 +669,19 @@ std::vector<std::string> Character::getStatuses()
 	return statusNames;
 }
 
+bool Character::hasStatus(std::string status)
+{
+	std::vector<std::string> statusnames = getStatuses();
+	if (std::find(statusnames.begin(), statusnames.end(), status) != statusnames.end())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void Character::statusTick(int phase)
 {
 	for (auto st : statuses)
@@ -790,7 +803,7 @@ void Character::guard()
 
 void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damager, Element elem)
 {
-	int damage = baseDamage; 
+	float damage = static_cast<float>(baseDamage); 
 	// base damage is attack (+ possible crit), damage is base damage - defence
 	if (dmgType == physical)
 	{
@@ -844,7 +857,8 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 		damage *= 2;
 		std::cout << "Double damage from weakness!\n";
 	}
-	currentHealth -= damage;
+
+	currentHealth -= static_cast<int>(std::ceil(damage));
 	std::cout << name << " took " << damage << " damage.\n";
 	/*
 	if (dmgType == physical && condition == sleep && randomizeInt(0, 1) == 1)

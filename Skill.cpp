@@ -77,8 +77,7 @@ void Skill::useAction(Character* user, Character* target)
 		{
 			critrate = statusProbability; // replaces crit rate with statusProbability but still uses crit calculation
 		}
-		std::vector <std::string> targetStatuses = target->getStatuses();
-		if (std::find(targetStatuses.begin(), targetStatuses.end(), "Sadness") != targetStatuses.end())
+		if (target->hasStatus("Sadness"))
 		{
 			critrate *= 2; // higher crit rate if target is sad
 		}

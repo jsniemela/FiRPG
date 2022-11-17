@@ -81,6 +81,7 @@ public:
 	void unEquipWeapon();
 	void die();
 	void revive();
+	bool hasStatus(std::string status);
 
 	std::string getName();
 	int getMaxHealth();
