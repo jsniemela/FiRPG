@@ -661,6 +661,17 @@ void Character::removeStatus(Status* effect)
 	delete(effect);
 }
 
+void Character::removeStatusByName(std::string statusName)
+{
+	for (auto st : statuses)
+	{
+		if (st->name == statusName)
+		{
+			removeStatus(st);
+		}
+	}
+}
+
 std::vector<std::string> Character::getStatuses()
 {
 	std::vector<std::string> statusNames;
@@ -854,18 +865,22 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 
 	currentHealth -= static_cast<int>(std::ceil(damage));
 	std::cout << name << " took " << damage << " damage.\n";
+
+	if (elem == Element::fire && hasStatus("Frozen"))
+	{
+		removeStatusByName("Frozen");
+	}
+
+	if (elem == Element::ice && hasStatus("Burning"))
+	{
+		removeStatusByName("Burning");
+	}
 	/*
 	if (dmgType == physical && condition == sleep && randomizeInt(0, 1) == 1)
 	{
 		statusTimer = 0;
 		condition = normal;
 		std::cout << name << " woke up!\n";
-	}
-	if (condition == frozen && elem != Element::ice)
-	{
-		statusTimer = 0;
-		condition = normal;
-		std::cout << name << "'s ice melted!\n";
 	}
 	if (condition == burning && elem == Element::ice)
 	{
