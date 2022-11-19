@@ -875,20 +875,13 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 	{
 		removeStatusByName("Burning");
 	}
-	/*
-	if (dmgType == physical && condition == sleep && randomizeInt(0, 1) == 1)
+	
+	if (dmgType == physical && hasStatus("Sleep") && randomizeInt(0, 1) == 1)
 	{
-		statusTimer = 0;
-		condition = normal;
 		std::cout << name << " woke up!\n";
+		removeStatusByName("Sleep");
 	}
-	if (condition == burning && elem == Element::ice)
-	{
-		statusTimer = 0;
-		condition = normal;
-		std::cout << name << " is no longer burning!\n";
-	}
-	*/
+	
 	std::cout << "\n";
 	//std::cout << "Current health: " << currentHealth << "\n";
 	if (currentHealth < 0) 
