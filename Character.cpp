@@ -862,12 +862,18 @@ void Character::takeDamage(int baseDamage, DamageType dmgType, Character* damage
 		damage *= 2;
 		std::cout << "Double damage from weakness!\n";
 	}
-
-	currentHealth -= static_cast<int>(std::ceil(damage));
-	std::cout << name << " took " << damage << " damage.\n";
+	int finalDamage = static_cast<int>(std::ceil(damage));
+	currentHealth -= finalDamage;
+	std::cout << name << " took " << finalDamage << " damage.\n";
 
 	if (elem == Element::fire && hasStatus("Frozen"))
 	{
+		std::cout << name << "'s ice melted!\n";
+		removeStatusByName("Frozen");
+	}
+	else if (elem != Element::ice && hasStatus("Frozen"))
+	{
+		std::cout << name << "'s ice shattered!\n";
 		removeStatusByName("Frozen");
 	}
 
