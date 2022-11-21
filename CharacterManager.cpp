@@ -20,6 +20,16 @@ void CharacterManager::clearCharacters()
 	characters.clear();
 }
 
+bool CharacterManager::partyAlive() // returns true if at least one character is alive
+{
+	for (auto ch : characters)
+	{
+		if (ch->getCurrentHealth() > 0)
+			return true;
+	}
+	return false;
+}
+
 void CharacterManager::healCharacters()
 {
 	for (auto ch : characters)

@@ -200,9 +200,8 @@ void Character::levelUp()
 	
 	if (level == 2)
 	{
-		actions.push_back(new Skill("Explode", &currentHealth, &currentHealth, 2, 0, Action::physical, false)); // use all health to deal 50% (minus opponents defense) of it to all enemies
+		learnAction(new Skill("Explode", &currentHealth, &currentHealth, 2, 0, Action::physical, false), true); // use all health to deal 50% (minus opponents defense) of it to all enemies
 	}
-	
 	std::cout << "\n";
 }
 

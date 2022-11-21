@@ -45,7 +45,8 @@ int main()
 					std::cout << "Starting a new battle.\n\n";
 					createEnemies(em);
 					CreateBattle(pm, em);
-					pm.receiveMoney(em.getMoney());
+					if (pm.partyAlive())
+						pm.receiveMoney(em.getMoney());
 					em.clearCharacters();
 					break;
 				case 2:

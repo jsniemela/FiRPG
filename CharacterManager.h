@@ -15,6 +15,7 @@ public:
 
 	std::vector<Character*> getCharacters();
 	int getMoney();
+	bool partyAlive();
 
 	CharacterManager(int money);
 	~CharacterManager();
