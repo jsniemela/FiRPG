@@ -42,12 +42,19 @@ int main()
 			switch (choice)
 			{
 				case 1:
-					std::cout << "Starting a new battle.\n\n";
-					createEnemies(em);
-					CreateBattle(pm, em);
-					if (pm.partyAlive())
-						pm.receiveMoney(em.getMoney());
-					em.clearCharacters();
+					if (pm.partyAlive()) 
+					{
+						std::cout << "Starting a new battle.\n\n";
+							createEnemies(em);
+							CreateBattle(pm, em);
+							if (pm.partyAlive())
+								pm.receiveMoney(em.getMoney());
+							em.clearCharacters();
+					}
+					else
+					{
+						std::cout << "Can't start a battle with everyone dead\n";
+					}
 					break;
 				case 2:
 					std::cout << "Healed everyone!\n\n";

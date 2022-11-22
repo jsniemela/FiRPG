@@ -555,7 +555,8 @@ void Character::takeTurn()
 	skipTurn = false;
 	if (condition != KO)
 	{
-		statusTick(0);
+		if (statuses.size() > 0)
+			statusTick(0);
 		/*
 		if (condition == sadness) {
 			if (int x = randomizeInt(1, 10) > 4) //chance to skip turn.
@@ -593,7 +594,8 @@ void Character::takeTurn()
 		}
 		if (condition != KO && enemies.size() > 0) 
 		{
-			statusTick(1);
+			if (statuses.size() > 0)
+				statusTick(1);
 			/*
 			if (condition == poisoned) 
 			{

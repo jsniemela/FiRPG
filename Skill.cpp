@@ -43,7 +43,7 @@ Skill::Skill(std::string newName, int atk, int hp, DamageType dmgType, bool req)
 }
 
 Skill::Skill(std::string newName, int* atk, int* hp, int bdd, int hpcd, DamageType dmgType, bool req)
-	:baseDamage{ *atk }, hpCost{ *hp }
+	:baseDamagePtr{ atk }, hpCostPtr{ hp }
 {
 	name = newName;
 	type = dmgType;
