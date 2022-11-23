@@ -647,12 +647,20 @@ void Character::setHealth(int hp)
 
 void Character::addStatus(Status* effect)
 {
-	statuses.push_back(effect);
+	if (hasStatus(effect->name))
+	{
+		std::cout << name << " already has the status " << effect->name << ".\n";
+	}
+	else
+	{
+		statuses.push_back(effect);
+	}
 	std::cout << name << " has the following status effects: \n";
 	for (auto st : statuses)
 	{
 		std::cout << st->name << "\n";
 	}
+	std::cout << "\n";
 }
 
 void Character::removeStatus(Status* effect)
