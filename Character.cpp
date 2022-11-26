@@ -214,7 +214,7 @@ void Character::showStats()
 		std::cout << ", statuses: ";
 		for (auto s : statuses)
 		{
-			std::cout << s->name << " ";
+			std::cout << s->name << " (" << s->turnsLeft << " turns) ";
 		}
 		//std::cout << "\n";
 	}
@@ -260,7 +260,7 @@ void Character::targetSelection(std::vector<Character*> targets)
 				std::cout << ", status: ";
 				for (auto st : t->statuses)
 				{
-					std::cout << st->name << " ";
+					std::cout << st->name << " (" << st->turnsLeft << " turns) ";
 				}
 			}
 			std::cout << "\n";
@@ -659,7 +659,7 @@ void Character::addStatus(Status* effect)
 	std::cout << name << " has the following status effects: \n";
 	for (auto st : statuses)
 	{
-		std::cout << st->name << "\n";
+		std::cout << st->name << " (" << st->turnsLeft << " turns)" << "\n";
 	}
 	std::cout << "\n";
 }
