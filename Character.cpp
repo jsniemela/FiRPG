@@ -211,10 +211,16 @@ void Character::showStats()
 	std::cout << ", SP: " << currentSP << "/" << maxSP;
 	if (statuses.size() > 0)
 	{
-		std::cout << ", statuses: ";
+		std::cout << ", status: ";
 		for (auto s : statuses)
 		{
-			std::cout << s->name << " (" << s->turnsLeft << " turns) ";
+			if (s->turnsLeft == 1)
+			{
+				std::cout << s->name << " (" << s->turnsLeft << " turn) ";
+			}
+			else {
+				std::cout << s->name << " (" << s->turnsLeft << " turns) ";
+			}
 		}
 		//std::cout << "\n";
 	}
@@ -260,7 +266,15 @@ void Character::targetSelection(std::vector<Character*> targets)
 				std::cout << ", status: ";
 				for (auto st : t->statuses)
 				{
-					std::cout << st->name << " (" << st->turnsLeft << " turns) ";
+					if (st->turnsLeft == 1)
+					{
+						std::cout << st->name << " (" << st->turnsLeft << " turn) ";
+					}
+					else
+					{
+						std::cout << st->name << " (" << st->turnsLeft << " turns) ";
+					}
+					
 				}
 			}
 			std::cout << "\n";
@@ -659,7 +673,14 @@ void Character::addStatus(Status* effect)
 	std::cout << name << " has the following status effects: \n";
 	for (auto st : statuses)
 	{
-		std::cout << st->name << " (" << st->turnsLeft << " turns)" << "\n";
+		if (st->turnsLeft == 1)
+		{
+			std::cout << st->name << " (" << st->turnsLeft << " turn)" << "\n";
+		}
+		else
+		{
+			std::cout << st->name << " (" << st->turnsLeft << " turns)" << "\n";
+		}
 	}
 	std::cout << "\n";
 }
