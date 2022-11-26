@@ -14,5 +14,4 @@ public:
 	~Weapon();
 	int getAttack();
 	std::string getName();
-	//void attachSkill(Skill weaponSkill) // Create a skill class first
 };

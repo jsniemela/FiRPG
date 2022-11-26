@@ -649,7 +649,8 @@ void Character::addStatus(Status* effect)
 {
 	if (hasStatus(effect->name))
 	{
-		std::cout << name << " already has the status " << effect->name << ".\n";
+		//std::cout << name << " already has the status " << effect->name << ".\n";
+		extendStatusByName(effect->name);
 	}
 	else
 	{
@@ -677,6 +678,18 @@ void Character::removeStatusByName(std::string statusName)
 		if (st->name == statusName)
 		{
 			removeStatus(st);
+		}
+	}
+}
+
+void Character::extendStatusByName(std::string statusName)
+{
+	for (auto st : statuses)
+	{
+		if (st->name == statusName)
+		{
+			st->turnsLeft = st->duration;
+			std::cout << name << "'s " << st->name << " status extended. (" << st->turnsLeft << " turns left)\n";
 		}
 	}
 }
@@ -724,8 +737,8 @@ void Character::statusTick(int phase)
 				std::cout << name << " took damage from " << st->name << ".\n";
 				takeDamage(st->damagePerTurn, ignoreDef, this, Element::none);
 			}
-			st->duration--;
-			if (st->duration == 0)
+			st->turnsLeft--;
+			if (st->turnsLeft == 0)
 			{
 				removeStatus(st);
 			}

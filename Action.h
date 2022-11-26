@@ -3,7 +3,7 @@
 #include <vector>
 
 class Character;
-class Status;
+struct Status;
 
 class Action {
 private:

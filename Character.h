@@ -70,6 +70,7 @@ public:
 	void addStatus(Status* effect);
 	void removeStatus(Status* effect);
 	void removeStatusByName(std::string statusName);
+	void extendStatusByName(std::string status);
 	void clearStatuses(bool notify = true);
 	void statusTick(int phase);
 	void guard();
