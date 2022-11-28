@@ -423,12 +423,10 @@ void Character::chooseAction()
 		}
 		else if (command == 4) // guard
 		{
-			/*
-			if (condition == burning)
+			if (hasStatus("Burning"))
 			{
-				recoverStatus();
+				removeStatusByName("Burning");
 			}
-			*/
 			callAction(actions[1]);
 		}
 		action--;
